@@ -3,22 +3,24 @@ const router = express.Router();
 const passport = require("passport");
 
 //importing the controllers
-const controller = require("./controller"); // for register
+const controller = require("./controller");
 const {
   getUsers,
   getUserById,
-  createUser,
   updateUser,
   deleteUser,
-} = require("../authorization/controller");
+} = require("./controller");
 
-//authentication routes
+// auth
 router.post("/register", controller.register);
 router.post("/login", controller.login);
 
-//login with google
-router.get('/google', 
-    passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'login' })
+// google auth
+router.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
 );
 
 router.get('/google/callback', 
@@ -29,11 +31,10 @@ router.get('/google/callback',
     }
 );
 
-router.post("/registerGoogle", controller.registerGoogle);
+router.post("/registerGoogle", controller.register);
 
 //user CRUD routes
 router.route("/")
-  //.post(createUser)
   .get(getUsers);
 
 router.route("/:id")
@@ -42,4 +43,3 @@ router.route("/:id")
   .delete(deleteUser);
 
 module.exports = router;
-//merge issues are resolved....when coding check if your code aligns....this is a combo of routes.js from me and D_Precious

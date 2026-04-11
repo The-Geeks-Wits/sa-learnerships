@@ -6,11 +6,9 @@ const email = document.getElementById('email');
 const password = document.getElementById('newPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 
-
-
-google.accounts.id.initialize({
-    client_id: "540897393879-so4uoeddh7jvu1delkd6ear8t7t9v0dt.apps.googleusercontent.com",
-    callback: receiveGoogleToken
+const googleBtn = document.getElementById('google-btn')
+googleBtn.addEventListener('click', () => {
+    window.location.href = 'http://localhost:3000/google';
 });
 
 function isStrong(password){
@@ -78,12 +76,20 @@ form.addEventListener('submit', async(event)=>{
 
         const data = await response.json();
         if (data.success){
+            
+            sessionStorage.setItem('jwtToken', data.token);
+            sessionStorage.setItem('userId', data.user.id);
+            sessionStorage.setItem('username', data.user.firstName);
+            sessionStorage.setItem('userEmail', data.user.email);
+            sessionStorage.setItem('isLoggedIn', 'true');
+
+
             const successMessage = document.getElementById('success-message');
             successMessage.textContent = "Registered successfully";
             successMessage.style.display = "block";
-            
+            const token = data.token;
             setTimeout(()=>{
-                window.location.href = ""; //I will handle navigation once the required page has been created:)
+                 window.location.href = `http:localhost:5500/dashboard.html?token=${token}`;
             }, 3000);
             
         }
@@ -96,52 +102,6 @@ form.addEventListener('submit', async(event)=>{
             errorMessage.style.display = "block";
             errorMessage.textContent = err.message;
     }
-
-
-    
+ 
 })
 
-
-async function receiveGoogleToken(res){
-    const google_token = res.credential;
-
-    try{
-        const response = await fetch('http://localhost:3000/registerGoogle', {
-            method: 'POST',
-            headers: {'Content-Type' : 'application/json'},
-            body: JSON.stringify({token : google_token})
-        });
-
-        const data = await response.json();
-        errorMessage.style.display = "none";
-       
-
-        if (data.success){
-
-            const successMessage = document.getElementById('success-message');
-            successMessage.textContent = data.message;
-            successMessage.style.display = "block";
-            
-            setTimeout(()=>{
-                window.location.href = ""; //I will handle navigation once the required page has been created:)
-            }, 3000);
-            
-        }
-        else{
-            errorMessage.textContent = data.message || "Google register failed!";
-            errorMessage.style.display = "block";
-        }
-
-    }catch(err){
-        errorMessage.style.display = "block";
-        errorMessage.textContent = err.message;
-    }
-
-
-
-}
-
-google.accounts.id.renderButton(
-    document.getElementById("google-btn-container"),
-    { theme: "outline", size: "medium" , text :"Register With Google"}
-);
