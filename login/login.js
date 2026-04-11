@@ -55,7 +55,9 @@ form.addEventListener('submit', async function (event) {
                 sessionStorage.setItem('userEmail', data.user.email);
                 sessionStorage.setItem('isLoggedIn', 'true');
                 setTimeout(()=>{
-                    window.location.href = "dashboard.html"; 
+                   app.get('/dashboard.html', (req, res) => {
+                        res.redirect('/adminDash.html');
+                    });
                 }, 3000);
             }
         }

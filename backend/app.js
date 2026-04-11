@@ -8,14 +8,15 @@ const User = require('./common/models/User');
 const jwt = require('jsonwebtoken');
 const connectDatabase = require('./database.js');
 const opportunitiesRouter = require('./opportunities/routes.js');
-const userRoutes = require("./routes/userRoutes");
+//const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
 
 const app = express();
 
 // serve static files (if you use frontend in /public)
-app.use(express.static("public"));
+//app.use(express.static("public"));
+app.use(express.static(__dirname + "/.."));  // Serve HTML files from project root
 
 // middleware
 app.use(cors());
@@ -68,7 +69,7 @@ passport.deserializeUser(async (id, done)=>{
 
 // routes
 app.use('/', Routes);
-app.use("/api/users", userRoutes);
+//app.use("/api/users", userRoutes);
 app.use('/opportunities', opportunitiesRouter);
 
 // 404 Error handling middleware

@@ -10,7 +10,7 @@ const {
   createUser,
   updateUser,
   deleteUser,
-} = require("../controllers/userController");
+} = require("../authorization/controller");
 
 //authentication routes
 router.post("/register", controller.register);
@@ -25,7 +25,7 @@ router.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/' }),
     (req, res) => {
         const token = req.user.token;
-        res.redirect(`http://localhost:5500/dashboard.html?token=${token}`);
+        res.redirect(`http://localhost:3000/adminDash.html?token=${token}`);
     }
 );
 
@@ -33,7 +33,7 @@ router.post("/registerGoogle", controller.registerGoogle);
 
 //user CRUD routes
 router.route("/")
-  .post(createUser)
+  //.post(createUser)
   .get(getUsers);
 
 router.route("/:id")
