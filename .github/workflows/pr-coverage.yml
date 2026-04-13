@@ -1,0 +1,48 @@
+name: Pull Request Code Coverage
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read # Read code from repository
+  pull-requests: write # Write comments on PRs (for coverage report)
+  checks: write 
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4 # Clone the repo using the checkout GitHub action
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # Install Node.js
+        with:
+          node-version: '20'
+          cache: 'npm' # Cacheing npm dependencies results in faster subsequent runs
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci # Clean install
+        working-directory: backend
+
+      - name: Run tests with coverage
+        run: npm run test:ci
+        working-directory: backend
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage
+          retention-days: 2
+
+      # Comment coverage on the pull request
+      - name: Comment Coverage
+        uses: MishaKav/jest-coverage-comment@main
+        with: 
+          coverage-summary-path: backend/coverage/coverage-summary.json
+          title: Code coverage report for this Branch
+          hide-comment: false

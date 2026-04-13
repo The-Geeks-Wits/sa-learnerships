@@ -1,3 +1,9 @@
+<!-- ====================== FILE INSTRUCTIONS =========================
+    This is a landing page 
+    It's placed on the main project folder so that the url to it can be '/index.html' 
+    It's styles can be found on the main scripts folder as other pages that are on the main project folder
+-->
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -5,8 +11,49 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>SA Learnership</title>
         <link rel="stylesheet" href="/styles/index.css" />
+        <link rel="stylesheet" href="/styles/landing.css" />
     </head>
     <body>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li><button class="login-btn transparent-btn">Login</button></li>
+                <li><button class="register-btn coloured-btn">Get Started</button></li>
+            </ul>
+        </nav>
+        <header>
+            <h2>Where Work-Seekers Meet Employers</h2>
+            <h3>Who Are Ready to Train.</h3>
+            <p>
+                Connect with SETA-accredited learnerships, apprenticeships, and internships. Built for South African
+                work-seekers and employers.
+            </p>
+            <section>
+                <button class="register-btn coloured-btn">Register</button>
+                <button class="login-btn transparent-btn">Login</button>
+            </section>
+        </header>
+        <article id="how-it-works">
+            <h3>How It Works</h3>
+            <ul>
+                <li class="card">
+                    <p class="card-number">1</p>
+                    <h4>Create Your Profile</h4>
+                    <p class="description">Sign up and tell us about your skills, interests, and location.</p>
+                </li>
+                <li class="card">
+                    <p class="card-number">2</p>
+                    <h4>Find An Opportunity</h4>
+                    <p class="description">Sign up and tell us about your skills, interests, and location.</p>
+                </li>
+                <li class="card">
+                    <p class="card-number">3</p>
+                    <h4>Apply & Track Progress</h4>
+                    <p class="description">Sign up and tell us about your skills, interests, and location.</p>
+                </li>
+            </ul>
+        </article>
         <script src="/scripts/index.js"></script>
+        <script src="/scripts/landing.js"></script>
     </body>
 </html>

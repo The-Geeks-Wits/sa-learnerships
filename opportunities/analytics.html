@@ -1,12 +1,12 @@
-<!-- This page is for viewing an opportunity so it needs the id to function accordingly. It is accessible to everyone  -->
+<!-- This page is where analytics of opportunities will be viewed. It should be accessible to the admins only -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title id="browser-title">View Opportunity</title>
+        <title>Opportunities Analytics</title>
         <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/view.css" />
+        <link rel="stylesheet" href="./styles/mine.css" />
         <link rel="stylesheet" href="./styles/common.css" />
     </head>
     <body>
@@ -52,46 +52,16 @@
                 </ul>
             </aside>
             <section id="main-details">
-                <section id="page-state"></section>
-                <section id="details-container">
-                    <header>
-                        <h2 id="page-title"></h2>
-                        <p id="status" class="pending"></p>
-                    </header>
-                    <h3>Description:</h3>
-                    <p id="description"></p>
-                    <h3>Requirements:</h3>
-                    <ul id="requirements"></ul>
-                    <section id="details-wrapper">
-                        <section>
-                            <h3>Stipend:</h3>
-                            <p id="stipend"></p>
-                        </section>
-                        <section>
-                            <h3>Duration:</h3>
-                            <p id="duration"></p>
-                        </section>
-                    </section>
-                    <section id="details-wrapper">
-                        <section>
-                            <h3>Location:</h3>
-                            <p id="location"></p>
-                        </section>
-                        <section>
-                            <h3>Closing Date:</h3>
-                            <p id="closing-date"></p>
-                        </section>
-                    </section>
-                    <!-- Actions that should only be visible to the admin -->
-                    <hr />
-                    <section id="actions">
-                        <button id="approve-btn" class="coloured-btn">Approve</button>
-                        <button id="remove-btn" class="transparent-btn">Reject</button>
-                    </section>
+                <section id="page-container">
+                    <h1 id="page-title">Analytics Of Opportunities</h1>
+                    <p>
+                        This is where analytics of all opportunities will be accessed once this feature has been fully
+                        implemented. Maybe in another world we would have this ready by now
+                    </p>
                 </section>
+                <script src="../scripts/index.js"></script>
+                <script src="./scripts/index.js"></script>
             </section>
         </main>
-        <script src="./scripts/view.js"></script>
-        <script src="../scripts/index.js"></script>
     </body>
 </html>

@@ -1,4 +1,8 @@
-#opportunities li button {
-    background: linear-gradient(to right, #6e2287 0%, #ae3096 73%, #c7359b 100%);
-    color: #ffffff;
+/* This file is for the opportunities/index.html file and should not be used anywhere else */
+
+#page-container {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    display: none;
 }

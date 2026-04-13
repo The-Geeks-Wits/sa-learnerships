@@ -1,37 +1,41 @@
-const getOpportunityElement = (title, location, closingDate) => {
-    return `<li>
-        <h3>${title}</h3>
-        <section class="opportunity-details">
-            <section>
-                <p><b>Location:</b> ${location}<p>
-                <p><b>Closes:</b> ${closingDate}</p>
-            </section>
-            <button>Apply</button>
-        </section>
-    </li>`;
-};
+const pageState = document.getElementById('page-state');
+const pageError = document.getElementById('page-error');
+const pageContainer = document.getElementById('page-container');
+const opportunities = document.getElementById('opportunities');
 
-const listCotainer = document.getElementById('opportunities');
-
-// Dummy data for now. This will come from the server in this format
-const opportunities = [
-    {
-        title: 'The Entelect Graduate Program - 2026',
-        location: 'Melrose, Johannesburg, Gauteng',
-        closingDate: '20-07-2026',
-    },
-    {
-        title: 'Umuzi 2026 Learnership',
-        location: 'Online, South Africa',
-        closingDate: '10-03-2026',
-    },
-    {
-        title: 'Gauteng Youth Learnership',
-        location: 'Kagiso, Krugersdrop, Gauteng',
-        closingDate: '10-03-2026',
-    },
-];
-
-opportunities.forEach(({ title, location, closingDate }) => {
-    listCotainer.innerHTML += getOpportunityElement(title, location, closingDate);
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        pageState.style.display = 'flex';
+        pageState.innerHTML = '<p>Loading...</p>';
+        const response = await fetch('http://localhost:3000/opportunities?status=Approved', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+        if (response.ok) {
+            pageContainer.style.display = 'block';
+            data.opportunities.forEach(({ id, title, location, closingDate }) => {
+                opportunities.innerHTML += `<li>
+                    <h3>${title}</h3>   
+                    <section class="opportunity-details">
+                        <section>
+                            <p><b>Location:</b> ${location || 'Not provided'}<p>
+                            <p><b>Closes:</b> ${closingDate.slice(0, 10)}</p>   
+                        </section>
+                        <secttion>
+                            <button class="coloured-btn">Apply</button>
+                            <button class="transparent-btn">More Details</button>
+                        </section>
+                    </section>
+                </li>`;
+            });
+        }
+    } catch (error) {
+        pageError.style.display = 'flex';
+        pageError.innerHTML = '<p>An error occurred! Please try again later</p>';
+        console.error('View opportunity error:', error);
+    } finally {
+        pageState.style.display = 'none';
+        pageState.innerHTML = '';
+    }
 });

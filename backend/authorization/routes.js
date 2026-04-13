@@ -1,45 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const passport = require("passport");
+const express = require('express');
+const passport = require('passport');
+const { verifyToken } = require('../middlewares/auth.js');
+const controller = require('./controller.js');
 
-//importing the controllers
-const controller = require("./controller");
-const {
-  getUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-} = require("./controller");
+const router = express.Router();
 
 // auth
-router.post("/register", controller.register);
-router.post("/login", controller.login);
+router.post('/register', controller.register);
+router.post('/login', controller.login);
 
 // google auth
 router.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"]
-  })
+    '/google',
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+    }),
 );
 
-router.get('/google/callback', 
-    passport.authenticate('google', { session: false, failureRedirect: '/' }),
+router.get(
+    '/google/callback',
+    passport.authenticate('google', {
+        session: false,
+        failureRedirect: '/',
+    }),
     (req, res) => {
         const token = req.user.token;
-        res.redirect(`http://localhost:3000/adminDash.html?token=${token}`);
-    }
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: false, //we have to change it to true in production
+            maxAge: 3600000,
+        });
+        res.redirect(`${process.env.CLIENT_URL}/adminDash.html`);
+    },
 );
 
-router.post("/registerGoogle", controller.register);
+router.get('/profile', verifyToken, (req, res) => {
+    res.json({ user: req.user });
+});
+
+// users
+router.get('/', verifyToken, controller.getUsers);
+router.get('/:id', verifyToken, controller.getUserById);
+router.put('/:id', verifyToken, controller.updateUser);
+router.delete('/:id', verifyToken, controller.deleteUser);
 
 //user CRUD routes
 router.route("/")
-  .get(getUsers);
+  .get(controller.getUsers);
 
 router.route("/:id")
-  .get(getUserById)
-  .put(updateUser)
-  .delete(deleteUser);
+  .get(controller.getUserById)
+  .put(controller.updateUser)
+  .delete(controller.deleteUser);
 
 module.exports = router;

@@ -1,13 +1,17 @@
-<!-- This page shows all opportunities which are available to receive applications (i.e Those that are approved) It should be accessible to everyone -->
+<!-- ====================== FILE INSTRUCTIONS =========================
+    This is a home page 
+    It's placed on the main project folder so that the url to it can be '/home.html' 
+    It's styles can be found on the main scripts folder as other pages that are on the main project folder
+-->
+
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>All Opportunities</title>
-        <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/index.css" />
-        <link rel="stylesheet" href="./styles/common.css" />
+        <title>Home</title>
+        <link rel="stylesheet" href="/styles/index.css" />
+        <link rel="stylesheet" href="/styles/home.css" />
     </head>
     <body>
         <nav>
@@ -33,7 +37,7 @@
                     <li>
                         <section id="opportunities-nav" class="heading">
                             <p>Opportunities</p>
-                            <img id="opportunities-nav-image" src="/assets/down-arrow.png" />
+                            <img id="opportunities-nav-image" src="/assets/right-arrow.png" />
                         </section>
                         <section id="opportunities-nav-options"></section>
                     </li>
@@ -52,15 +56,23 @@
                 </ul>
             </aside>
             <section id="main-details">
-                <section id="page-state"></section>
-                <section id="page-error"></section>
-                <section id="page-container">
-                    <h1 id="page-title">All Opportunities</h1>
-                    <ul id="opportunities"></ul>
-                </section>
+                <ul id="insights">
+                    <li class="card">
+                        <h4>500</h4>
+                        <p>Total Opportunities</p>
+                    </li>
+                    <li class="card">
+                        <h4>80%</h4>
+                        <p>Acceptance Rate</p>
+                    </li>
+                    <li class="card">
+                        <h4>10.89</h4>
+                        <p>Application Volume</p>
+                    </li>
+                </ul>
             </section>
         </main>
-        <script src="../scripts/index.js"></script>
-        <script src="./scripts/index.js"></script>
+        <script src="/scripts/home.js"></script>
+        <script src="/scripts/index.js"></script>
     </body>
 </html>

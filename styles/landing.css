@@ -1,0 +1,93 @@
+/* This file is for the landing page design and should be used solely on the index.html file */
+
+/* Header syles */
+header {
+    width: 100%;
+    background-color: #dfdfdf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 0px;
+}
+
+header h2 {
+    font-size: 42px;
+    line-height: 34px;
+}
+
+header h3 {
+    margin: 20px 0px;
+    font-size: 30px;
+    color: #1562f2;
+}
+
+header p {
+    max-width: 700px;
+    text-align: center;
+    font-size: 18px;
+    color: #595959;
+}
+
+header section {
+    margin-top: 40px;
+}
+
+header section button {
+    width: 150px;
+    padding: 0px;
+}
+
+header section .coloured-btn {
+    margin-right: 30px;
+}
+
+/* How it works article syles */
+
+#how-it-works {
+    padding: 80px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#how-it-works h3 {
+    font-size: 30px;
+}
+
+#how-it-works ul {
+    margin-top: 30px;
+    list-style: none;
+    display: flex;
+}
+
+#how-it-works ul li {
+    width: 320px;
+    padding: 16px 0px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#how-it-works ul li h4 {
+    margin: 10px 0px;
+    font-size: 18px;
+}
+
+#how-it-works ul li .card-number {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1562f2;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#how-it-works ul li .description {
+    max-width: 300px;
+    text-align: center;
+    color: #595959;
+}

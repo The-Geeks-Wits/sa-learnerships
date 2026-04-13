@@ -1,0 +1,19 @@
+/* This file contains the styles for the home page and should be used solely on the home.html file */
+
+#main-details #insights {
+    width: 70%;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+#main-details #insights li {
+    padding: 30px 40px;
+    background-color: #ffffff;
+}
+
+#main-details #insights li h4 {
+    font-size: 20px;
+    line-height: 18px;
+    margin-bottom: 10px;
+}

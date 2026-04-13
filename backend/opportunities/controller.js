@@ -8,6 +8,9 @@ exports.createOpportunity = async (req, res) => {
             });
         }
 
+        // Get the token cookie and load the user from the database
+
+        const user = undefined;
         const title = req.body.title;
         const description = req.body.description;
         const requirements = req.body.requirements;
@@ -31,6 +34,7 @@ exports.createOpportunity = async (req, res) => {
         // TODO: Check if stipend and duration are numbers, the location is a valid location, the closing date is a valid date,
 
         const opportunity = await Opportunity.create({
+            user,
             title,
             description,
             requirements,
@@ -48,6 +52,7 @@ exports.createOpportunity = async (req, res) => {
 
         res.status(201).json({
             id: opportunity._id,
+            creator: opportunity.creator,
             title: opportunity.title,
             description: opportunity.description,
             duration: opportunity.duration,
@@ -123,17 +128,6 @@ exports.getOpportunity = async (req, res) => {
     }
 };
 
-// TODO: (By MUSA)
-// 1. Opportunity approval by admin. This is just updating the status of an opportunity
-// Much work goes into confirming if the person updating the status is an admin or not which
-// is only possible to do after Thendo is done
-// 2. Removal of opportunity by amdin. Similarly to 1, this just involves deleting an opportunity
-// and much of the work will go into confirming that the person deleting an opportunity is an admin
-// 3. List of opportunities that are accepting applications. I have made this simple by creating a get all opportunites route
-// which you can use by sending a request to '/opportunites?status=Pending' for example. Status can be pending or approved so the list
-// of all such is one where opportunities have a status of 'approved'
-// So you should basically add 2 routes here, one for updating of an opportunity and one for deleting an opportunity
-
 exports.rejectOpportunity = async (req, res) => {
     try {
         if (!req.params || !req.params.id) {
@@ -145,7 +139,7 @@ exports.rejectOpportunity = async (req, res) => {
         const opportunity = await Opportunity.findById(req.params.id);
         if (!opportunity) {
             return res.status(400).json({
-                error: 'Opportunity not found! Please check your id and try again', 
+                error: 'Opportunity not found! Please check your id and try again',
             });
         }
 
@@ -154,15 +148,13 @@ exports.rejectOpportunity = async (req, res) => {
         res.status(200).json({
             message: 'Opportunity rejected successfully!',
         });
-    }   
-    catch (error) {
-        res.status(500).json({ 
+    } catch (error) {
+        res.status(500).json({
             error: 'Something went wrong! Please try again later',
         });
         console.log(error);
-    }  
+    }
 };
-
 
 exports.approveOpportunity = async (req, res) => {
     try {
@@ -175,7 +167,7 @@ exports.approveOpportunity = async (req, res) => {
         const opportunity = await Opportunity.findById(req.params.id);
         if (!opportunity) {
             return res.status(400).json({
-                error: 'Opportunity not found! Please check your id and try again', 
+                error: 'Opportunity not found! Please check your id and try again',
             });
         }
 
@@ -184,11 +176,10 @@ exports.approveOpportunity = async (req, res) => {
         res.status(200).json({
             message: 'Opportunity approved successfully!',
         });
-    }   
-    catch (error) {
-        res.status(500).json({ 
+    } catch (error) {
+        res.status(500).json({
             error: 'Something went wrong! Please try again later',
         });
         console.log(error);
-    }  
+    }
 };

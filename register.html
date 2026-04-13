@@ -1,0 +1,92 @@
+<!-- ====================== FILE INSTRUCTIONS =========================
+    This is a login page 
+    It's placed on the main project folder so that the url to it can be '/register.html' 
+    It's styles can be found on the main scripts folder as other pages that are on the main project folder
+-->
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Register</title>
+        <link rel="stylesheet" href="/styles/index.css" />
+        <link rel="stylesheet" href="/styles/register.css" />
+    </head>
+
+    <body>
+        <main class="wrapper">
+            <article>
+                <h1>Register</h1>
+                <p class="description">Create a new account to get started</p>
+                <form id="registration-form" novalidate>
+                    <section class="input-group">
+                        <label for="firstName">FIRST NAME</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/user.svg" alt="user-icon" class="left-icon" />
+                            <input
+                                type="text"
+                                id="firstName"
+                                name="firstName"
+                                placeholder="Please enter your first name"
+                            />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="lastName">LAST NAME</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/user.svg" alt="user-icon" class="left-icon" />
+                            <input
+                                type="text"
+                                id="lastName"
+                                name="lastName"
+                                placeholder="Please enter your last name"
+                            />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="email">EMAIL</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/email.svg" alt="email-icon" class="left-icon" />
+                            <input type="text" id="email" name="email" placeholder="Please enter your email address" />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="newPassword">NEW PASSWORD</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/lock.svg" alt="lock-icon" class="left-icon" />
+                            <input
+                                type="password"
+                                id="newPassword"
+                                name="newPassword"
+                                placeholder="Please enter new password"
+                            />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="confirmPassword">CONFIRM PASSWORD</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/lock.svg" alt="lock-icon" class="left-icon" />
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                placeholder="Please confirm new password"
+                            />
+                        </section>
+                    </section>
+                    <p id="error-message">Please enter matching passwords.</p>
+                    <button type="submit" id="registerBtn" class="coloured-btn">Register</button>
+                    <section id="redirect-wrapper">
+                        <p class="redirect-text">Already have an account?</p>
+                        <a href="login.html">Log In</a>
+                    </section>
+                    <hr />
+                    <button type="button" id="google-btn" class="transparent-btn">Register with Google</button>
+                </form>
+            </article>
+        </main>
+        <script src="https://accounts.google.com/gsi/client"></script>
+        <script type="module" src="/scripts/register.js"></script>
+    </body>
+</html>

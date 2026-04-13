@@ -1,0 +1,55 @@
+<!-- ====================== FILE INSTRUCTIONS =========================
+    This is a login page 
+    It's placed on the main project folder so that the url to it can be '/login.html' 
+    It's styles can be found on the main scripts folder as other pages that are on the main project folder
+-->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="/styles/index.css" />
+        <link rel="stylesheet" href="/styles/login.css" />
+    </head>
+    <body>
+        <main class="wrapper">
+            <article>
+                <h1>Login</h1>
+                <p class="description">Please fill in your details to access your account</p>
+                <form id="login-form">
+                    <section class="input-group">
+                        <label for="email">Email</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/email.svg" alt="email-icon" class="left-icon" />
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="password">Password</label>
+                        <section class="input-wrapper">
+                            <img src="../assets/lock.svg" alt="lock-icon" class="left-icon" />
+                            <input type="password" id="password" name="password" placeholder="Enter your password" />
+                            <img src="../assets/eye-off.svg" alt="toggle-visibility" class="right-icon" />
+                        </section>
+                    </section>
+                    <p id="error-message" class="error-message">Please enter the correct password.</p>
+                    <section class="remember-me-wrapper">
+                        <section>
+                            <input type="checkbox" id="remember-me" />
+                            <p>Remember me</p>
+                        </section>
+                        <a href="#" class="forgot-password">Forgot Password</a>
+                    </section>
+                    <button type="submit" id="login-btn" class="coloured-btn">Login</button>
+                    <section id="redirect-wrapper">
+                        <p class="redirect-text">Do you have an account?</p>
+                        <a href="register.html">Register</a>
+                    </section>
+                    <button type="button" id="google-btn" class="transparent-btn">Login with Google</button>
+                </form>
+            </article>
+        </main>
+        <script type="module" src="/scripts/login.js"></script>
+    </body>
+</html>

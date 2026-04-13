@@ -1,5 +1,7 @@
-body {
-    padding: 20px;
+#main-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #page-description {
@@ -16,12 +18,6 @@ form {
     padding-bottom: 40px;
     display: flex;
     flex-direction: column;
-}
-
-form button {
-    width: 100%;
-    background: linear-gradient(to right, #6e2287 0%, #ae3096 73%, #c7359b 100%);
-    color: #ffffff;
 }
 
 #requirements {
@@ -56,6 +52,10 @@ form button {
     display: flex;
 }
 
+.requirements-group {
+    margin-bottom: 10px;
+}
+
 #stipend,
 #location {
     margin-right: 20px;
@@ -83,7 +83,7 @@ textarea {
     width: 100%;
     padding: 12px 20px;
     background-color: #ffffff;
-    border: 1.5px solid #1a6b7232;
+    border: 1.5px solid #dfdfdf;
     border-radius: 10px;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
@@ -98,7 +98,7 @@ textarea {
 
 input:focus,
 textarea:focus {
-    border-color: #ae3096;
+    border-color: #1562f2;
 }
 
 .input-group {

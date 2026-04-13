@@ -10,11 +10,57 @@
         <link rel="stylesheet" href="./styles/pending.css" />
     </head>
     <body>
-        <section id="page-state"></section>
-        <section id="page-container">
-            <h1 id="page-title">Pending Opportunities</h1>
-            <ul id="opportunities"></ul>
-            <script src="./scripts/pending.js"></script>
-        </section>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="/assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details">
+                    <section>
+                        <h4>Dikeledi Moatle</h4>
+                        <p>Applicant</p>
+                    </section>
+                    <h3>D</h3>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <button id="apply-btn" class="coloured-btn">Apply</button>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="/assets/down-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Your Account</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Settings</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                </ul>
+            </aside>
+            <section id="main-details">
+                <section id="page-state"></section>
+                <section id="page-error"></section>
+                <section id="page-container">
+                    <h1 id="page-title">Pending Opportunities</h1>
+                    <ul id="opportunities"></ul>
+                    <script src="./scripts/pending.js"></script>
+                </section>
+            </section>
+        </main>
+        <script src="/scripts/index.js"></script>
     </body>
 </html>

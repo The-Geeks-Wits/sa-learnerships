@@ -20,12 +20,22 @@ button:hover {
     opacity: 0.85;
 }
 
+/* Show the opportunity side bar options */
+aside #opportunities-nav-options {
+    display: block;
+}
+
+aside #opportunities-nav {
+    background-color: #dfdfdf;
+}
+
 #page-title {
     width: 100%;
+    max-width: 800px;
+    margin-bottom: 30px;
     font-size: 38px;
     max-width: 800px;
-    padding-top: 30px;
-    padding-bottom: 10px;
+    line-height: 30px;
 }
 
 #opportunities {
@@ -45,6 +55,10 @@ button:hover {
     border-radius: 10px;
 }
 
+#opportunities li h3 {
+    font-size: 24px;
+}
+
 #opportunities li p {
     margin-top: 10px;
     font-size: 14px;
@@ -57,4 +71,24 @@ button:hover {
 .opportunity-details {
     display: flex;
     justify-content: space-between;
+}
+
+/* Page state and error styles */
+
+#page-state,
+#page-error {
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#page-state p,
+#page-error p {
+    font-size: 18px;
+}
+
+.no-data {
+    margin-top: 50px;
 }

@@ -1,5 +1,8 @@
+/* This file is for all common styles. It should be imported on every html file so that common styles can be applied */
+
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600&family=Jost:wght@400;600&display=swap');
 
+/* Element styles goes here i.e. Every style that is applied using the element selector should put here */
 * {
     margin: 0px;
     padding: 0px;
@@ -7,7 +10,225 @@
 }
 
 body {
+    height: 100%;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
+    background-color: #fafafa;
+}
+
+button {
+    height: 36px;
+    padding: 0px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    transition: opacity 0.2s ease;
+}
+
+button:hover {
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+/* Navigation styles */
+nav {
+    width: 100%;
+    padding: 16px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1.5px solid #dfdfdf;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul {
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 10px;
+}
+
+nav #app-name {
+    font-size: 26px;
+}
+
+nav #profile-details {
+    display: flex;
+    align-items: center;
+}
+
+nav #profile-details h3 {
+    height: 30px;
+    width: 30px;
+    font-size: 14px;
+    font-weight: 300;
+    border: none;
+    border-radius: 50%;
+    background-color: #34a853;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav #profile-details section {
+    margin-right: 20px;
+}
+
+nav #profile-details h4 {
+    margin-bottom: 6px;
+    font-size: 16px;
+    line-height: 14px;
+    word-spacing: 4px;
+}
+
+nav #profile-details p {
+    font-size: 14px;
+    line-height: 12px;
+}
+
+nav #notifications {
+    width: 50px;
+    margin-right: 30px;
+    border-right: 1.5px solid #dfdfdf;
+    position: relative;
+}
+
+nav #notifications img {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    transform: translate(0%, -50%);
+}
+
+nav #notifications #count {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1562f2;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 18%;
+    top: 5%;
+}
+
+/* Main styles */
+main {
+    height: 100%;
+    min-height: calc(100vh - 66px);
+    width: 100%;
+    display: flex;
+}
+
+main #main-details {
+    width: calc(100% - 280px);
+    padding: 30px 80px 40px 80px;
+}
+
+/* Sidebar styles */
+aside {
+    width: 280px;
     background-color: #ffffff;
+    border-right: 1.5px solid #dfdfdf;
+}
+
+aside ul {
+    padding: 0px 20px;
+    list-style: none;
+}
+
+aside ul li {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+aside ul li .heading {
+    padding: 6px 20px;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+aside ul li .heading:hover {
+    background-color: #dfdfdf;
+    cursor: pointer;
+}
+
+aside ul li .heading p {
+    font-size: 16px;
+    color: #505050;
+}
+
+aside ul li .heading img {
+    height: 10px;
+    width: 10px;
+}
+
+aside #opportunities-nav-options,
+aside #control-center-nav-options {
+    display: none;
+}
+
+aside #opportunities-nav-options ul,
+aside #control-center-nav-options ul {
+    margin-top: 10px;
+    padding-left: 40px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+aside #opportunities-nav-options ul li,
+aside #control-center-nav-options ul li {
+    height: 40px;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+aside #opportunities-nav-options ul li a,
+aside #control-center-nav-options ul li a {
+    font-size: 16px;
+    color: #505050;
+    text-decoration: none;
+}
+
+aside #apply-btn {
+    width: calc(100% - 40px);
+    margin: 30px 20px;
+}
+
+/* Class styles goes here i.e. Every style that is applied using the element class selector should put here */
+
+.transparent-btn {
+    background-color: transparent;
+    border: 1.5px solid #1562f2;
+    color: #1562f2;
+}
+
+.coloured-btn {
+    background-color: #1562f2;
+    color: #ffffff;
+}
+
+.card {
+    background-color: transparent;
+    border: 1.5px solid #dfdfdf;
+    border-radius: 6px;
 }

@@ -1,7 +1,7 @@
 const pageState = document.getElementById('page-state');
 const detailsContainer = document.getElementById('details-container');
+const browserTitle = document.getElementById('browser-title');
 const pageTitle = document.getElementById('page-title');
-const title = document.getElementById('title');
 const statusElement = document.getElementById('status');
 const descriptionContainer = document.getElementById('description-container');
 const description = document.getElementById('description');
@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.ok) {
             detailsContainer.style.display = 'block';
 
-            pageTitle.innerHTML = 'Opportunity | ' + data.title;
-            title.innerHTML = data.title;
+            browserTitle.innerHTML = 'Opportunity | ' + data.title;
+            pageTitle.innerHTML = data.title;
             statusElement.innerHTML = data.status;
 
             if (data.description) description.innerHTML = data.description;
@@ -84,10 +84,9 @@ approveButton.addEventListener('click', async () => {
             approveButton.textContent = 'Approved';
             approveButton.style.cursor = 'not-allowed';
             alert('Opportunity approved successfully!');
-        }else {
+        } else {
             alert(data.error);
         }
-
     } catch (error) {
         alert('Something went wrong! Please try again later');
     }

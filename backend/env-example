@@ -1,3 +1,5 @@
 SERVER_PORT=your server port
 LOCAL_DB_PORT=your local db port
 GOOGLE_CLIENT_ID =your gooogle client id for google authentication
+CLIENT_URL= http://127.0.0.1:5500
+API_URL = http://localhost:3000

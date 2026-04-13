@@ -1,3 +1,4 @@
+<!-- This page is where opportunities can be created. It should be accessible to the providers and admins only -->
 <!doctype html>
 <html lang="en">
     <head>
@@ -9,77 +10,137 @@
         <link rel="stylesheet" href="./styles/create.css" />
     </head>
     <body>
-        <h2 id="page-title">Create Opportunity</h2>
-        <p id="page-description">
-            Fill in details of the opportunity you want to create. All fields marked with * are required. Please note
-            that your opportunity will only be able to receive applications after a successful review by our
-            administrators
-        </p>
-        <form id="create-opportunity-form">
-            <section class="input-group">
-                <section class="required-group">
-                    <label for="title">Title:</label>
-                    <p>*</p>
-                </section>
-                <section class="input-wrapper">
-                    <input type="text" id="title" name="title" placeholder="Enter the title of the opportunity" />
-                </section>
-            </section>
-            <section class="input-group">
-                <label for="description">Description:</label>
-                <section class="input-wrapper">
-                    <textarea id="description" name="description"> </textarea>
-                </section>
-            </section>
-            <section>
-                <section class="required-group">
-                    <h4>Requirements:</h4>
-                    <p>*</p>
-                </section>
-                <ul id="requirements">
-                    <li><input type="text" class="requirement" /></li>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="/assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details">
+                    <section>
+                        <h4>Dikeledi Moatle</h4>
+                        <p>Applicant</p>
+                    </section>
+                    <h3>D</h3>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <button id="apply-btn" class="coloured-btn">Apply</button>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="/assets/down-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Your Account</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Settings</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
                 </ul>
-                <button type="button" id="add-requirement-btn">Add requirement</button>
+            </aside>
+            <section id="main-details">
+                <h2 id="page-title">Create Opportunity</h2>
+                <p id="page-description">
+                    Fill in details of the opportunity you want to create. All fields marked with * are required. Please
+                    note that your opportunity will only be able to receive applications after a successful review by
+                    our administrators
+                </p>
+                <form id="create-opportunity-form">
+                    <section class="input-group">
+                        <section class="required-group">
+                            <label for="title">Title:</label>
+                            <p>*</p>
+                        </section>
+                        <section class="input-wrapper">
+                            <input
+                                type="text"
+                                id="title"
+                                name="title"
+                                placeholder="Enter the title of the opportunity"
+                            />
+                        </section>
+                    </section>
+                    <section class="input-group">
+                        <label for="description">Description:</label>
+                        <section class="input-wrapper">
+                            <textarea id="description" name="description"> </textarea>
+                        </section>
+                    </section>
+                    <section class="requirements-group">
+                        <section class="required-group">
+                            <h4>Requirements:</h4>
+                            <p>*</p>
+                        </section>
+                        <ul id="requirements">
+                            <li><input type="text" class="requirement" /></li>
+                        </ul>
+                        <button type="button" class="transparent-btn" id="add-requirement-btn">Add requirement</button>
+                    </section>
+                    <section class="details-group">
+                        <section class="input-group">
+                            <label for="stipend">Stipend:</label>
+                            <section class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="stipend"
+                                    name="stipend"
+                                    placeholder="Enter the stipend in rands"
+                                />
+                            </section>
+                        </section>
+                        <section class="input-group">
+                            <label for="duration">Duration:</label>
+                            <section class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="duration"
+                                    name="duration"
+                                    placeholder="Enter the duration in months"
+                                />
+                            </section>
+                        </section>
+                    </section>
+                    <section class="details-group">
+                        <section class="input-group">
+                            <label for="location">Location:</label>
+                            <section class="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="location"
+                                    name="location"
+                                    placeholder="Enter the location of the opportunity "
+                                />
+                            </section>
+                        </section>
+                        <section class="input-group">
+                            <section class="required-group">
+                                <label for="closing-date">Closing Date:</label>
+                                <p>*</p>
+                            </section>
+                            <section class="input-wrapper">
+                                <input type="date" id="closing-date" name="closing-date" />
+                            </section>
+                        </section>
+                    </section>
+                    <p id="error-message">An error has occurred... Debug there</p>
+                    <button id="submit-btn" class="coloured-btn" type="submit">Submit for review</button>
+                </form>
             </section>
-            <section class="details-group">
-                <section class="input-group">
-                    <label for="stipend">Stipend:</label>
-                    <section class="input-wrapper">
-                        <input type="text" id="stipend" name="stipend" placeholder="Enter the stipend in rands" />
-                    </section>
-                </section>
-                <section class="input-group">
-                    <label for="duration">Duration:</label>
-                    <section class="input-wrapper">
-                        <input type="text" id="duration" name="duration" placeholder="Enter the duration in months" />
-                    </section>
-                </section>
-            </section>
-            <section class="details-group">
-                <section class="input-group">
-                    <label for="location">Location:</label>
-                    <section class="input-wrapper">
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            placeholder="Enter the location of the opportunity "
-                        />
-                    </section>
-                </section>
-                <section class="input-group">
-                    <section class="required-group">
-                        <label for="closing-date">Closing Date:</label>
-                        <p>*</p>
-                    </section>
-                    <section class="input-wrapper">
-                        <input type="date" id="closing-date" name="closing-date" />
-                    </section>
-                </section>
-            </section>
-            <p id="error-message">An error has occurred... Debug there</p>
-            <button id="submit-btn" type="submit">Submit for review</button>
-        </form>
+        </main>
         <script src="./scripts/create.js"></script>
+        <script src="../scripts/index.js"></script>
     </body>
 </html>

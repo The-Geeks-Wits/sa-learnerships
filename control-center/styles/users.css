@@ -1,0 +1,101 @@
+/* Show the control center side bar options */
+aside #control-center-nav-options {
+    display: block;
+}
+
+aside #control-center-nav {
+    background-color: #dfdfdf;
+}
+
+/* Thedo's style -- Delete this comment after confirming everything */
+
+form {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+/* input styles used on the whole app  */
+input {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #ffffff;
+    border: 1.5px solid #dfdfdf;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+input:focus {
+    border-color: #1562f2;
+}
+
+/* Yours -- Please confirm the input style diffences with the ones that are used on the whole app */
+input,
+select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1.5px solid #dfdfdf;
+}
+
+input {
+    flex: 2;
+}
+
+select {
+    flex: 1;
+}
+
+/* table css stuff*/
+
+/* This are the styles I added... Their for a loading state and showing the error message. We don't need to show alerts on everything */
+/* I did this because that is how everything else works on the app */
+
+#table-state,
+#table-error {
+    width: 100%;
+    margin-top: 40px;
+    display: none;
+    justify-content: center;
+}
+
+table {
+    width: 100%;
+    margin-top: 40px;
+    border-radius: 8px;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+th {
+    background: #ffffff;
+    text-align: left;
+    font-size: 13px;
+}
+
+th,
+td {
+    overflow: hidden;
+    padding: 14px;
+    border-bottom: 1.5px solid #dfdfdf;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover {
+    background: #f9fafb;
+    cursor: pointer;
+}
+
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: #94a3b8;
+}

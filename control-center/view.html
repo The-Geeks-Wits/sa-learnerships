@@ -1,0 +1,106 @@
+<!-- This page is for viewing a user details and performing actions on that user. It should be accessible to the admins only -->
+<!-- This page is for user management. It fetches all users and allows filtering. It should be accessible to the admins only -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>View User</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/view.css" />
+    </head>
+    <body>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="/assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details">
+                    <section>
+                        <h4>Dikeledi Moatle</h4>
+                        <p>Applicant</p>
+                    </section>
+                    <h3>D</h3>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <button id="apply-btn" class="coloured-btn">Apply</button>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="/assets/right-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Your Account</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Settings</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                </ul>
+            </aside>
+            <section id="main-details">
+                <section id="page-state"></section>
+                <section id="page-error"></section>
+                <section id="page-container">
+                    <h1 id="page-title">User Details</h1>
+                    <!-- user details -->
+                    <section id="userDetailSection">
+                        <section id="user-details-header" class="detail-wrapper">
+                            <!-- I placed this next to one another so that they can be next to each other and make it look neat -->
+                            <!-- followed by names -->
+                            <section>
+                                <h3>Name</h3>
+                                <p id="detailName"></p>
+                            </section>
+                            <section id="user-role">
+                                <!-- these are the role options for the user to be given by admin -->
+                                <h3>Role</h3>
+                                <select id="detailRole">
+                                    <option value="applicant">Applicant</option>
+                                    <option value="provider">Provider</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </section>
+                        </section>
+                        <section class="detail-wrapper">
+                            <!-- followed by email then we have a drop down for the roles to be able to reassign -->
+                            <h3>Email</h3>
+                            <p id="detailEmail"></p>
+                        </section>
+                        <section class="detail-wrapper">
+                            <!-- followed by the date joined -->
+                            <h3>Joined</h3>
+                            <p id="joined-detail"></p>
+                        </section>
+                        <section class="detail-wrapper">
+                            <!-- followed by their account status -->
+                            <h3>Status</h3>
+                            <p id="status-detail"></p>
+                        </section>
+                        <hr />
+                        <!-- these buttons are the crud ones that appear together with user info when you click the user -->
+                        <section id="user-actions">
+                            <button class="coloured-btn" id="save-user-details" onclick="updateUser()">Save</button>
+                            <button class="transparent-btn" id="delete-user" onclick="deleteUser()">Delete</button>
+                        </section>
+                    </section>
+                </section>
+            </section>
+        </main>
+        <script src="../scripts/index.js"></script>
+        <script src="./scripts/view.js"></script>
+    </body>
+</html>
