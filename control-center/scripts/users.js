@@ -2,10 +2,8 @@ const API_URL = 'http://localhost:3000/api/users';
 
 // page elements
 const tbody = document.getElementById('userTableBody');
-
 const searchInput = document.getElementById('searchInput');
 const roleFilter = document.getElementById('roleFilter');
-
 const tableState = document.getElementById('table-state');
 const tableError = document.getElementById('table-error');
 
@@ -34,7 +32,7 @@ async function loadUsers() {
     }
 }
 
-// render users table
+// render users table..this function simply renders the users in the table based on the search and filter criteria. It also handles the case when there are no results to show.
 function renderUsers(users) {
     tbody.innerHTML = '';
 
@@ -65,7 +63,7 @@ function renderUsers(users) {
         `;
         return;
     }
-
+   //here i was trying to flag disabled users by changing the background color of the row to light red and text color to dark red. I also added some opacity to make it look more subtle. This way, admin can easily identify which users are disabled while browsing through the list.
     filtered.forEach((user) => {
         if (!user) return;
 
@@ -84,7 +82,7 @@ function renderUsers(users) {
             <td>${user.email || ''}</td>
             <td>${user.role || ''}</td>
         `;
-
+        //clicking a user will take you to view page where you can see the details and ddo CRUD operations on that user.
         tr.onclick = () => {
             const id = user._id || user.id;
 

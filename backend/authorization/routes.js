@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const {  isAuthenticated } = require('../middlewares/auth.js');
+const { verifyToken, isAdmin } = require('../middlewares/auth.js');
 const controller = require('./controller.js');
 
 const router = express.Router();
@@ -39,9 +39,9 @@ router.get('/profile', isAuthenticated, (req, res) => {
 });
 
 // users
-router.get('/', controller.getUsers);
+router.get('/', verifyToken,isAdmin, controller.getUsers);
 router.get('/:id', controller.getUserById);
-router.put('/:id', isAuthenticated, controller.updateUser);
-router.delete('/:id', isAuthenticated, controller.deleteUser);
+router.put('/:id', verifyToken,isAdmin, controller.updateUser);
+router.delete('/:id', verifyToken,isAdmin, controller.deleteUser);
 
 module.exports = router;
