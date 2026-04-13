@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const { verifyToken } = require('../middlewares/auth.js');
+const {  isAuthenticated } = require('../middlewares/auth.js');
 const controller = require('./controller.js');
 
 const router = express.Router();
@@ -30,18 +30,18 @@ router.get(
             secure: false, //we have to change it to true in production
             maxAge: 3600000,
         });
-        res.redirect(`${process.env.CLIENT_URL}/adminDash.html`);
+        res.redirect(`${process.env.CLIENT_URL}/index.html`);
     },
 );
 
-router.get('/profile', verifyToken, (req, res) => {
+router.get('/profile', isAuthenticated, (req, res) => {
     res.json({ user: req.user });
 });
 
 // users
-router.get('/', verifyToken, controller.getUsers);
-router.get('/:id', verifyToken, controller.getUserById);
-router.put('/:id', verifyToken, controller.updateUser);
-router.delete('/:id', verifyToken, controller.deleteUser);
+router.get('/', controller.getUsers);
+router.get('/:id', controller.getUserById);
+router.put('/:id', isAuthenticated, controller.updateUser);
+router.delete('/:id', isAuthenticated, controller.deleteUser);
 
 module.exports = router;

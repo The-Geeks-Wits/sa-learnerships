@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const { isStrong } = require('../../scripts/common_functions.js');
 
-function generateAccessToken(email, userId) {
+function generateAccessToken(email, id) {
     const secret = process.env.JWT_SECRET || 'your_secret_key_here';
-    return jwt.sign({ email, userId }, secret, { expiresIn: '24h' });
+    return jwt.sign({ email, id }, secret, { expiresIn: '24h' });
 }
 
 async function hashPassword(password) {
