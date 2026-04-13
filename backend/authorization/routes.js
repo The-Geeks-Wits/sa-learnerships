@@ -44,13 +44,4 @@ router.get('/:id', verifyToken, controller.getUserById);
 router.put('/:id', verifyToken, controller.updateUser);
 router.delete('/:id', verifyToken, controller.deleteUser);
 
-//user CRUD routes
-router.route("/")
-  .get(controller.getUsers);
-
-router.route("/:id")
-  .get(controller.getUserById)
-  .put(controller.updateUser)
-  .delete(controller.deleteUser);
-
 module.exports = router;
