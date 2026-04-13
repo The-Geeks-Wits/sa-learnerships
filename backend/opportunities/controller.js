@@ -8,9 +8,6 @@ exports.createOpportunity = async (req, res) => {
             });
         }
 
-        // Get the token cookie and load the user from the database
-
-        const user = undefined;
         const title = req.body.title;
         const description = req.body.description;
         const requirements = req.body.requirements;
@@ -34,7 +31,6 @@ exports.createOpportunity = async (req, res) => {
         // TODO: Check if stipend and duration are numbers, the location is a valid location, the closing date is a valid date,
 
         const opportunity = await Opportunity.create({
-            user,
             title,
             description,
             requirements,

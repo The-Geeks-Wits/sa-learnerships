@@ -123,6 +123,9 @@ nav #notifications #count {
     left: 18%;
     top: 5%;
 }
+nav #app-name:hover {
+    cursor: pointer;
+}
 
 /* Main styles */
 main {

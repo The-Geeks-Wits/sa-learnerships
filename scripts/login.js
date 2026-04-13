@@ -30,24 +30,25 @@ form.addEventListener('submit', async function (event) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: "include",
+            credentials: 'include',
             body: JSON.stringify({
                 email: email.value,
                 password: password.value,
-                rememberMe: rememberMe.checked
+                rememberMe: rememberMe.checked,
             }),
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
+        if (response.ok) {
+            const data = await response.json();
+            if (data) {
+                // The token needs to come from the server as an http only cookie
+                window.location.href = 'home.html';
+                localStorage.setItem('userId', data.user.id);
+            }
+        } else {
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Login failed';
-        return;
         }
-        window.location.href = 'home.html';
-
-
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = 'Server error';

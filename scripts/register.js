@@ -6,7 +6,7 @@ const email = document.getElementById('email');
 const password = document.getElementById('newPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 const loadingSpinner = document.getElementById('loading-spinner');
-const googleBtn = document.getElementById('google-btn')
+const googleBtn = document.getElementById('google-btn');
 
 googleBtn.addEventListener('click', () => {
     window.location.href = 'http://localhost:3000/api/users/google';
@@ -64,7 +64,6 @@ form.addEventListener('submit', async (event) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
             body: JSON.stringify({
                 firstName: firstName.value,
                 lastName: lastName.value,
@@ -74,17 +73,17 @@ form.addEventListener('submit', async (event) => {
             }),
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
+        if (response.status === 201) {
+            const data = await response.json();
+            if (data) {
+                // The token needs to come from the server as an http only cookie
+                window.location.href = 'home.html';
+                localStorage.setItem('userId', data.user.id);
+            }
+        } else {
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || data.message || 'Registration failed';
-            return;
         }
-
-        window.location.href = 'home.html';
-
-        
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = err.message;
