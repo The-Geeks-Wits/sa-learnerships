@@ -1,29 +1,31 @@
 const jwt = require('jsonwebtoken');
+const User = require('../authorization/User.js');
 
-const authMiddleware = (req, res, next) => {
-    const token = req.headers.authorization;
+const isAuthenticated = async (req, res, next) => {
+    try{
+        const token = req.cookies.token;
 
-    if (!token) {
-        return res.status(401).json({ message: 'Access denied' });
-    }
-
-    next();
-};
-
-const verifyToken = (req, res, next) => {
-    try {
-        if (!req.headers.authorization) {
-            return res.status(401).json({ message: 'No token provided' });
+        if(!token){
+            return res.status(401).json({message: "Access denied"});
         }
 
-        const token = req.headers.authorization.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
+
+        const user = await User.findById(decoded.id);
+
+        if(!user){
+            return res.status(401).json({message: "User not found"});
+        }
+
+        req.user = user;
+
         next();
-    } catch {
-        res.status(401).json({ message: 'Invalid token' });
+
     }
-};
+    catch {
+        res.status(401).json({message: "Invalid token"});
+    }
+}
 
 //middleware to check if the user is admin or not
 const isAdmin = (req, res, next) => {
@@ -33,6 +35,7 @@ const isAdmin = (req, res, next) => {
 
     next();
 };
+
 //middleware to check if the user is provider or not
 const isProvider = (req, res, next) => {
     if (req.user.role !== 'provider') {
@@ -40,4 +43,5 @@ const isProvider = (req, res, next) => {
     }
     next();
 };
-module.exports = { authMiddleware, verifyToken, isAdmin, isProvider };
+
+module.exports = { isAuthenticated, isAdmin, isProvider };
