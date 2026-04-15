@@ -35,9 +35,8 @@ router.get(
 );
 //router.post("/registerGoogle", controller.registerGoogle);
 
-router.get('/profile', (req, res) => {
-    res.json({ user: req.user });
-});
+const {verifyTokenCookie} = require('../middlewares/auth.js');
+router.get('/profile', verifyTokenCookie, controller.getProfile);
 
 // users
 router.get('/', controller.getUsers);

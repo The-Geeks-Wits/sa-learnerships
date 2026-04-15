@@ -17,7 +17,7 @@ const verifyTokenCookie = (req,res,next)=>{
             return res.status(401).json({message: "No Token Provided"});
         }
 
-        const decoded = jwt.verify(token, process.eventNames.JWT_SECRET);
+        const decoded = jwt.verify(token,process.env.JWT_SECRET);
         req.user = decoded;
         next();
     }catch(err){

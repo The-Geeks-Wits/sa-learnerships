@@ -46,31 +46,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         </ul>`;
 
         // Get the user id
-        const id = localStorage.getItem('userId');
-        if (!id) window.location.href = 'login.html';
-
-        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+        const response = await fetch('http://localhost:3000/api/users/profile', {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            credentials: 'include',
         });
 
-        let userRole = 'admin';
-        if (response.ok) {
-            const data = await response.json();
-            userRole = data.role;
+        const data = await response.json();
 
-            profileElement.innerHTML = `<section>
-                <h4>${data.firstName} ${data.lastName}</h4>
-                <p>${data.role}</p>
-            </section><h3>${data.firstName[0].toUpperCase()}</h3>`;
-        } else {
-            profileElement.innerHTML = `<section>
-                <p>Couldn't load user details</p>
-            </section>`;
+        console.log("PROFILE RESPONSE:", response.status, data);
+
+        if (!response.ok || !data.user) {
+            window.location.href = 'login.html';
+            return;
         }
 
+        const user = data.user;
+        const userRole = user.role;
+
+        profileElement.innerHTML = `
+        <section>
+            <h4>${user.firstName} ${user.lastName}</h4>
+            <p>${user.role}</p>
+        </section>
+        <h3>${user.firstName[0].toUpperCase()}</h3>
+    
+
+        
         if (userRole === 'applicant') opportunitiesNavOptions.innerHTML = applicantOptions;
         else if (userRole === 'provider') opportunitiesNavOptions.innerHTML = providerOptions;
         else if (userRole === 'admin') {

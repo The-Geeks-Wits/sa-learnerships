@@ -37,10 +37,12 @@ passport.use(
                         lastName: profile.name.familyName || 'User',
                         email: profile.emails[0].value,
                         googleId: profile.id,
+                        signupMethod: "google",
+
                     });
                 }
 
-                const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ email: user.email, userId : user._id }, process.env.JWT_SECRET, {
                     expiresIn: '24h',
                 });
 
