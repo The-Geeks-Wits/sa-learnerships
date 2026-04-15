@@ -46,6 +46,7 @@ form.addEventListener('submit', async function (event) {
                 localStorage.setItem('userId', data.user.id);
             }
         } else {
+            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Login failed';
         }

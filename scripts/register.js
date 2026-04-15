@@ -81,6 +81,7 @@ form.addEventListener('submit', async (event) => {
                 localStorage.setItem('userId', data.user.id);
             }
         } else {
+            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || data.message || 'Registration failed';
         }
