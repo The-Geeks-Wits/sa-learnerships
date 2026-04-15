@@ -1,4 +1,5 @@
 const User = require('./User.js');
+const Profile = require('./Profile.js')
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -254,3 +255,26 @@ exports.getProfile = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+
+exports.saveProfile = async (req,res) => {
+    try{
+        const user_id = req.user.userId;
+        const existingProfile = await Profile.findOne({userId : req.user.userId});
+
+        const profile = await Profile.findOneAndUpdate(
+            {userId: req.user.userId},
+            req.body,
+            {new:true, upsert: true}
+        );
+    
+        return res.status(200).json({profile});
+        
+        
+    
+    }catch(err){
+        res.status(500).json({error: err.message})
+
+    }
+    
+}
