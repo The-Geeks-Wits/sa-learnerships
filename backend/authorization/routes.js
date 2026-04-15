@@ -29,6 +29,7 @@ router.get(
             secure: false, //we have to change it to true in production
             sameSite: 'Lax',
             maxAge: 3600000,
+            
         });
         res.redirect(`${process.env.CLIENT_URL}/home.html`);
     },

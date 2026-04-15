@@ -104,11 +104,13 @@ exports.login = async (req, res) => {
             maxAge = 3600000;
         }
 
+
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: false, //we have to change to true after production/deployment
             maxAge: maxAge,
             sameSite: 'Lax',
+             domain: 'localhost'
         });
 
         res.status(201).json({
@@ -238,17 +240,17 @@ exports.getUserById = async (req, res) => {
     }
 };
 
-exports.getProfile = async (req,res) => {
-    try{
+exports.getProfile = async (req, res) => {
+    try {
         const user = await User.findById(req.user.userId).select('-password');
-        
-        if(!user){
-            return res.status(404).json({message: "User Not Found"});
 
-        }else{
-            res.json({user : user});
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+
         }
-    }catch(err){
-        res.status(500).json({message:err.message});
+        return res.json({ user: user });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };

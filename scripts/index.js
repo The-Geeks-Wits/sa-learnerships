@@ -55,12 +55,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         console.log("PROFILE RESPONSE:", response.status, data);
 
-        if (!response.ok || !data.user) {
-            window.location.href = 'login.html';
-            return;
+        if (!response.ok){
+            window.location.href = '/login.html';
+            return
         }
 
         const user = data.user;
+        if (!user){
+            return;
+        }
         const userRole = user.role;
 
         profileElement.innerHTML = `
@@ -68,7 +71,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             <h4>${user.firstName} ${user.lastName}</h4>
             <p>${user.role}</p>
         </section>
-        <h3>${user.firstName[0].toUpperCase()}</h3>
+        <a href="../profile/profile.html">
+            <h3>${user.firstName[0].toUpperCase()}</h3>
+        </a>
+`;
     
 
         
