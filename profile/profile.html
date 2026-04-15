@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Applicant Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+    
+
+    <header>
+        <button id="back">Back To Dashboard</button>
+        <h1>My Profile</h1>
+        <p>Complete your details to apply for opportunities</p>
+    </header>
+
+    <main>
+
+        <article class="profile">
+            <button id="edit-btn">Edit</button>
+            
+            <section aria-label="Profile Summary">
+                <h2 id="full-name">Your Name</h2>
+                <p id="email">user@email.com</p>
+
+            </section>
+            <form id="profile-form">
+                <section>
+                    <h3>Personal Information</h3>
+                    <label for="first-name">First Name </label>
+                    <input type ="text" id="first-name" name="first-name" disabled>
+
+                    <label for="last-name">Last Name </label>
+                    <input type ="text" id="last-name" name="last-name" disabled>
+
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" disabled>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value ="Prefer Not To Say">Prefer Not To Say</option>
+                    </select>
+
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dateOfBirth" disabled>
+
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" disabled>
+
+                    <label for="email-input">Email</label>
+                    <input type ="email" id="email-input" name="email-input" disabled>
+
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" disabled>
+                </section>
+
+                <section>
+                    <h3>Education (NQF Aligned)</h3>
+
+                    <label for="qualification">Qualification</label>
+                    <select id="qualification" name="qualification" disabled>
+                        <option value="">Select qualification</option>
+                    </select>
+
+                    <label for="nqfLevel">NQF Level</label>
+                    <select id="nqfLevel" name="nqfLevel" disabled>
+                        <option value="1">Level 1</option>
+                        <option value="2">Level 2</option>
+                        <option value="3">Level 3</option>
+                        <option value="4">Level 4</option>
+                        <option value="5">Level 5</option>
+                        <option value="6">Level 6</option>
+                        <option value="7">Level 7</option>
+                        <option value="8">Level 8</option>
+                        <option value="9">Level 9</option>
+                    </select>
+
+                    <label for="institution">Institution</label>
+                    <input type="text" id="institution" name="institution" disabled>
+                </section>
+
+                <section>
+                    <h3>Skills</h3>
+
+                    <label for="skills">Add Skills</label>
+                    <input type="text" id="skills" name="skills" placeholder="e.g. JavaScript, Excel, CPP, etc" disabled>
+
+                </section>
+
+                <section>
+                    <h3>CV Upload</h3>
+
+                    <label for="cv">Upload CV</label>
+                    <input type="file" id="cv" name="cv" disabled>
+                </section>
+
+                <button type="submit" disabled style="display: none" id="save-profile">Save Profile</button>
+
+            </form>
+
+        </article>
+
+    </main>
+
+    <footer>
+        <small>SETA Learnership Platform</small>
+    </footer>
+    <script type="module" src="profile.js"></script>
+
+</body>
+
+
+</html>

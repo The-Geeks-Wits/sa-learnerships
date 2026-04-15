@@ -1,0 +1,87 @@
+body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    background: #f3f4f6;
+    color: #111;
+}
+
+header {
+    background:  #021c4b;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.profile {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+figure {
+    text-align: center;
+}
+
+figure img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+}
+
+form {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+section {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+h3 {
+    margin-bottom: 0.5rem;
+}
+
+label {
+    display: block;
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+ #back {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
