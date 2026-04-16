@@ -19,6 +19,10 @@ const opportunitySchema = new Schema({
     stipend: { type: Number, min: 0 },
     duration: { type: Number, min: 0 },
     status: { type: String, default: 'Pending' },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     createdAt: { type: Date, default: Date.now },
 });
 

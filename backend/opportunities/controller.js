@@ -38,8 +38,7 @@ exports.createOpportunity = async (req, res) => {
             closingDate,
             stipend,
             duration,
-            creator: req.userId,
-            status: 'pending'
+            creator: req.user?._id || req.user?.id,
         });
 
         if (!opportunity) {
@@ -47,7 +46,7 @@ exports.createOpportunity = async (req, res) => {
                 error: "Couldn't create opportunity! Please try again later",
             });
         }
-
+        console.log('Creator value being saved:', req.user?._id || req.user?.id);
         res.status(201).json({
             id: opportunity._id,
             creator: opportunity.creator,
@@ -108,6 +107,7 @@ exports.getOpportunity = async (req, res) => {
 
         res.status(200).json({
             id: opportunity._id,
+            creator: opportunity.creator,
             title: opportunity.title,
             requirements: opportunity.requirements,
             description: opportunity.description,

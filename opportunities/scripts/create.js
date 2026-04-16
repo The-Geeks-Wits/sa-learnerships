@@ -46,6 +46,7 @@ form.addEventListener('submit', async (event) => {
         const response = await fetch('http://localhost:3000/opportunities', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
                 title: title.value,
                 closingDate: closingDate.value,
