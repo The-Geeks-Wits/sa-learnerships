@@ -1,6 +1,8 @@
 // This file is for preparing and showing elements conditionally based on the users role
 // where all this is common such as in the side bar
 
+import { backendURL } from '../env.config.js';
+
 const opportunitiesNav = document.getElementById('opportunities-nav');
 const opportunitiesNavOptions = document.getElementById('opportunities-nav-options');
 const opportunitiesNavImage = document.getElementById('opportunities-nav-image');
@@ -49,7 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const id = localStorage.getItem('userId');
         if (!id) window.location.href = 'login.html';
 
-        const response = await fetch(`http://localhost:3000/api/users/${id}`, {
+        const url = backendURL() + `/api/users/${id}`;
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
@@ -7,7 +9,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
-        const response = await fetch('http://localhost:3000/opportunities?status=Rejected', {
+
+        const url = backendURL() + '/opportunities?status=Rejected';
+        const response = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
