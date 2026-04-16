@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     location.value = user.gender;
     skills.value = user.skills;
     
+    const skillsList = document.getElementById("skills-list");
+    const userSkills = user.skills;
+
 
     
 
