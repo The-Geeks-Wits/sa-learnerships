@@ -38,7 +38,7 @@ router.get(
 
 const {verifyTokenCookie, verifyToken} = require('../middlewares/auth.js');
 router.get('/profile', verifyTokenCookie, controller.getProfile);
-router.put('/profile', verifyToken, controller.saveProfile );
+router.put('/profile', verifyTokenCookie, controller.saveProfile );
 
 // users
 router.get('/', controller.getUsers);

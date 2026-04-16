@@ -58,26 +58,32 @@
                 <section>
                     <h3>Education (NQF Aligned)</h3>
 
-                    <label for="qualification">Qualification</label>
-                    <select id="qualification" name="qualification" disabled>
-                        <option value="">Select qualification</option>
+                    <label for="qualification-level">Qualification Level</label>
+                    <select id="qualification-level" name="qualification-level" disabled>
+                        <option value=" ">Select qualification</option>
+                        <option value="matric">Matric</option>
+                        <option value="certificate">Certificate</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="degree">Degree</option>
+                        <option value="honours">Honours</option>
+                        <option value="masters">Masters</option>
+                        <option value="phd">PhD</option>
+                        
                     </select>
+                    
+
+                    <label for="qualification-name">Qualification Name</label>
+                    <input type="text" id="qualification-name" name="qualification-name" disabled>
 
                     <label for="nqfLevel">NQF Level</label>
-                    <select id="nqfLevel" name="nqfLevel" disabled>
-                        <option value="1">Level 1</option>
-                        <option value="2">Level 2</option>
-                        <option value="3">Level 3</option>
-                        <option value="4">Level 4</option>
-                        <option value="5">Level 5</option>
-                        <option value="6">Level 6</option>
-                        <option value="7">Level 7</option>
-                        <option value="8">Level 8</option>
-                        <option value="9">Level 9</option>
-                    </select>
+                    <input type="number" id="nqfLevel" name="nqfLevel" disabled>
+                        
+        
 
                     <label for="institution">Institution</label>
                     <input type="text" id="institution" name="institution" disabled>
+
+                     <section id = "qualifications-list"></section>
                 </section>
 
                 <section>
@@ -85,6 +91,8 @@
 
                     <label for="skills">Add Skills</label>
                     <input type="text" id="skills" name="skills" placeholder="e.g. JavaScript, Excel, CPP, etc" disabled>
+
+                     <section id = "skills-list"></section>
 
                 </section>
 

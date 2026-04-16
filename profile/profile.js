@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("email-input").value = user.email;
 
 
+
     const firstName= document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const emailInput = document.getElementById("email-input");
@@ -31,11 +32,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dateOfBirth = document.getElementById("dob");
     const phone = document.getElementById("phone");
     const location = document.getElementById("location");
-    const qualification = document.getElementById("qualification");
+    const qualificationLevel = document.getElementById("qualification-level");
     const nqfLevel = document.getElementById("nqfLevel");
     const institution =  document.getElementById("institution");
     const cv = document.getElementById("cv");
     const skills = document.getElementById("skills");
+    const qualificationName = document.getElementById("qualification-name");
+
+    phone.value = user.phone;
+    gender.value = user.gender;
+    location.value = user.gender;
+    skills.value = user.skills;
+    
+
+    
 
     const editBtn = document.getElementById("edit-btn");
 
@@ -44,8 +54,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         skills.disabled = false;
         cv.disabled = false;
         institution.disabled = false;
-        nqfLevel.disabled = false;
-        qualification.disabled = false;
+        qualificationLevel.disabled = false;
+        qualificationName.disabled = false;
         location.disabled = false;
         phone.disabled = false;
         dateOfBirth.disabled = false;
@@ -59,37 +69,59 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     })
 
-    const backBtn = document.getElementById("back");
-    backBtn.addEventListener('click', async(e)=>{
-        e.preventDefault();
-        window.location.href = '/home.html';
+    const nqfMap = {
+            matric : 4,
+            certificate: 5,
+            diploma: 6,
+            degree: 7,
+            honours: 8,
+            masters: 9,
+            phd: 10
+        }
+    qualificationLevel.addEventListener("change", ()=>{
+        const choice = qualificationLevel.value;
+        nqfLevel.value = nqfMap[choice] || "";
     })
 
     const saveProfileBtn = document.getElementById("save-profile");
 
-    saveProfileBtn.addEventListener('click', async (e)=>{
-        e.preventDefault();
+    saveProfileBtn.addEventListener("click", async ()=>{
+        
 
-        const response = await fetch('http://localhost:3000/api/users/profile', {
-            method: 'PUT',
-            headers: {"Content-Type":"application/json"},
-            credentials: 'include',
-            body: JSON.stringify({
-                dateOfBirth : dateOfBirth.value,
-                phone : phone.value,
-                location: location.value,
-                qualification: qualification.value,
-                nqfLevel : nqfLevel.value,
-                institution: institution.value,
-                skills : skills.value
-            })
-        })
-         
-        if (response.ok) {
-            location.reload();
+        const new_qualification = {
+            qualificationName : qualificationName.value,
+            qualificationLevel: qualificationLevel.value,
+            nqfLevel : nqfLevel.value,
+            institution : institution.value
+
         }
 
+        try{
+            
+
+            const res = await fetch('http://localhost:3000/api/users/profile', {
+                method: "PUT",
+                headers: {"content-type" : "application/json"},
+                credentials: 'include',
+                body: JSON.stringify({
+                    firstName : firstName.value,
+                    lastName : lastName.value,
+                    location : location.value,
+                    qualification: new_qualification,
+                    gender : gender.value,
+                    skills : skills.value.split(",").map(s=>s.trim()).filter(s=>s!=""),
+                    phone : phone.value,
+                    dateOfBirth: dateOfBirth.value
+                })
+
+            })
+
+
+        }catch(err){
+            
+        }
     })
+
 });
 
 

@@ -1,5 +1,4 @@
 const User = require('./User.js');
-const Profile = require('./Profile.js')
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -258,17 +257,48 @@ exports.getProfile = async (req, res) => {
 
 
 exports.saveProfile = async (req,res) => {
-    try{
-        const user_id = req.user.userId;
-        const existingProfile = await Profile.findOne({userId : req.user.userId});
 
-        const profile = await Profile.findOneAndUpdate(
-            {userId: req.user.userId},
-            req.body,
-            {new:true, upsert: true}
-        );
-    
-        return res.status(200).json({profile});
+    try{
+        const user = await User.findById(req.user.userId);
+
+
+        const user_id = req.user.userId;
+        const newQualification = req.body.qualification || {};
+        const newSkills = req.body.skills || [];
+
+
+        newSkills.forEach(s => {
+            if (!user.skills.includes(s)){
+                user.skills.push(s);
+            }
+        })
+
+        
+        if ( newQualification.qualificationName || newQualification.institution || newQualification.qualificationLevel || newQualification.nqfLevel){
+            const qualificationExists = user.qualifications.some(q =>
+            q.qualificationName === newQualification.qualificationName &&
+            q.institution === newQualification.institution &&
+            q.nqfLevel === newQualification.nqfLevel &&
+            q.qualificationLevel === newQualification.qualificationLevel
+            );
+            if (!qualificationExists) {
+            user.qualifications.push(newQualification);
+            }
+        
+        }
+
+
+        user.firstName= req.body.firstName;
+        user.lastName=req.body.lastName;
+        user.phone=req.body.phone;
+        user.location=req.body.location;
+        user.gender=req.body.gender;
+        user.dateOfBirth=req.body.dateOfBirth;
+
+        await user.save();
+        
+        return res.status(200).json({success: true, user: user});
+        
         
         
     
