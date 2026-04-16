@@ -1,14 +1,16 @@
 const express = require('express');
 const opportunitiesController = require('./controller.js');
-
+const { isAuthenticated, isAdmin } = require('../middlewares/auth.js');
 const router = express.Router();
 
 const createOpportunity = opportunitiesController.createOpportunity;
 const getOpportunity = opportunitiesController.getOpportunity;
 const getAllOpportunities = opportunitiesController.getAllOpportunities;
+const getMyOpportunities = opportunitiesController.getMyOpportunities;
 
 router.post('/', createOpportunity);
 router.get('/', getAllOpportunities);
+router.get('/my_opportunities', isAuthenticated, getMyOpportunities);
 router.get('/:id', getOpportunity);
 
 router.post('/:id/approve',isAuthenticated ,isAdmin, opportunitiesController.approveOpportunity);

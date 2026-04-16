@@ -38,6 +38,8 @@ exports.createOpportunity = async (req, res) => {
             closingDate,
             stipend,
             duration,
+            creator: req.userId,
+            status: 'pending'
         });
 
         if (!opportunity) {
@@ -179,3 +181,20 @@ exports.approveOpportunity = async (req, res) => {
         console.log(error);
     }
 };
+exports.getMyOpportunities = async (req,res) =>{
+    try{
+        const userId = req.user._id || req.user.id;
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: "User not authenticated"
+            });
+        }
+        const myOpportunities = await Opportunity.find({ creator: userId }).sort({ createdAt: -1 });
+
+        res.status(200).json({success: true, count:myOpportunities.length, data: myOpportunities});
+    }
+    catch{
+        res.status(500).json({success: false, message:"Could not the opportunities"});
+    }
+}

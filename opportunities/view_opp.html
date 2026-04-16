@@ -1,0 +1,97 @@
+<!-- This page is for viewing a single opportunity from "My Opportunities" so it needs the id to function accordingly. It is accessible to authenticated users only -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title id="browser-title">View My Opportunity</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/view.css" />
+        <link rel="stylesheet" href="./styles/common.css" />
+    </head>
+    <body>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="/assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details">
+                    <section>
+                        <h4>Dikeledi Moatle</h4>
+                        <p>Applicant</p>
+                    </section>
+                    <h3>D</h3>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <button id="apply-btn" class="coloured-btn">Apply</button>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="/assets/down-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Your Account</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Settings</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                </ul>
+            </aside>
+            <section id="main-details">
+                <section id="page-state"></section>
+                <section id="details-container">
+                    <header>
+                        <h2 id="page-title"></h2>
+                        <p id="status" class="pending"></p>
+                    </header>
+                    <h3>Description:</h3>
+                    <p id="description"></p>
+                    <h3>Requirements:</h3>
+                    <ul id="requirements"></ul>
+                    <section id="details-wrapper">
+                        <section>
+                            <h3>Stipend:</h3>
+                            <p id="stipend"></p>
+                        </section>
+                        <section>
+                            <h3>Duration:</h3>
+                            <p id="duration"></p>
+                        </section>
+                    </section>
+                    <section id="details-wrapper">
+                        <section>
+                            <h3>Location:</h3>
+                            <p id="location"></p>
+                        </section>
+                        <section>
+                            <h3>Closing Date:</h3>
+                            <p id="closing-date"></p>
+                        </section>
+                    </section>
+                    <!-- Actions that should only be visible to the admin -->
+                    <hr />
+                    <section id="actions">
+                        <button id="approve-btn" class="coloured-btn">Approve</button>
+                        <button id="remove-btn" class="transparent-btn">Reject</button>
+                    </section>
+                </section>
+            </section>
+        </main>
+        <script src="./scripts/view-my-opportunities.js"></script>
+        <script src="../scripts/index.js"></script>
+    </body>
+</html>
