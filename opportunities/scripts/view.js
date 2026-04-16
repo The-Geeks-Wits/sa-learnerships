@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const pageState = document.getElementById('page-state');
 const detailsContainer = document.getElementById('details-container');
 const browserTitle = document.getElementById('browser-title');
@@ -22,7 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(queryString);
         const id = params.get('id');
 
-        const response = await fetch(`http://localhost:3000/opportunities/${id}`, {
+        const url = backendURL() + `/opportunities/${id}`;
+        const response = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -72,7 +75,8 @@ approveButton.addEventListener('click', async () => {
     const id = new URLSearchParams(window.location.search).get('id');
 
     try {
-        const response = await fetch('http://localhost:3000/opportunities/' + id + '/approve', {
+        const url = backendURL() + `/opportunities/${id}/approve`;
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         });
