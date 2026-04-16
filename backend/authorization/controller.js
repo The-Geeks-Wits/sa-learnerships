@@ -1,8 +1,7 @@
 const User = require('./User.js');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-const { isStrong } = require('../../scripts/common_functions.js');
+const { isStrong }  = require('../utils.js');
 
 function generateAccessToken(email, userId) {
     const secret = process.env.JWT_SECRET || 'your_secret_key_here';
