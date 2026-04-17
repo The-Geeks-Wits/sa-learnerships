@@ -18,19 +18,22 @@ async function hashPassword(password) {
 
 exports.register = async (req, res) => {
     try {
+        if (!req.body || Object.keys(req.body).length === 0) {
+            return res.status(400).json({ error: 'Request body is missing' });
+        }
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         const password = req.body.password;
         const email = req.body.email;
         const confirmPassword = req.body.confirmPassword;
 
-        const userExists = await User.findOne({ email: req.body.email });
+        const userExists = await User.findOne({ email: email });
         if (userExists) {
             return res.status(409).json({ error: 'User Already Exists!' });
         }
 
-        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
-            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
+        if (!firstName?.trim() || !lastName?.trim() || !email?.trim() || !password?.trim() || !confirmPassword?.trim()){
+            return res.status(400).json({error: "Please Fill All TThe Required Fields"});
         }
 
         if (password != confirmPassword) {
