@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-   
     const response = await fetch('http://localhost:3000/api/users/profile', {
         method: "GET",
         credentials: "include"
@@ -39,6 +38,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     phone.value = user.phone;
     gender.value = user.gender;
     location.value = user.location;
+    dateOfBirth.value = user.dateOfBirth 
+    ? user.dateOfBirth.split("T")[0] 
+    : "";
 
     
     const skillsContainer = document.getElementById("skills-container");
@@ -76,7 +78,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         phone.disabled = false;
         dateOfBirth.disabled = false;
         gender.disabled = false;
-        emailInput.disabled = false;
         firstName.disabled = false;
         lastName.disabled = false;
         document.getElementById("save-profile").style.display = "block";
@@ -136,8 +137,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 credentials: 'include',
                 body: JSON.stringify(requestBody)
             })
-            
 
+            if (!res.ok) {
+                alert(data.error || data.message || "Update failed");
+                return;
+            }
+
+            alert(data.message || "Profile updated successfully");
+            
         }catch(err){
             
         }

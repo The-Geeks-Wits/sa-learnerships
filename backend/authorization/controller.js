@@ -266,9 +266,9 @@ exports.saveProfile = async (req, res) => {
         const newQualification = req.body.qualification || {};
         const newSkills = req.body.skills || [];
 
-        newSkills.forEach(skill => {
+        newSkills.forEach(rawskill => {
             
-            skill = skill.toLowerCase().trim();
+            skill = rawskill.toLowerCase().trim();
             if (skill && !user.skills.includes(skill)) {
                 user.skills.push(skill);
             }
@@ -281,6 +281,7 @@ exports.saveProfile = async (req, res) => {
             newQualification.qualificationName?.trim() &&
             newQualification.nqfLevel;
 
+        let qualificationExists = false;
         if (isValidQualification) {
             const exists = user.qualifications.some(q =>
                 q.qualificationName === newQualification.qualificationName &&
@@ -292,18 +293,42 @@ exports.saveProfile = async (req, res) => {
             if (!exists) {
                 user.qualifications.push(newQualification);
             }
+            else{
+                qualificationExists = true;
+            }
+        }
+        
+
+        if (req.body.firstName){
+            user.firstName = req.body.firstName;
+        }
+        if (req.body.lastName){
+             user.lastName = req.body.lastName;
         }
 
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.phone = req.body.phone;
-        user.location = req.body.location;
-        user.gender = req.body.gender;
-        user.dateOfBirth = req.body.dateOfBirth;
+        if (req.body.phone){
+             user.phone = req.body.phone;
+        }
+        if (req.body.location){
+             user.location = req.body.location;
+        }
+        if (req.body.gender){
+             user.gender = req.body.gender;
+        }
+        if (req.body.dateOfBirth){
+             user.dateOfBirth = req.body.dateOfBirth;
+        }
+    
 
         await user.save();
-
-        return res.status(200).json({ success: true, user });
+        return res.status(200).json({
+            success: true,
+            message: qualificationExists
+            ? "Profile updated, but qualification already exists"
+            : "Profile updated successfully",
+            user
+        });
+        
 
     } catch (err) {
         return res.status(500).json({ error: err.message });
