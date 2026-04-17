@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
+exports.authMiddleware = (req, res, next) => {
     const token = req.headers.authorization;
 
     if (!token) {
@@ -10,7 +10,7 @@ const authMiddleware = (req, res, next) => {
     next();
 };
 
-const verifyToken = (req, res, next) => {
+exports.verifyToken = (req, res, next) => {
     try {
         if (!req.headers.authorization) {
             return res.status(401).json({ message: 'No token provided' });
@@ -26,18 +26,18 @@ const verifyToken = (req, res, next) => {
 };
 
 //middleware to check if the user is admin or not
-const isAdmin = (req, res, next) => {
+exports.isAdmin = (req, res, next) => {
     if (req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Access denied' });
     }
 
     next();
 };
+
 //middleware to check if the user is provider or not
-const isProvider = (req, res, next) => {
+exports.isProvider = (req, res, next) => {
     if (req.user.role !== 'provider') {
         return res.status(403).json({ message: 'Access denied' });
     }
     next();
 };
-module.exports = { authMiddleware, verifyToken, isAdmin, isProvider };
