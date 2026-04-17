@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("full-name").textContent = user.firstName + " " + user.lastName;
     document.getElementById("email").textContent = user.email;
+    document.getElementById("upload-btn").addEventListener("click", uploadCV);
 
     document.getElementById("first-name").value = user.firstName;
     document.getElementById("last-name").value = user.lastName;
@@ -141,6 +142,74 @@ document.addEventListener("DOMContentLoaded", async () => {
             
         }
     })
+
+    // cv upload function
+window.uploadCV = async function () {
+    const cvInput = document.getElementById("cv");
+    const file = cvInput.files[0];
+
+    const uploadBtn = document.querySelector("button[onclick='uploadCV()']");
+
+    // no file selected
+    if (!file) {
+        alert("Please select a CV file");
+        uploadBtn.disabled = true;
+        return;
+    }
+
+    // file size limit (5MB)
+    const MAX_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+        alert("File too large. Maximum allowed size is 5MB.");
+        cvInput.value = "";
+        uploadBtn.disabled = true;
+        return;
+    }
+
+    // optional: restrict file types
+    const allowedTypes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+        alert("Only PDF, DOC, or DOCX files are allowed.");
+        cvInput.value = "";
+        uploadBtn.disabled = true;
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("cv", file);
+
+    try {
+        const response = await fetch("http://localhost:3000/api/users/upload-cv", {
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("CV uploaded successfully!");
+
+            // reset UI
+            cvInput.value = "";
+            uploadBtn.disabled = true;
+
+            console.log("CV saved at:", data.cv);
+        } else {
+            alert(data.message || "Upload failed");
+        }
+
+    } catch (err) {
+        console.error("CV upload error:", err);
+        alert("Something went wrong while uploading CV");
+    }
+};
+
 
 });
 

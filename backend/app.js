@@ -13,12 +13,14 @@ const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const app = express();
+const path = require('path');
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 passport.use(
     new GoogleStrategy(

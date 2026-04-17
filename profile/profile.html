@@ -68,7 +68,6 @@
                         <option value="honours">Honours</option>
                         <option value="masters">Masters</option>
                         <option value="phd">PhD</option>
-                        
                     </select>
                     
 
@@ -77,13 +76,11 @@
 
                     <label for="nqfLevel">NQF Level</label>
                     <input type="number" id="nqfLevel" name="nqfLevel" disabled>
-                        
-        
 
                     <label for="institution">Institution</label>
                     <input type="text" id="institution" name="institution" disabled>
 
-                     <section id = "qualifications-container"></section>
+                    <section id="qualifications-container"></section>
                 </section>
 
                 <section>
@@ -92,7 +89,7 @@
                     <label for="skills">Add Skills</label>
                     <input type="text" id="skills" name="skills" placeholder="e.g. JavaScript, Excel, CPP, etc" disabled>
 
-                     <section id = "skills-container"></section>
+                    <section id="skills-container"></section>
 
                 </section>
 
@@ -100,10 +97,15 @@
                     <h3>CV Upload</h3>
 
                     <label for="cv">Upload CV</label>
-                    <input type="file" id="cv" name="cv" disabled>
+
+                    <!-- I removed disabled so file can be selected and uploaded -->
+                    <input type="file" id="cv" name="cv">
+
+                    <!-- i added upload trigger button -->
+                    <button type="button" id="upload-btn">Upload CV</button>
                 </section>
 
-                <button type="submit"  style="display: none" id="save-profile">Save Profile</button>
+                <button type="submit" style="display: none" id="save-profile">Save Profile</button>
                 <p id="user-message"></p>
 
             </form>
@@ -118,6 +120,5 @@
     <script type="module" src="profile.js"></script>
 
 </body>
-
 
 </html>
