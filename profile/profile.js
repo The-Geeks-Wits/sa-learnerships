@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", async () => {
    
     const response = await fetch('http://localhost:3000/api/users/profile', {
@@ -23,8 +21,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("last-name").value = user.lastName;
     document.getElementById("email-input").value = user.email;
 
-
-
     const firstName= document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const emailInput = document.getElementById("email-input");
@@ -41,14 +37,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     phone.value = user.phone;
     gender.value = user.gender;
-    location.value = user.gender;
-    skills.value = user.skills;
+    location.value = user.location;
+
     
-    const skillsList = document.getElementById("skills-list");
+    const skillsContainer = document.getElementById("skills-container");
     const userSkills = user.skills;
+    userSkills.forEach(skill => {
+        const li = document.createElement("li");
+        li.textContent = skill;
+        skillsContainer.append(li);
+    });
 
+    const qContainer = document.getElementById("qualifications-container");
+    const userQualifications = user.qualifications;
+    userQualifications.forEach(q =>{
+        const article = document.createElement("article");
 
-    
+        article.innerHTML = `
+        <h4>${q.qualificationName}</h4>
+        <p>${q.qualificationLevel} (NQF ${q.nqfLevel})</p>
+        <p>${q.institution}</p>
+        `;
+
+        qContainer.appendChild(article);
+    })
 
     const editBtn = document.getElementById("edit-btn");
 
@@ -92,33 +104,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         
 
         const new_qualification = {
-            qualificationName : qualificationName.value,
-            qualificationLevel: qualificationLevel.value,
+            qualificationName : qualificationName.value.toLowerCase(),
+            qualificationLevel: qualificationLevel.value.toLowerCase(),
             nqfLevel : nqfLevel.value,
-            institution : institution.value
+            institution : institution.value.toLowerCase()
+            
+        }
+        
+        const requestBody = {
+            firstName : firstName.value,
+            lastName : lastName.value,
+            location : location.value,
+            gender : gender.value,
+            phone : phone.value,
+            dateOfBirth: dateOfBirth.value,
+            skills : skills.value.split(",").map(s=>s.trim().toLowerCase()).filter(s=>s!=""),
+        }
 
+        const hasQualification = new_qualification.qualificationName?.trim() && new_qualification.qualificationLevel?.trim() && new_qualification.institution?.trim() && new_qualification.nqfLevel;
+
+        if (hasQualification) {
+           requestBody.qualification = new_qualification;
         }
 
         try{
             
-
             const res = await fetch('http://localhost:3000/api/users/profile', {
                 method: "PUT",
                 headers: {"content-type" : "application/json"},
                 credentials: 'include',
-                body: JSON.stringify({
-                    firstName : firstName.value,
-                    lastName : lastName.value,
-                    location : location.value,
-                    qualification: new_qualification,
-                    gender : gender.value,
-                    skills : skills.value.split(",").map(s=>s.trim()).filter(s=>s!=""),
-                    phone : phone.value,
-                    dateOfBirth: dateOfBirth.value
-                })
-
+                body: JSON.stringify(requestBody)
             })
-
+            
 
         }catch(err){
             

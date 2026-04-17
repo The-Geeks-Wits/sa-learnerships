@@ -256,55 +256,53 @@ exports.getProfile = async (req, res) => {
 };
 
 
-exports.saveProfile = async (req,res) => {
-
-    try{
+exports.saveProfile = async (req, res) => {
+    try {
         const user = await User.findById(req.user.userId);
 
-
-        const user_id = req.user.userId;
         const newQualification = req.body.qualification || {};
         const newSkills = req.body.skills || [];
 
-
-        newSkills.forEach(s => {
-            if (!user.skills.includes(s)){
-                user.skills.push(s);
+        newSkills.forEach(skill => {
+            
+            skill = skill.toLowerCase().trim();
+            if (skill && !user.skills.includes(skill)) {
+                user.skills.push(skill);
             }
-        })
+        });
 
-        
-        if ( newQualification.qualificationName || newQualification.institution || newQualification.qualificationLevel || newQualification.nqfLevel){
-            const qualificationExists = user.qualifications.some(q =>
-            q.qualificationName === newQualification.qualificationName &&
-            q.institution === newQualification.institution &&
-            q.nqfLevel === newQualification.nqfLevel &&
-            q.qualificationLevel === newQualification.qualificationLevel
+        const isValidQualification =
+            newQualification &&
+            newQualification.institution?.trim() &&
+            newQualification.qualificationLevel?.trim() &&
+            newQualification.qualificationName?.trim() &&
+            newQualification.nqfLevel;
+
+        if (isValidQualification) {
+            const exists = user.qualifications.some(q =>
+                q.qualificationName === newQualification.qualificationName &&
+                q.qualificationLevel === newQualification.qualificationLevel &&
+                q.nqfLevel === newQualification.nqfLevel &&
+                q.institution === newQualification.institution
             );
-            if (!qualificationExists) {
-            user.qualifications.push(newQualification);
+
+            if (!exists) {
+                user.qualifications.push(newQualification);
             }
-        
         }
 
-
-        user.firstName= req.body.firstName;
-        user.lastName=req.body.lastName;
-        user.phone=req.body.phone;
-        user.location=req.body.location;
-        user.gender=req.body.gender;
-        user.dateOfBirth=req.body.dateOfBirth;
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.phone = req.body.phone;
+        user.location = req.body.location;
+        user.gender = req.body.gender;
+        user.dateOfBirth = req.body.dateOfBirth;
 
         await user.save();
-        
-        return res.status(200).json({success: true, user: user});
-        
-        
-        
-    
-    }catch(err){
-        res.status(500).json({error: err.message})
 
+        return res.status(200).json({ success: true, user });
+
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
     }
-    
-}
+};

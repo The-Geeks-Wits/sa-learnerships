@@ -27,17 +27,6 @@ main {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-figure {
-    text-align: center;
-}
-
-figure img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #ddd;
-}
 
 form {
     display: grid;
@@ -84,4 +73,20 @@ button:hover {
     position: absolute;
     top: 10px;
     left: 10px;
+}
+
+#skills-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid rgb(233, 233, 233);
+    overflow-y: auto;
+}
+#skills-container li{
+    background: rgb(230, 230, 230);
+    padding: auto;
+    border-radius: 5px;
 }
