@@ -3,6 +3,13 @@ const passport = require('passport');
 const controller = require('./controller.js');
 
 const router = express.Router();
+//using multer for file upload handling.
+const multer = require('multer');
+
+const upload = multer({
+    dest: 'uploads/' 
+});
+
 
 // auth
 router.post('/register', controller.register);
@@ -45,5 +52,7 @@ router.get('/', controller.getUsers);
 router.get('/:id', controller.getUserById);
 router.put('/:id', controller.updateUser);
 router.delete('/:id', controller.deleteUser);
+//cv upload route
+router.post('/upload-cv', verifyTokenCookie, upload.single('cv'), controller.uploadCV);
 
 module.exports = router;

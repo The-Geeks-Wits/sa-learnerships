@@ -30,7 +30,9 @@ const userSchema = new Schema({
      //this is a dulicate fix it
   
     signupMethod: {type: String},
-    createdAt: {type:Date, default: Date.now},
+    //Im commenting out this created at because it duplicates with timestamps true,
+    //and it may cause an error when creating a user...timestamp is more convinient to use for createdAt and updatedAt.
+    //createdAt: {type:Date, default: Date.now},
 
     //profile data
     gender: {
@@ -40,6 +42,12 @@ const userSchema = new Schema({
     dateOfBirth : Date,
     phone : {type:String, default:null},
     location: {type:String, default:null},
+
+    cv: {
+  type: String, //will store file path to the uploaded CV
+  default: null
+},
+
     qualifications : [
         {
             qualificationLevel: {type : String},

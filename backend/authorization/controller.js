@@ -306,3 +306,39 @@ exports.saveProfile = async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 };
+
+///upload cv and save the file path to the backend.
+exports.uploadCV = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        //handling error if no file is uploaded.
+        if (!req.file) {
+            return res.status(400).json({ message: "No file uploaded" });
+        }
+
+        const filePath = req.file.path;
+
+        //saving the file path to the user's cv field in the database.
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { cv: filePath },
+            { new: true }
+        );
+
+        //success response.
+        res.json({
+            success: true,
+            message: "CV uploaded successfully",
+            cv: updatedUser.cv
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
