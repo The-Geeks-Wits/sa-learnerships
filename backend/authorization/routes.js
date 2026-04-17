@@ -33,11 +33,6 @@ router.get(
         res.redirect(`${process.env.CLIENT_URL}/home.html`);
     },
 );
-//router.post("/registerGoogle", controller.registerGoogle);
-
-router.get('/profile', (req, res) => {
-    res.json({ user: req.user });
-});
 
 // users
 router.get('/', controller.getUsers);
