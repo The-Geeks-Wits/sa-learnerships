@@ -1,92 +1,117 @@
-body {
+
+body{
     font-family: system-ui, sans-serif;
     margin: 0;
     background: #f3f4f6;
-    color: #111;
+    color: #111827;
+    line-height: 1.5;
 }
-
-header {
-    background:  #021c4b;
-    color: white;
-    padding: 2rem;
+header{
     text-align: center;
 }
 
-main {
+main{
     display: flex;
     justify-content: center;
-    padding: 2rem;
+    padding: 2rem 1rem;
 }
 
-.profile {
-    background: white;
+.profile{
     width: 100%;
-    max-width: 700px;
+    background: #ffffff;
+    border-radius: 15px;
+    max-width: 800px;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-
-form {
-    display: grid;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
 }
 
 section {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 1rem;
+    background: #fafafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
 }
 
-h3 {
-    margin-bottom: 0.5rem;
-}
+h3{
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #111827;
 
-label {
-    display: block;
-    margin-top: 0.7rem;
-    font-size: 0.9rem;
 }
 
 input, select {
     width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #ffffff;
+    font-size: 0.95rem;
+    transition: 0.2s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+label {
+    display: block;
+    margin-top: 0.8rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.85rem;
+    color: #374151;
 }
 
 button {
-    background: #2563eb;
+    background: #011d6c;
     color: white;
     border: none;
     padding: 0.9rem;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s ease;
 }
 
 button:hover {
-    background: #1d4ed8;
+    background: #000a25;
 }
 
- #back {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-#skills-container{
+#skills-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border: 1px solid rgb(233, 233, 233);
+    gap: 8px;
+    padding: 0.8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    max-height: 120px;
     overflow-y: auto;
 }
-#skills-container li{
-    background: rgb(230, 230, 230);
-    padding: auto;
-    border-radius: 5px;
+
+#skills-container li {
+    list-style: none;
+    background: #e0e7ff;
+    color: #1e3a8a;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+#qualifications-container {
+    display: grid;
+    gap: 10px;
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+#qualifications-container article {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 0.8rem;
 }
