@@ -62,6 +62,11 @@ passport.use(
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
 
+// Health status check route (For confirming that the app is up and running when deployed)
+app.use('/health', (req, res) => {
+    res.status(200).json({ status: 'healthy' })
+})
+
 // Error handling middleware
 app.use((req, res) => {
     res.status(404).json({ error: `${req.method} ${req.url} not found` });

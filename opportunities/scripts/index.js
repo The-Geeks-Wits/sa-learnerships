@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
@@ -7,11 +9,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
-        const response = await fetch('http://localhost:3000/opportunities?status=Approved', {
+
+        const url = backendURL() + '/opportunities?status=Approved';
+        const response = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
+
         const data = await response.json();
+
         if (response.ok) {
             pageContainer.style.display = 'block';
             data.opportunities.forEach(({ id, title, location, closingDate }) => {

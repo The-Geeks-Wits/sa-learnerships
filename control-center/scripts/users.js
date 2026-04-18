@@ -1,6 +1,5 @@
-const API_URL = 'http://localhost:3000/api/users';
+import { backendURL } from '../../env.config.js';
 
-// page elements
 const tbody = document.getElementById('userTableBody');
 const searchInput = document.getElementById('searchInput');
 const roleFilter = document.getElementById('roleFilter');
@@ -13,7 +12,8 @@ async function loadUsers() {
         tableState.style.display = 'flex';
         tableState.innerHTML = '<p>Loading...</p>';
 
-        const res = await fetch(API_URL);
+        const url = backendURL() + '/api/users';
+        const res = await fetch(url);
         const users = await res.json();
 
         renderUsers(users);
@@ -63,7 +63,7 @@ function renderUsers(users) {
         `;
         return;
     }
-   //here i was trying to flag disabled users by changing the background color of the row to light red and text color to dark red. I also added some opacity to make it look more subtle. This way, admin can easily identify which users are disabled while browsing through the list.
+    //here i was trying to flag disabled users by changing the background color of the row to light red and text color to dark red. I also added some opacity to make it look more subtle. This way, admin can easily identify which users are disabled while browsing through the list.
     filtered.forEach((user) => {
         if (!user) return;
 

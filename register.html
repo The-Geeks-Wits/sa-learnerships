@@ -10,27 +10,21 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Register</title>
-        <link rel="stylesheet" href="/styles/index.css" />
-        <link rel="stylesheet" href="/styles/register.css" />
+        <link rel="stylesheet" href="./styles/index.css" />
+        <link rel="stylesheet" href="./styles/register.css" />
     </head>
 
     <body>
         <main class="wrapper">
-            <a href="index.html">
-                <h1>
-                    SA LEARNERSHIPS
-                </h1>
-                
-            </a>
+            <h1 id="app-name">SA - Learnerships</h1>
             <article>
-
-                <h1>Register</h1>
+                <h2>Register</h2>
                 <p class="description">Create a new account to get started</p>
                 <form id="registration-form" novalidate>
                     <section class="input-group">
                         <label for="firstName">FIRST NAME</label>
                         <section class="input-wrapper">
-                            <img src="../assets/user.svg" alt="user-icon" class="left-icon" />
+                            <img src="./assets/user.svg" alt="user-icon" class="left-icon" />
                             <input
                                 type="text"
                                 id="firstName"
@@ -42,7 +36,7 @@
                     <section class="input-group">
                         <label for="lastName">LAST NAME</label>
                         <section class="input-wrapper">
-                            <img src="../assets/user.svg" alt="user-icon" class="left-icon" />
+                            <img src="./assets/user.svg" alt="user-icon" class="left-icon" />
                             <input
                                 type="text"
                                 id="lastName"
@@ -54,14 +48,14 @@
                     <section class="input-group">
                         <label for="email">EMAIL</label>
                         <section class="input-wrapper">
-                            <img src="../assets/email.svg" alt="email-icon" class="left-icon" />
+                            <img src="./assets/email.svg" alt="email-icon" class="left-icon" />
                             <input type="text" id="email" name="email" placeholder="Please enter your email address" />
                         </section>
                     </section>
                     <section class="input-group">
                         <label for="newPassword">NEW PASSWORD</label>
                         <section class="input-wrapper">
-                            <img src="../assets/lock.svg" alt="lock-icon" class="left-icon" />
+                            <img src="./assets/lock.svg" alt="lock-icon" class="left-icon" />
                             <input
                                 type="password"
                                 id="newPassword"
@@ -73,7 +67,7 @@
                     <section class="input-group">
                         <label for="confirmPassword">CONFIRM PASSWORD</label>
                         <section class="input-wrapper">
-                            <img src="../assets/lock.svg" alt="lock-icon" class="left-icon" />
+                            <img src="./assets/lock.svg" alt="lock-icon" class="left-icon" />
                             <input
                                 type="password"
                                 id="confirmPassword"
@@ -92,9 +86,9 @@
                     <button type="button" id="google-btn" class="transparent-btn">Register with Google</button>
                 </form>
             </article>
-            <output id = "loading-spinner" aria-label="Loading"></output>
+            <output id="loading-spinner" aria-label="Loading"></output>
         </main>
         <script src="https://accounts.google.com/gsi/client"></script>
-        <script type="module" src="/scripts/register.js"></script>
+        <script type="module" src="./scripts/register.js"></script>
     </body>
 </html>

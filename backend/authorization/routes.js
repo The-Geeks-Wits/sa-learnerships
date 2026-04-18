@@ -44,15 +44,17 @@ router.get(
             secure: false, //we have to change it to true in production
             sameSite: 'Lax',
             maxAge: 3600000,
-            
         });
+
         res.redirect(`${process.env.CLIENT_URL}/home.html`);
     },
 );
+
 //router.post("/registerGoogle", controller.registerGoogle);
 
-const {verifyTokenCookie, verifyToken} = require('../middlewares/auth.js');
+const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
 
+// profile routes
 router.get('/profile', verifyTokenCookie, controller.getProfile);
 router.put('/profile', verifyTokenCookie, controller.saveProfile);
 
