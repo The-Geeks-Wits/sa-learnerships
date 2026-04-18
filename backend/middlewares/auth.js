@@ -43,4 +43,4 @@ exports.isProvider = (req, res, next) => {
     }
     next();
 };
-module.exports = { authMiddleware, verifyToken, isAdmin, isProvider, verifyTokenCookie };
+module.exports = { authMiddleware, verifyTokenCookie, isAdmin, isProvider };
