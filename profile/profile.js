@@ -16,7 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("full-name").textContent = user.firstName + " " + user.lastName;
     document.getElementById("email").textContent = user.email;
-    document.getElementById("upload-btn").addEventListener("click", uploadCV);
+
+    document.getElementById("upload-btn").addEventListener("click", async () => {
+        await uploadCV();
+    });
 
     document.getElementById("first-name").value = user.firstName;
     document.getElementById("last-name").value = user.lastName;
@@ -40,7 +43,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     gender.value = user.gender;
     location.value = user.location;
 
-    
     const skillsContainer = document.getElementById("skills-container");
     const userSkills = user.skills;
     userSkills.forEach(skill => {
@@ -61,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
 
         qContainer.appendChild(article);
-    })
+    });
 
     const editBtn = document.getElementById("edit-btn");
 
@@ -80,37 +82,35 @@ document.addEventListener("DOMContentLoaded", async () => {
         firstName.disabled = false;
         lastName.disabled = false;
         document.getElementById("save-profile").style.display = "block";
-        editBtn.style.display = "none"
+        editBtn.style.display = "none";
         
-
-    })
+    });
 
     const nqfMap = {
-            matric : 4,
-            certificate: 5,
-            diploma: 6,
-            degree: 7,
-            honours: 8,
-            masters: 9,
-            phd: 10
-        }
+        matric : 4,
+        certificate: 5,
+        diploma: 6,
+        degree: 7,
+        honours: 8,
+        masters: 9,
+        phd: 10
+    };
+
     qualificationLevel.addEventListener("change", ()=>{
         const choice = qualificationLevel.value;
         nqfLevel.value = nqfMap[choice] || "";
-    })
+    });
 
     const saveProfileBtn = document.getElementById("save-profile");
 
     saveProfileBtn.addEventListener("click", async ()=>{
         
-
         const new_qualification = {
             qualificationName : qualificationName.value.toLowerCase(),
             qualificationLevel: qualificationLevel.value.toLowerCase(),
             nqfLevel : nqfLevel.value,
             institution : institution.value.toLowerCase()
-            
-        }
+        };
         
         const requestBody = {
             firstName : firstName.value,
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             phone : phone.value,
             dateOfBirth: dateOfBirth.value,
             skills : skills.value.split(",").map(s=>s.trim().toLowerCase()).filter(s=>s!=""),
-        }
+        };
 
         const hasQualification = new_qualification.qualificationName?.trim() && new_qualification.qualificationLevel?.trim() && new_qualification.institution?.trim() && new_qualification.nqfLevel;
 
@@ -130,91 +130,98 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try{
             
-            const res = await fetch('http://localhost:3000/api/users/profile', {
+            await fetch('http://localhost:3000/api/users/profile', {
                 method: "PUT",
                 headers: {"content-type" : "application/json"},
                 credentials: 'include',
                 body: JSON.stringify(requestBody)
-            })
-            
+            });
 
         }catch(err){
             
         }
-    })
+    });
 
     // cv upload function
-window.uploadCV = async function () {
-    const cvInput = document.getElementById("cv");
-    const file = cvInput.files[0];
+    async function uploadCV() {
+        const cvInput = document.getElementById("cv");
+        const file = cvInput.files[0];
 
-    const uploadBtn = document.querySelector("button[onclick='uploadCV()']");
-
-    // no file selected
-    if (!file) {
-        alert("Please select a CV file");
-        uploadBtn.disabled = true;
-        return;
-    }
-
-    // file size limit (5MB)
-    const MAX_SIZE = 5 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-        alert("File too large. Maximum allowed size is 5MB.");
-        cvInput.value = "";
-        uploadBtn.disabled = true;
-        return;
-    }
-
-    // optional: restrict file types
-    const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-        alert("Only PDF, DOC, or DOCX files are allowed.");
-        cvInput.value = "";
-        uploadBtn.disabled = true;
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("cv", file);
-
-    try {
-        const response = await fetch("http://localhost:3000/api/users/upload-cv", {
-            method: "POST",
-            body: formData,
-            credentials: "include"
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert("CV uploaded successfully!");
-
-            // reset UI
-            cvInput.value = "";
-            uploadBtn.disabled = true;
-
-            console.log("CV saved at:", data.cv);
-        } else {
-            alert(data.message || "Upload failed");
+        if (!file) {
+            alert("Please select a CV file");
+            return;
         }
 
-    } catch (err) {
-        console.error("CV upload error:", err);
-        alert("Something went wrong while uploading CV");
-    }
-};
+        const MAX_SIZE = 5 * 1024 * 1024;
+        if (file.size > MAX_SIZE) {
+            alert("File too large. Maximum allowed size is 5MB.");
+            cvInput.value = "";
+            return;
+        }
 
+        const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only PDF, DOC, or DOCX files are allowed.");
+            cvInput.value = "";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("cv", file);
+
+        try {
+            const response = await fetch("http://localhost:3000/api/users/upload-cv", {
+                method: "POST",
+                body: formData,
+                credentials: "include"
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert("CV uploaded successfully!");
+
+                cvInput.value = "";
+
+                // UPDATE CV LINK
+                const cvLink = document.getElementById("cv-link");
+
+                if (cvLink) {
+                    cvLink.style.display = "block";
+                    cvLink.href = "http://localhost:3000" + data.cv;
+                    cvLink.textContent = "View / Download CV";
+                }
+
+                // 🔥 REQUEST BACKEND TO DELETE OLD FILE (IF YOU IMPLEMENT IT)
+                await fetch("http://localhost:3000/api/users/delete-old-cv", {
+                    method: "POST",
+                    credentials: "include"
+                });
+
+            } else {
+                alert(data.message || "Upload failed");
+            }
+
+        } catch (err) {
+            console.error("CV upload error:", err);
+            alert("Something went wrong while uploading CV");
+        }
+    }
+
+    // SHOW CV ON LOAD
+    if (user.cv) {
+        const cvLink = document.getElementById("cv-link");
+
+        if (cvLink) {
+            cvLink.style.display = "block";
+            cvLink.href = "http://localhost:3000" + user.cv;
+            cvLink.textContent = "View / Download CV";
+        }
+    }
 
 });
-
-
-
-
-
-

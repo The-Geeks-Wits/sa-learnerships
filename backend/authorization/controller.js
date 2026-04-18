@@ -308,37 +308,40 @@ exports.saveProfile = async (req, res) => {
 };
 
 ///upload cv and save the file path to the backend.
+///upload cv and save the file path to the backend.
 exports.uploadCV = async (req, res) => {
     try {
-        const userId = req.user.userId;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        //handling error if no file is uploaded.
         if (!req.file) {
             return res.status(400).json({ message: "No file uploaded" });
         }
 
-        const filePath = req.file.path;
+        const fs = require("fs");
+        const path = require("path");
 
-        //saving the file path to the user's cv field in the database.
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { cv: filePath },
-            { new: true }
-        );
+        const user = await User.findById(req.user.userId);
 
-        //success response.
+        // delete old CV if it exists (overwrite behavior)
+        if (user.cv) {
+            const oldFilePath = path.join(process.cwd(), user.cv);
+            if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+            }
+        }
+
+        const filePath = `/uploads/${req.file.filename}`;
+
+        // save new CV path
+        user.cv = filePath;
+        await user.save();
+
         res.json({
             success: true,
-            message: "CV uploaded successfully",
-            cv: updatedUser.cv
+            cv: filePath
         });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        console.error(err);
+        res.status(500).json({ message: "Upload failed" });
     }
 };
+
