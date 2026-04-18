@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 opportunities.addEventListener('click', (event) => {
-    console.log('clicked');
     if (event.target.classList.contains('full-details-btn')) {
         const id = event.target.getAttribute('data-id');
         window.location.href = `/opportunities/view.html?id=${id}`;
