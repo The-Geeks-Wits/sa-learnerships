@@ -25,21 +25,7 @@ const verifyTokenCookie = (req,res,next)=>{
     }
 };
 
-const verifyToken = (req, res, next) => {
-exports.verifyToken = (req, res, next) => {
-    try {
-        if (!req.headers.authorization) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
 
-        const token = req.headers.authorization.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch {
-        res.status(401).json({ message: 'Invalid token' });
-    }
-};
 
 //middleware to check if the user is admin or not
 exports.isAdmin = (req, res, next) => {
