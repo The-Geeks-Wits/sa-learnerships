@@ -59,10 +59,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             },
         });
 
-        let userRole = 'admin';
+        let userRole = 'applicant';
         if (response.ok) {
             const data = await response.json();
             userRole = data.role;
+            console.log(data);
 
             profileElement.innerHTML = `<section>
                 <h4>${data.firstName} ${data.lastName}</h4>

@@ -124,7 +124,16 @@ exports.deleteUser = async (req, res) => {
         if (!user) {
             res.status(404).json({ message: 'User not found' });
         } else {
-            res.json({ message: 'User disabled', user: user });
+            res.json({
+                message: 'User disabled',
+                user: {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                },
+            });
         }
     } catch (e) {
         res.status(500).json({ message: e.message });
@@ -179,6 +188,7 @@ exports.updateUser = async (req, res) => {
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
             email: updatedUser.email,
+            role: updatedUser.role,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -227,6 +237,7 @@ exports.getUserById = async (req, res) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
+            role: user.role,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
