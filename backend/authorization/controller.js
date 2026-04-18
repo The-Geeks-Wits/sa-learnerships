@@ -1,20 +1,5 @@
 const User = require('./User.js');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-const { isStrong } = require('../../scripts/common_functions.js');
-
-function generateAccessToken(email, userId) {
-    const secret = process.env.JWT_SECRET || 'your_secret_key_here';
-    return jwt.sign({ email, userId }, secret, { expiresIn: '24h' });
-}
-
-async function hashPassword(password) {
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
-
-    return hashedPassword;
-}
+const utils = require('../utils.js');
 
 exports.register = async (req, res) => {
     try {
@@ -44,13 +29,13 @@ exports.register = async (req, res) => {
             return res.status(400).json({ error: 'Password length must be at least 8 characters long' });
         }
 
-        if (!isStrong(password)) {
+        if (!utils.isStrong(password)) {
             return res.status(400).json({
                 error: 'Password is too weak. It must include at least one uppercase letter, one lowercase letter, one digit and one special symbol',
             });
         }
 
-        const hashedPassword = await hashPassword(password);
+        const hashedPassword = await utils.hashPassword(password);
 
         const user = await User.create({
             firstName,
@@ -60,7 +45,7 @@ exports.register = async (req, res) => {
             signupMethod: 'manual',
         });
 
-        const token = generateAccessToken(email, user._id);
+        const token = utils.generateAccessToken(email, user._id);
 
         res.cookie('jwt', token, {
             httpOnly: true,
@@ -92,13 +77,14 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
-        const isPasswordValid = await bcryptjs.compare(password, userExists.password);
+        const isPasswordValid = await utils.comparePasswords(password, userExists.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
+
         const rememberMe = req.body.rememberMe;
-        const token = generateAccessToken(email, userExists._id);
+        const token = utils.generateAccessToken(email, userExists._id);
 
         let maxAge;
         if (rememberMe) {
@@ -138,13 +124,7 @@ exports.deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const user = await User.findByIdAndUpdate(
-            id,
-            {
-                status: 'disabled',
-            },
-            { new: true },
-        );
+        const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -193,13 +173,18 @@ exports.updateUser = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
             new: true,
             runValidators: true,
-        }).select('-password');
+        });
 
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json(updatedUser);
+        res.json({
+            _id: updatedUser._id,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -220,7 +205,12 @@ exports.getUsers = async (req, res) => {
             query.$or = [{ username: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
         }
 
-        const users = await User.find(query).select('-password');
+        const users = await User.find(query);
+
+        // Remove passwords from the users data
+        for (let i = 0; i < users.length; i++) {
+            delete users[i].password;
+        }
 
         res.json(users);
     } catch (error) {
@@ -231,13 +221,18 @@ exports.getUsers = async (req, res) => {
 //get  user by id
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-password');
+        const user = await User.findById(req.params.id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json(user);
+        res.json({
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

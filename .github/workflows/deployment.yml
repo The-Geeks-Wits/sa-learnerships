@@ -1,10 +1,10 @@
-name: Main Branch Code Coverage
+name: Azure App Service Deployment
 on:
   push:
     branches: [main]
 
 jobs:
-  test-coverage:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,14 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm ci # Clean install
         working-directory: backend
-
-      - name: Run tests with coverage
-        run: npm run test:ci
-        working-directory: backend
-
-      - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v4
+      
+      - name: Azure app service deployment
+        uses: azure/webapps-deploy@v2
         with:
-          name: coverage-report
-          path: backend/coverage
-          retention-days: 2
+          app-name: salearnerships
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend
+

@@ -1,6 +1,5 @@
-const API_URL = 'http://localhost:3000/api/users';
+import { backendURL } from '../../env.config.js';
 
-// initialise page elements
 const detailName = document.getElementById('detailName');
 const detailEmail = document.getElementById('detailEmail');
 const detailRole = document.getElementById('detailRole');
@@ -17,16 +16,17 @@ const getUserId = () => {
 async function updateUser() {
     const id = getUserId();
     if (!id) {
-        alert("No user ID found");
+        alert('No user ID found');
         return;
     }
 
     try {
-        const res = await fetch(`${API_URL}/${id}`, {
+        const url = backendURL() + `/api/users/${id}`;
+        const res = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role: detailRole.value }),
-            credentials: 'include'
+            credentials: 'include',
         });
 
         if (res.ok) {
@@ -45,14 +45,15 @@ async function updateUser() {
 async function deleteUser() {
     const id = getUserId();
     if (!id) {
-        alert("No user ID found");
+        alert('No user ID found');
         return;
     }
 
     try {
-        const res = await fetch(`${API_URL}/${id}`, {
+        const url = backendURL() + `/api/users/${id}`;
+        const res = await fetch(url, {
             method: 'DELETE',
-            credentials: 'include'
+            credentials: 'include',
         });
 
         if (res.ok) {
@@ -72,15 +73,16 @@ async function deleteUser() {
 document.addEventListener('DOMContentLoaded', async () => {
     const id = getUserId();
     if (!id) {
-        console.error("No user ID in query params");
+        console.error('No user ID in query params');
         return;
     }
 
     try {
-        const res = await fetch(`${API_URL}/${id}`, {
+        const url = backendURL() + `/api/users/${id}`;
+        const res = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
+            credentials: 'include',
         });
 
         if (res.ok) {
@@ -91,10 +93,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             statusDetail.innerHTML = user.status || '';
             detailRole.value = user.role || '';
         } else {
-            alert("Could not load user details");
+            alert('Could not load user details');
         }
     } catch (err) {
         console.error(err);
-        alert("Server error while fetching user details");
+        alert('Server error while fetching user details');
     }
 });
