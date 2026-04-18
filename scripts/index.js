@@ -27,24 +27,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Load the opportunities options on the sidebar based on the role of the user
         const applicantOptions = `<ul>
-            <li><a href="/opportunities/index.html" id='all-opportunities-tab'>All Opportunities</a></li>>
-            <li><a href="/opportunities/analytics.html" id='analytics-tab'>Analytics</a></li>
+            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
+            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const providerOptions = `<ul>
-            <li><a href="/opportunities/mine.html" id='your-opportunities-tab'>Your Opportunities</a></li>
-            <li><a href="/opportunities/index.html" id='all-opportunities-tab'>All Opportunities</a></li>
-            <li><a href="/opportunities/create.html" id='create-opportunity-tab'>Create</a></li>
-            <li><a href="/opportunities/analytics.html" id='analytics-tab'>Analytics</a></li>
+            <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
+            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
+            <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
+            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const adminOptions = `<ul>
-            <li><a href="/opportunities/mine.html" id='your-opportunities-tab'>Your Opportunities</a></li>
-            <li><a href="/opportunities/index.html" id='all-opportunities-tab'>All Opportunities</a></li>
-            <li><a href="/opportunities/pending.html" id='pending-opportunities-tab'>Pending</a></li>
-            <li><a href="/opportunities/rejected.html" id='rejected-opportunities-tab'>Rejected</a></li>
-            <li><a href="/opportunities/create.html" id='create-opportunity-tab'>Create</a></li>
-            <li><a href="/opportunities/analytics.html" id='analytics-tab'>Analytics</a></li>
+            <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
+            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
+            <li id="pending-opportunities-tab"><a href="/opportunities/pending.html">Pending</a></li>
+            <li id="rejected-opportunities-tab"><a href="/opportunities/rejected.html">Rejected</a></li>
+            <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
+            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         // Get the user id
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </section>
                 <section id="control-center-nav-options">
                     <ul>
-                        <li><a href="/control-center/users.html">User Management</a></li>
+                        <li id="user-management-tab"><a href="/control-center/users.html">User Management</a></li>
                     </ul>
                 </section>
             </li>`,

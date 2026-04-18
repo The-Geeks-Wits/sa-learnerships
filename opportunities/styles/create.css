@@ -11,6 +11,12 @@
     color: #555555;
 }
 
+/* Highlight the right border of the create opportunity sidebar tab */
+aside #opportunities-nav-options #create-opportunity-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
 form {
     width: 100%;
     max-width: 800px;

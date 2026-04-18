@@ -3,6 +3,12 @@ aside #control-center-nav-options {
     display: block;
 }
 
+/* Highlight the right border of the user management sidebar tab */
+aside #control-center-nav-options #user-management-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
 #userDetailSection {
     width: 100%;
     max-width: 800px;
