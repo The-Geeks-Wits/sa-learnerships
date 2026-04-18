@@ -1,3 +1,8 @@
+/* Show the control center side bar options */
+aside #control-center-nav-options {
+    display: block;
+}
+
 #userDetailSection {
     width: 100%;
     max-width: 800px;

@@ -47,52 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 opportunities.innerHTML += getOpportunityElement(_id, title, location, closingDate);
             });
         }
-
-        opportunities.addEventListener('click', async (event) => {
-            if (event.target.classList.contains('approve-btn')) {
-                const opportunityId = event.target.getAttribute('data-opportunity-id');
-
-                try {
-                    const url = backendURL() + `/opportunities/${opportunityId}/approve`;
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        alert('Opportunity approved successfully!');
-                        window.location.reload();
-                    } else {
-                        alert(data.error);
-                    }
-                } catch (error) {
-                    alert('Something went wrong! Please try again later');
-                }
-            } else if (event.target.classList.contains('reject-btn')) {
-                const opportunityId = event.target.previousElementSibling.getAttribute('data-opportunity-id');
-
-                try {
-                    const url = backendURL() + `/opportunities/${opportunityId}/reject`;
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        alert('Opportunity rejected successfully!');
-                        window.location.reload();
-                    } else {
-                        alert(data.error);
-                    }
-                } catch (error) {
-                    alert('Something went wrong! Please try again later');
-                }
-            }
-        });
     } catch (error) {
         pageError.style.display = 'flex';
         pageError.innerHTML = '<p>An error occurred! Please try again later</p>';
@@ -100,5 +54,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
+    }
+});
+
+opportunities.addEventListener('click', async (event) => {
+    if (event.target.classList.contains('approve-btn')) {
+        const opportunityId = event.target.getAttribute('data-opportunity-id');
+
+        try {
+            const url = backendURL() + `/opportunities/${opportunityId}/approve`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Opportunity approved successfully!');
+                window.location.reload();
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Something went wrong! Please try again later');
+        }
+    } else if (event.target.classList.contains('reject-btn')) {
+        const opportunityId = event.target.previousElementSibling.getAttribute('data-opportunity-id');
+
+        try {
+            const url = backendURL() + `/opportunities/${opportunityId}/reject`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('Opportunity rejected successfully!');
+                window.location.reload();
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Something went wrong! Please try again later');
+        }
     }
 });

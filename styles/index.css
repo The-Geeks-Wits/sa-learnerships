@@ -191,7 +191,7 @@ aside #control-center-nav-options {
 aside #opportunities-nav-options ul,
 aside #control-center-nav-options ul {
     margin-top: 10px;
-    padding-left: 40px;
+    padding-left: 30px;
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -201,8 +201,10 @@ aside #opportunities-nav-options ul li,
 aside #control-center-nav-options ul li {
     height: 40px;
     margin: 0px;
+    padding-left: 10px;
     display: flex;
     justify-content: center;
+    border-left: 1.5px solid #dfdfdf;
 }
 
 aside #opportunities-nav-options ul li a,

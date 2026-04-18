@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (response.ok) {
             pageContainer.style.display = 'block';
-            data.opportunities.forEach(({ id, title, location, closingDate }) => {
+            data.opportunities.forEach(({ _id, title, location, closingDate }) => {
                 opportunities.innerHTML += `<li>
                     <h3>${title}</h3>   
                     <section class="opportunity-details">
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </section>
                         <secttion>
                             <button class="coloured-btn">Apply</button>
-                            <button class="transparent-btn">More Details</button>
+                            <button class="transparent-btn full-details-btn" data-id="${_id}">Full Details</button>
                         </section>
                     </section>
                 </li>`;
@@ -43,5 +43,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
+    }
+});
+
+opportunities.addEventListener('click', (event) => {
+    console.log('clicked');
+    if (event.target.classList.contains('full-details-btn')) {
+        const id = event.target.getAttribute('data-id');
+        window.location.href = `/opportunities/view.html?id=${id}`;
     }
 });

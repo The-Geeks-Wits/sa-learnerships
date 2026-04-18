@@ -46,7 +46,7 @@ form.addEventListener('submit', async function (event) {
             const data = await response.json();
             if (data) {
                 // The token needs to come from the server as an http only cookie
-                window.location.href = 'home.html';
+                window.location.href = '/home.html';
                 localStorage.setItem('userId', data.user.id);
             }
         } else {
