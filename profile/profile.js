@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     })
 
-    cv upload function
+    
     window.uploadCV = async function () {
         const cvInput = document.getElementById("cv");
         const file = cvInput.files[0];
