@@ -1,15 +1,33 @@
 body {
     font-family: system-ui, sans-serif;
     margin: 0;
-    background: #f3f4f6;
+    background: #f3f8ff;
     color: #111;
 }
 
 header {
-    background:  #021c4b;
+    background: #1562f2;
     color: white;
     padding: 2rem;
     text-align: center;
+    position: relative;
+}
+
+#back {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: white;
+    color: #1562f2;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#back:hover {
+    background: #eaf1ff;
 }
 
 main {
@@ -21,10 +39,24 @@ main {
 .profile {
     background: white;
     width: 100%;
-    max-width: 700px;
+    max-width: 750px;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+#edit-btn {
+    float: right;
+    background: #1562f2;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#edit-btn:hover {
+    background: #0f4ed0;
 }
 
 form {
@@ -34,11 +66,12 @@ form {
 }
 
 section {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e6eefc;
     padding-bottom: 1rem;
 }
 
 h3 {
+    color: #1562f2;
     margin-bottom: 0.5rem;
 }
 
@@ -46,90 +79,67 @@ label {
     display: block;
     margin-top: 0.7rem;
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 input, select {
     width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #ccc;
+    padding: 0.7rem;
+    border: 1px solid #cdddf7;
     border-radius: 6px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #1562f2;
 }
 
 button {
-    background: #2563eb;
+    background: #1562f2;
     color: white;
     border: none;
-    padding: 0.9rem;
+    padding: 0.8rem;
     border-radius: 8px;
     cursor: pointer;
 }
 
 button:hover {
-    background: #1d4ed8;
+    background: #0f4ed0;
 }
 
-#back {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-#skills-container{
+#skills-container {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     list-style: none;
     padding: 0;
-    margin: 0;
-    border: 1px solid rgb(233, 233, 233);
-    overflow-y: auto;
+    margin-top: 10px;
 }
 
-#skills-container li{
-    background: rgb(230, 230, 230);
-    padding: auto;
-    border-radius: 5px;
+#skills-container li {
+    background: #e7f0ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
 }
-
-/* ===== YOUR CV SECTION (ADDED ONLY) ===== */
 
 .cv-section {
-    margin-top: 20px;
-}
-
-.cv-card {
-    border: 1px solid #e5e7eb;
-    padding: 15px;
-    border-radius: 10px;
-    background: #f9fafb;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    max-width: 400px;
-}
-
-.cv-card input[type="file"] {
-    padding: 6px;
-    background: white;
+    padding-top: 10px;
 }
 
 #upload-btn {
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-#upload-btn:hover {
-    background-color: #1d4ed8;
+    margin-top: 10px;
+    width: 100%;
 }
 
 #cv-link {
-    text-decoration: none;
-    color: #16a34a;
+    margin-top: 10px;
+    display: inline-block;
+    color: #1562f2;
     font-weight: 600;
-    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+#cv-link:hover {
+    text-decoration: underline;
 }

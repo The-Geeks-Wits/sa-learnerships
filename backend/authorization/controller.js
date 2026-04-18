@@ -61,7 +61,7 @@ exports.register = async (req, res) => {
 
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
+            secure: false,
             sameSite: 'Lax',
             maxAge: 3600000,
         });
@@ -70,6 +70,7 @@ exports.register = async (req, res) => {
             success: true,
             user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email },
         });
+
     } catch (err) {
         res.status(500).json({
             success: false,
@@ -94,23 +95,18 @@ exports.login = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
+
         const rememberMe = req.body.rememberMe;
         const token = generateAccessToken(email, userExists._id);
 
-        let maxAge;
-        if (rememberMe) {
-            maxAge = 604800000;
-        } else {
-            maxAge = 3600000;
-        }
-
+        let maxAge = rememberMe ? 604800000 : 3600000;
 
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
+            secure: false,
             maxAge: maxAge,
             sameSite: 'Lax',
-             domain: 'localhost'
+            domain: 'localhost'
         });
 
         res.status(201).json({
@@ -122,6 +118,7 @@ exports.login = async (req, res) => {
                 email: userExists.email,
             },
         });
+
     } catch (err) {
         res.status(500).json({
             success: false,
@@ -148,6 +145,7 @@ exports.deleteUser = async (req, res) => {
         } else {
             res.json({ message: 'User disabled', user: user });
         }
+
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -157,7 +155,7 @@ exports.deleteUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const { role, status } = req.body;
-        //arrays of roles and statuses
+
         const allowedRoles = ['applicant', 'provider', 'admin'];
         const allowedStatus = ['active', 'inactive', 'blocked'];
 
@@ -197,12 +195,13 @@ exports.updateUser = async (req, res) => {
         }
 
         res.json(updatedUser);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-//get all users also with  search and filter
+//get all users also with search and filter
 exports.getUsers = async (req, res) => {
     try {
         const { search, role } = req.query;
@@ -214,18 +213,22 @@ exports.getUsers = async (req, res) => {
         }
 
         if (search) {
-            query.$or = [{ username: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
+            query.$or = [
+                { username: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } }
+            ];
         }
 
         const users = await User.find(query).select('-password');
 
         res.json(users);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-//get  user by id
+//get user by id
 exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
@@ -235,6 +238,7 @@ exports.getUserById = async (req, res) => {
         }
 
         res.json(user);
+
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -246,28 +250,32 @@ exports.getProfile = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({ message: "User Not Found" });
-
         }
-        return res.json({ user: user });
+
+        return res.json({ user });
 
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
-
+//update profile
 exports.saveProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.userId);
 
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
         const newQualification = req.body.qualification || {};
         const newSkills = req.body.skills || [];
 
+        //Fixing issue: properly normalize skills
         newSkills.forEach(skill => {
-            
-            skill = skill.toLowerCase().trim();
-            if (skill && !user.skills.includes(skill)) {
-                user.skills.push(skill);
+            const cleanSkill = skill.toLowerCase().trim();
+            if (cleanSkill && !user.skills.includes(cleanSkill)) {
+                user.skills.push(cleanSkill);
             }
         });
 
@@ -277,7 +285,7 @@ exports.saveProfile = async (req, res) => {
             newQualification.qualificationLevel?.trim() &&
             newQualification.qualificationName?.trim() &&
             newQualification.nqfLevel;
-
+//Fixing issue: prevent duplicate qualifications and only add if all fields are valid
         if (isValidQualification) {
             const exists = user.qualifications.some(q =>
                 q.qualificationName === newQualification.qualificationName &&
@@ -291,12 +299,12 @@ exports.saveProfile = async (req, res) => {
             }
         }
 
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.phone = req.body.phone;
-        user.location = req.body.location;
-        user.gender = req.body.gender;
-        user.dateOfBirth = req.body.dateOfBirth;
+        user.firstName = req.body.firstName ?? user.firstName;
+        user.lastName = req.body.lastName ?? user.lastName;
+        user.phone = req.body.phone ?? user.phone;
+        user.location = req.body.location ?? user.location;
+        user.gender = req.body.gender ?? user.gender;
+        user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
 
         await user.save();
 
@@ -308,7 +316,6 @@ exports.saveProfile = async (req, res) => {
 };
 
 ///upload cv and save the file path to the backend.
-///upload cv and save the file path to the backend.
 exports.uploadCV = async (req, res) => {
     try {
         if (!req.file) {
@@ -319,8 +326,7 @@ exports.uploadCV = async (req, res) => {
         const path = require("path");
 
         const user = await User.findById(req.user.userId);
-
-        // delete old CV if it exists (overwrite behavior)
+//overwrite prevous cv if exists
         if (user.cv) {
             const oldFilePath = path.join(process.cwd(), user.cv);
             if (fs.existsSync(oldFilePath)) {
@@ -330,7 +336,6 @@ exports.uploadCV = async (req, res) => {
 
         const filePath = `/uploads/${req.file.filename}`;
 
-        // save new CV path
         user.cv = filePath;
         await user.save();
 
@@ -344,4 +349,3 @@ exports.uploadCV = async (req, res) => {
         res.status(500).json({ message: "Upload failed" });
     }
 };
-
