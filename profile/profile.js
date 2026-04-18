@@ -13,14 +13,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     const user = data.user;
 
+    
     document.getElementById("full-name").textContent = user.firstName + " " + user.lastName;
     document.getElementById("email").textContent = user.email;
-    document.getElementById("upload-btn").addEventListener("click", uploadCV);
+    
 
     document.getElementById("first-name").value = user.firstName;
     document.getElementById("last-name").value = user.lastName;
     document.getElementById("email-input").value = user.email;
 
+    const uploadBtn = document.getElementById("upload-btn");
     const firstName= document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const emailInput = document.getElementById("email-input");
@@ -48,6 +50,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     userSkills.forEach(skill => {
         const li = document.createElement("li");
         li.textContent = skill;
+
+        const removeSkillBtn = document.createElement("button");
+        removeSkillBtn.textContent = "x";
+        removeSkillBtn.classList.add("delete-skill-btn");
+        removeSkillBtn.disabled = true;
+        
+        removeSkillBtn.addEventListener("click", async ()=>{
+            const res = await fetch("http://localhost:3000/api/users/remove-skill",{
+                method: "PUT",
+                headers : {"content-type": "application/json"},
+                credentials: "include",
+                body: JSON.stringify({skill: skill})
+            });
+            const data = await res.json();
+            if (res.ok){
+                alert(data.message);
+                li.remove();
+            }else{
+                alert(data.error || "Failed to remove skill");
+            }
+           
+        });
+
+        li.appendChild(removeSkillBtn);
+
         skillsContainer.append(li);
     });
 
@@ -61,14 +88,50 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p>${q.qualificationLevel} (NQF ${q.nqfLevel})</p>
         <p>${q.institution}</p>
         `;
+        const removeQBtn = document.createElement("button");
+        removeQBtn.textContent = "x";
+        removeQBtn.classList.add("delete-qualification-btn");
+        removeQBtn.disabled = true;
 
+        removeQBtn.addEventListener("click", async ()=>{
+            const res = await fetch("http://localhost:3000/api/users/remove-qualification",{
+                method: "PUT",
+                headers : {"content-type": "application/json"},
+                credentials: "include",
+                body: JSON.stringify({qualification: q})
+            });
+            const data = await res.json();
+            if (res.ok){
+                alert(data.message);
+                article.remove();
+            }else{
+                alert(data.error || "Failed to remove qualification");
+            }
+        });
+
+        article.appendChild(removeQBtn);
         qContainer.appendChild(article);
+
     })
 
     const editBtn = document.getElementById("edit-btn");
 
     editBtn.addEventListener('click', async()=>{
-    
+       
+        document.getElementById("save-profile").style.display = "block";
+        editBtn.style.display = "none"
+
+
+        const deleteSkillButtons = document.querySelectorAll(".delete-skill-btn");
+        deleteSkillButtons.forEach(btn=>{
+            btn.disabled = false;
+        });
+
+        const deleteQualificationButtons = document.querySelectorAll(".delete-qualification-btn");
+        deleteQualificationButtons.forEach(btn=>{
+            btn.disabled = false;
+        })
+        
         skills.disabled = false;
         cv.disabled = false;
         institution.disabled = false;
@@ -80,10 +143,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         gender.disabled = false;
         firstName.disabled = false;
         lastName.disabled = false;
-        document.getElementById("save-profile").style.display = "block";
-        editBtn.style.display = "none"
+       
         
 
+    })
+
+    const backToDashboard = document.getElementById("back");
+    backToDashboard.addEventListener('click', async()=>{
+        window.location.href = "/home.html"
     })
 
     const nqfMap = {
@@ -137,6 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 credentials: 'include',
                 body: JSON.stringify(requestBody)
             })
+            const data = await res.json();
 
             if (!res.ok) {
                 alert(data.error || data.message || "Update failed");
@@ -150,73 +218,72 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     })
 
-    // cv upload function
-window.uploadCV = async function () {
-    const cvInput = document.getElementById("cv");
-    const file = cvInput.files[0];
+    cv upload function
+    window.uploadCV = async function () {
+        const cvInput = document.getElementById("cv");
+        const file = cvInput.files[0];
 
-    const uploadBtn = document.querySelector("button[onclick='uploadCV()']");
+        const uploadBtn = document.querySelector("button[onclick='uploadCV()']");
 
-    // no file selected
-    if (!file) {
-        alert("Please select a CV file");
-        uploadBtn.disabled = true;
-        return;
-    }
+        // no file selected
+        if (!file) {
+            alert("Please select a CV file");
+            uploadBtn.disabled = true;
+            return;
+        }
 
-    // file size limit (5MB)
-    const MAX_SIZE = 5 * 1024 * 1024;
-    if (file.size > MAX_SIZE) {
-        alert("File too large. Maximum allowed size is 5MB.");
-        cvInput.value = "";
-        uploadBtn.disabled = true;
-        return;
-    }
+        // file size limit (5MB)
+        const MAX_SIZE = 5 * 1024 * 1024;
+        if (file.size > MAX_SIZE) {
+            alert("File too large. Maximum allowed size is 5MB.");
+            cvInput.value = "";
+            uploadBtn.disabled = true;
+            return;
+        }
 
-    // optional: restrict file types
-    const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ];
+        // optional: restrict file types
+        const allowedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ];
 
-    if (!allowedTypes.includes(file.type)) {
-        alert("Only PDF, DOC, or DOCX files are allowed.");
-        cvInput.value = "";
-        uploadBtn.disabled = true;
-        return;
-    }
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only PDF, DOC, or DOCX files are allowed.");
+            cvInput.value = "";
+            uploadBtn.disabled = true;
+            return;
+        }
 
-    const formData = new FormData();
-    formData.append("cv", file);
+        const formData = new FormData();
+        formData.append("cv", file);
 
-    try {
-        const response = await fetch("http://localhost:3000/api/users/upload-cv", {
+        try {
+            const response = await fetch("http://localhost:3000/api/users/upload-cv", {
             method: "POST",
             body: formData,
             credentials: "include"
-        });
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.success) {
-            alert("CV uploaded successfully!");
+            if (data.success) {
+                alert("CV uploaded successfully!");
 
-            // reset UI
-            cvInput.value = "";
-            uploadBtn.disabled = true;
+                // reset UI
+                cvInput.value = "";
+                uploadBtn.disabled = true;
 
-            console.log("CV saved at:", data.cv);
-        } else {
-            alert(data.message || "Upload failed");
+                console.log("CV saved at:", data.cv);
+            } else {
+                alert(data.message || "Upload failed");
+            }
+
+        } catch (err) {
+            console.error("CV upload error:", err);
+            alert("Something went wrong while uploading CV");
         }
-
-    } catch (err) {
-        console.error("CV upload error:", err);
-        alert("Something went wrong while uploading CV");
-    }
-};
-
+    };
 
 });
 

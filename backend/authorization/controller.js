@@ -335,6 +335,48 @@ exports.saveProfile = async (req, res) => {
     }
 };
 
+exports.removeQualification = async (req, res)=>{
+    try{
+        const user = await User.findById(req.user.userId);
+        const qualification = req.body.qualification;
+        user.qualifications = user.qualifications.filter(q => !(
+            q.qualificationName === qualification.qualificationName &&
+            q.qualificationLevel === qualification.qualificationLevel &&
+            q.institution === qualification.institution &&
+            q.nqfLevel === qualification.nqfLevel
+        ));
+        
+        await user.save();
+
+        res.json({
+            success:true,
+            message : "Qualification Removed",
+            qualifications : user.qualifications
+        });
+
+    }catch(err){
+        res.status(500).json({error : err.message});
+    }
+}
+
+exports.removeSkill = async (req, res) => {
+    try{
+        const user = await User.findById(req.user.userId);
+        const skill = req.body.skill;
+        user.skills = user.skills.filter(s => s !== skill.toLowerCase());
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message : "Skill Removed",
+            skills: user.skills
+        });
+    }catch(err){
+        res.status(500).json({error : err.message});
+    }
+};
+
 ///upload cv and save the file path to the backend.
 exports.uploadCV = async (req, res) => {
     try {
