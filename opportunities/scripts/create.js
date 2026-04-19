@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const form = document.getElementById('create-opportunity-form');
 const title = document.getElementById('title');
 const description = document.getElementById('description');
@@ -43,7 +45,8 @@ form.addEventListener('submit', async (event) => {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/opportunities', {
+        const url = backendURL() + '/opportunities';
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

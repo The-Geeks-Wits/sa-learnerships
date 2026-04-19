@@ -20,7 +20,7 @@ module.exports = {
     },
 
     collectCoverage: true,
-    coverageReporters: ['json','json-summary', 'text', 'text-summary', 'lcov', 'html', 'clover'], // Output formats for coverage reports
+    coverageReporters: ['json', 'json-summary', 'text', 'text-summary', 'lcov', 'html', 'clover'], // Output formats for coverage reports
     coverageDirectory: 'coverage',
     testPathIgnorePatterns: ['/node_modules/', '/coverage/', '/dist/', '/build/'],
 };

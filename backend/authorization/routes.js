@@ -4,6 +4,21 @@ const controller = require('./controller.js');
 
 const router = express.Router();
 
+// using multer for file upload handling.
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + file.originalname;
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage });
+
 // auth
 router.post('/register', controller.register);
 router.post('/login', controller.login);
@@ -30,19 +45,31 @@ router.get(
             sameSite: 'Lax',
             maxAge: 3600000,
         });
+
         res.redirect(`${process.env.CLIENT_URL}/home.html`);
     },
 );
+
 //router.post("/registerGoogle", controller.registerGoogle);
 
-router.get('/profile', (req, res) => {
-    res.json({ user: req.user });
-});
+const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
+
+// profile routes
+router.get('/profile', verifyTokenCookie, controller.getProfile);
+router.put('/profile', verifyTokenCookie, controller.saveProfile);
 
 // users
 router.get('/', controller.getUsers);
 router.get('/:id', controller.getUserById);
 router.put('/:id', controller.updateUser);
 router.delete('/:id', controller.deleteUser);
+
+// cv upload route
+router.post(
+    '/upload-cv',
+    verifyTokenCookie,
+    upload.single('cv'),
+    controller.uploadCV
+);
 
 module.exports = router;

@@ -8,7 +8,7 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
-        "test:ci": "jest --coverage --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov"
+        "test:ci": "jest --coverage --silent --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=text-summary --coverageReporters=lcov"
     },
     "keywords": [],
     "author": "",
@@ -25,6 +25,7 @@
         "google-auth-library": "^10.6.2",
         "jsonwebtoken": "^9.0.3",
         "mongoose": "^9.4.1",
+        "multer": "^2.1.1",
         "passport": "^0.7.0",
         "passport-google-oauth20": "^2.0.0"
     },
