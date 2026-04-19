@@ -1,0 +1,145 @@
+body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    background: #f3f8ff;
+    color: #111;
+}
+
+header {
+    background: #1562f2;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+#back {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: white;
+    color: #1562f2;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#back:hover {
+    background: #eaf1ff;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.profile {
+    background: white;
+    width: 100%;
+    max-width: 750px;
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+#edit-btn {
+    float: right;
+    background: #1562f2;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#edit-btn:hover {
+    background: #0f4ed0;
+}
+
+form {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+section {
+    border-bottom: 1px solid #e6eefc;
+    padding-bottom: 1rem;
+}
+
+h3 {
+    color: #1562f2;
+    margin-bottom: 0.5rem;
+}
+
+label {
+    display: block;
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.7rem;
+    border: 1px solid #cdddf7;
+    border-radius: 6px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #1562f2;
+}
+
+button {
+    background: #1562f2;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0f4ed0;
+}
+
+#skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#skills-container li {
+    background: #e7f0ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.cv-section {
+    padding-top: 10px;
+}
+
+#upload-btn {
+    margin-top: 10px;
+    width: 100%;
+}
+
+#cv-link {
+    margin-top: 10px;
+    display: inline-block;
+    color: #1562f2;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+#cv-link:hover {
+    text-decoration: underline;
+}

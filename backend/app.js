@@ -13,12 +13,15 @@ const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const app = express();
+const path = require('path');
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/profile', express.static(path.join(__dirname, 'profile')));
 
 passport.use(
     new GoogleStrategy(
@@ -37,10 +40,12 @@ passport.use(
                         lastName: profile.name.familyName || 'User',
                         email: profile.emails[0].value,
                         googleId: profile.id,
+                        signupMethod: "google",
+
                     });
                 }
 
-                const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ email: user.email, userId : user._id }, process.env.JWT_SECRET, {
                     expiresIn: '24h',
                 });
 

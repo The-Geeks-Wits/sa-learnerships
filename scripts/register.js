@@ -33,6 +33,7 @@ form.addEventListener('submit', async (event) => {
         errorMessage.textContent = 'Password must be at least 8 characters long!';
         return;
     }
+
     if (!isStrong(p)) {
         errorMessage.style.display = 'block';
         errorMessage.textContent =
@@ -47,6 +48,7 @@ form.addEventListener('submit', async (event) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({
                 firstName: firstName.value,
                 lastName: lastName.value,
@@ -58,15 +60,21 @@ form.addEventListener('submit', async (event) => {
 
         if (response.status === 201) {
             const data = await response.json();
+
             if (data) {
+
                 // The token needs to come from the server as an http only cookie
                 window.location.href = './home.html';
+
                 localStorage.setItem('userId', data.user.id);
             }
+
         } else {
+            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || data.message || 'Registration failed';
         }
+
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = err.message;
