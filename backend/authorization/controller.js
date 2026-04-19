@@ -272,18 +272,10 @@ exports.saveProfile = async (req, res) => {
         const newQualification = req.body.qualification || {};
         const newSkills = req.body.skills || [];
 
-<<<<<<< HEAD
-        newSkills.forEach(rawskill => {
-            
-            skill = rawskill.toLowerCase().trim();
-            if (skill && !user.skills.includes(skill)) {
-                user.skills.push(skill);
-=======
         newSkills.forEach(skill => {
             const cleanSkill = skill.toLowerCase().trim();
             if (cleanSkill && !user.skills.includes(cleanSkill)) {
                 user.skills.push(cleanSkill);
->>>>>>> origin/main
             }
         });
 
@@ -319,7 +311,6 @@ exports.saveProfile = async (req, res) => {
              user.lastName = req.body.lastName;
         }
 
-<<<<<<< HEAD
         if (req.body.phone){
              user.phone = req.body.phone;
         }
@@ -333,14 +324,6 @@ exports.saveProfile = async (req, res) => {
              user.dateOfBirth = req.body.dateOfBirth;
         }
     
-=======
-        user.firstName = req.body.firstName ?? user.firstName;
-        user.lastName = req.body.lastName ?? user.lastName;
-        user.phone = req.body.phone ?? user.phone;
-        user.location = req.body.location ?? user.location;
-        user.gender = req.body.gender ?? user.gender;
-        user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
->>>>>>> origin/main
 
         await user.save();
         return res.status(200).json({
