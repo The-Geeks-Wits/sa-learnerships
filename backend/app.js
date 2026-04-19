@@ -21,7 +21,11 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+<<<<<<< HEAD
 app.use(express.static(path.join(__dirname, 'public')));
+=======
+app.use('/profile', express.static(path.join(__dirname, 'profile')));
+>>>>>>> origin/main
 
 passport.use(
     new GoogleStrategy(
@@ -61,6 +65,11 @@ passport.use(
 // routes
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
+
+// Health status check route (For confirming that the app is up and running when deployed)
+app.use('/health', (req, res) => {
+    res.status(200).json({ status: 'healthy' })
+})
 
 // Error handling middleware
 app.use((req, res) => {

@@ -2,12 +2,41 @@
 body{
     font-family: system-ui, sans-serif;
     margin: 0;
+<<<<<<< HEAD
     background: #f3f4f6;
     color: #111827;
     line-height: 1.5;
 }
 header{
+=======
+    background: #f3f8ff;
+    color: #111;
+}
+
+header {
+    background: #1562f2;
+    color: white;
+    padding: 2rem;
+>>>>>>> origin/main
     text-align: center;
+    position: relative;
+}
+
+#back {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: white;
+    color: #1562f2;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#back:hover {
+    background: #eaf1ff;
 }
 
 main{
@@ -18,6 +47,7 @@ main{
 
 .profile{
     width: 100%;
+<<<<<<< HEAD
     background: #ffffff;
     border-radius: 15px;
     max-width: 800px;
@@ -39,10 +69,54 @@ h3{
     margin-bottom: 1rem;
     color: #111827;
 
+=======
+    max-width: 750px;
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+#edit-btn {
+    float: right;
+    background: #1562f2;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#edit-btn:hover {
+    background: #0f4ed0;
+}
+
+form {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+section {
+    border-bottom: 1px solid #e6eefc;
+    padding-bottom: 1rem;
+}
+
+h3 {
+    color: #1562f2;
+    margin-bottom: 0.5rem;
+}
+
+label {
+    display: block;
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+>>>>>>> origin/main
 }
 
 input, select {
     width: 100%;
+<<<<<<< HEAD
     padding: 0.7rem 0.8rem;
     border: 1px solid #d1d5db;
     border-radius: 10px;
@@ -71,18 +145,41 @@ button {
     border: none;
     padding: 0.9rem;
     border-radius: 10px;
+=======
+    padding: 0.7rem;
+    border: 1px solid #cdddf7;
+    border-radius: 6px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: #1562f2;
+}
+
+button {
+    background: #1562f2;
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+>>>>>>> origin/main
     cursor: pointer;
     font-weight: 500;
     transition: 0.2s ease;
 }
 
 button:hover {
+<<<<<<< HEAD
     background: #000a25;
+=======
+    background: #0f4ed0;
+>>>>>>> origin/main
 }
 
 #skills-container {
     display: flex;
     flex-wrap: wrap;
+<<<<<<< HEAD
     gap: 8px;
     padding: 0.8rem;
     border: 1px solid #e5e7eb;
@@ -140,3 +237,38 @@ button:hover {
 .delete-qualification-btn:hover{
     color: darkred;
 }
+=======
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+#skills-container li {
+    background: #e7f0ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.cv-section {
+    padding-top: 10px;
+}
+
+#upload-btn {
+    margin-top: 10px;
+    width: 100%;
+}
+
+#cv-link {
+    margin-top: 10px;
+    display: inline-block;
+    color: #1562f2;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+#cv-link:hover {
+    text-decoration: underline;
+}
+>>>>>>> origin/main

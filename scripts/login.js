@@ -1,11 +1,14 @@
+import { backendURL } from '../env.config.js';
+
 const errorMessage = document.getElementById('error-message');
 const form = document.getElementById('login-form');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
 const rememberMe = document.getElementById('remember-me');
-
 const loginButton = document.getElementById('login-btn');
 const googleBtn = document.getElementById('google-btn');
+const appName = document.getElementById('app-name');
+
 googleBtn.addEventListener('click', () => {
     window.location.href = 'http://localhost:3000/api/users/google';
 });
@@ -25,7 +28,8 @@ form.addEventListener('submit', async function (event) {
     loginButton.textContent = 'Logging in';
 
     try {
-        const response = await fetch('http://localhost:3000/api/users/login', {
+        const url = backendURL() + '/api/users/login';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,21 +66,20 @@ form.addEventListener('submit', async function (event) {
         loginButton.textContent = 'Login';
     }
 });
-function loadRememberedCredentials() {
+
+document.addEventListener('DOMContentLoaded', () => {
     const rememberedEmail = localStorage.getItem('rememberedEmail');
     const rememberMeChecked = localStorage.getItem('rememberMeChecked');
 
     if (rememberedEmail && rememberMeChecked === 'true') {
         email.value = rememberedEmail;
-        //password.value = rememberedPassword;
-
         if (rememberMe) {
             rememberMe.checked = true;
         }
         password.focus();
     }
-}
+});
 
-document.addEventListener('DOMContentLoaded', () => {
-    loadRememberedCredentials();
+appName.addEventListener('click', () => {
+    window.location.href = '/index.html';
 });

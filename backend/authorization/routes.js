@@ -3,13 +3,21 @@ const passport = require('passport');
 const controller = require('./controller.js');
 
 const router = express.Router();
-//using multer for file upload handling.
+
+// using multer for file upload handling.
 const multer = require('multer');
 
-const upload = multer({
-    dest: 'uploads/' 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + file.originalname;
+        cb(null, uniqueName);
+    }
 });
 
+const upload = multer({ storage });
 
 // auth
 router.post('/register', controller.register);
@@ -36,26 +44,39 @@ router.get(
             secure: false, //we have to change it to true in production
             sameSite: 'Lax',
             maxAge: 3600000,
-            
         });
+
         res.redirect(`${process.env.CLIENT_URL}/home.html`);
     },
 );
+
 //router.post("/registerGoogle", controller.registerGoogle);
 
-const {verifyTokenCookie, verifyToken} = require('../middlewares/auth.js');
+const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
+
+// profile routes
 router.get('/profile', verifyTokenCookie, controller.getProfile);
+<<<<<<< HEAD
 router.put('/profile', verifyTokenCookie, controller.saveProfile );
 router.put('/remove-skill', verifyTokenCookie, controller.removeSkill);
 router.put('/remove-qualification', verifyTokenCookie, controller.removeQualification);
 
+=======
+router.put('/profile', verifyTokenCookie, controller.saveProfile);
+>>>>>>> origin/main
 
 // users
 router.get('/', controller.getUsers);
 router.get('/:id', controller.getUserById);
 router.put('/:id', controller.updateUser);
 router.delete('/:id', controller.deleteUser);
-//cv upload route
-router.post('/upload-cv', verifyTokenCookie, upload.single('cv'), controller.uploadCV);
+
+// cv upload route
+router.post(
+    '/upload-cv',
+    verifyTokenCookie,
+    upload.single('cv'),
+    controller.uploadCV
+);
 
 module.exports = router;

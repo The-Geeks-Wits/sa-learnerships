@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const data = await response.json();
-    
     const user = data.user;
 
     
@@ -18,21 +17,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("email").textContent = user.email;
     
 
-    document.getElementById("first-name").value = user.firstName;
-    document.getElementById("last-name").value = user.lastName;
-    document.getElementById("email-input").value = user.email;
+    //triger cv upload on button click
+    document.getElementById("upload-btn").addEventListener("click", async () => {
+        await uploadCV();
+    });
 
     const uploadBtn = document.getElementById("upload-btn");
     const firstName= document.getElementById("first-name");
     const lastName = document.getElementById("last-name");
     const emailInput = document.getElementById("email-input");
-    const gender =  document.getElementById("gender");
+    const gender = document.getElementById("gender");
     const dateOfBirth = document.getElementById("dob");
     const phone = document.getElementById("phone");
     const location = document.getElementById("location");
     const qualificationLevel = document.getElementById("qualification-level");
     const nqfLevel = document.getElementById("nqfLevel");
-    const institution =  document.getElementById("institution");
+    const institution = document.getElementById("institution");
     const cv = document.getElementById("cv");
     const skills = document.getElementById("skills");
     const qualificationName = document.getElementById("qualification-name");
@@ -44,9 +44,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     ? user.dateOfBirth.split("T")[0] 
     : "";
 
-    
+    // fixing:date input wasnt showing in frontend
+    if (user.dateOfBirth) {
+        const dob = new Date(user.dateOfBirth);
+        // Format date to YYYY-MM-DD for input value
+        dateOfBirth.value = dob.toISOString().split("T")[0];
+    } else {
+        dateOfBirth.value = "";
+    }
+
+    //dispalying skills in the profile page
     const skillsContainer = document.getElementById("skills-container");
-    const userSkills = user.skills;
+    const userSkills = user.skills || [];
+
+    skillsContainer.innerHTML = "";
+
     userSkills.forEach(skill => {
         const li = document.createElement("li");
         li.textContent = skill;
@@ -78,15 +90,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         skillsContainer.append(li);
     });
 
+    //showing qualifications in the profile page
     const qContainer = document.getElementById("qualifications-container");
-    const userQualifications = user.qualifications;
-    userQualifications.forEach(q =>{
+    const userQualifications = user.qualifications || [];
+
+    qContainer.innerHTML = "";
+
+    const title = document.createElement("h3");
+    title.textContent = "Your Qualifications";
+
+    const intro = document.createElement("p");
+    intro.textContent = "Here is a list of your qualifications:";
+    intro.style.color = "#555";
+    intro.style.fontSize = "0.9rem";
+    intro.style.marginBottom = "10px";
+
+    qContainer.appendChild(title);
+    qContainer.appendChild(intro);
+
+    const sortedQualifications = [...userQualifications].reverse();
+
+    sortedQualifications.forEach((q, index) => {
+
         const article = document.createElement("article");
 
+        article.style.borderLeft = "3px solid #1562f2";
+        article.style.padding = "10px 12px";
+        article.style.marginBottom = "10px";
+        article.style.background = "#f7faff";
+        article.style.borderRadius = "6px";
+
         article.innerHTML = `
-        <h4>${q.qualificationName}</h4>
-        <p>${q.qualificationLevel} (NQF ${q.nqfLevel})</p>
-        <p>${q.institution}</p>
+            <strong>${index + 1}. ${q.qualificationName}</strong>
+            <p>${q.qualificationLevel} (NQF ${q.nqfLevel})</p>
+            <p>${q.institution}</p>
         `;
         const removeQBtn = document.createElement("button");
         removeQBtn.textContent = "x";
@@ -154,54 +191,60 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
 
     const nqfMap = {
-            matric : 4,
-            certificate: 5,
-            diploma: 6,
-            degree: 7,
-            honours: 8,
-            masters: 9,
-            phd: 10
-        }
-    qualificationLevel.addEventListener("change", ()=>{
+        matric: 4,
+        certificate: 5,
+        diploma: 6,
+        degree: 7,
+        honours: 8,
+        masters: 9,
+        phd: 10
+    };
+
+    qualificationLevel.addEventListener("change", () => {
         const choice = qualificationLevel.value;
         nqfLevel.value = nqfMap[choice] || "";
-    })
+    });
 
     const saveProfileBtn = document.getElementById("save-profile");
 
-    saveProfileBtn.addEventListener("click", async ()=>{
-        
+    //saving profile changes to the backend
+    saveProfileBtn.addEventListener("click", async () => {
 
         const new_qualification = {
-            qualificationName : qualificationName.value.toLowerCase(),
-            qualificationLevel: qualificationLevel.value.toLowerCase(),
-            nqfLevel : nqfLevel.value,
-            institution : institution.value.toLowerCase()
-            
-        }
-        
-        const requestBody = {
-            firstName : firstName.value,
-            lastName : lastName.value,
-            location : location.value,
-            gender : gender.value,
-            phone : phone.value,
-            dateOfBirth: dateOfBirth.value,
-            skills : skills.value.split(",").map(s=>s.trim().toLowerCase()).filter(s=>s!=""),
-        }
+            qualificationName: qualificationName.value,
+            qualificationLevel: qualificationLevel.value,
+            nqfLevel: nqfLevel.value,
+            institution: institution.value
+        };
 
-        const hasQualification = new_qualification.qualificationName?.trim() && new_qualification.qualificationLevel?.trim() && new_qualification.institution?.trim() && new_qualification.nqfLevel;
+        const requestBody = {
+            firstName: firstName.value,
+            lastName: lastName.value,
+            location: location.value,
+            gender: gender.value,
+            phone: phone.value,
+            dateOfBirth: dateOfBirth.value,
+            skills: skills.value
+                .split(",")
+                .map(s => s.trim().toLowerCase())
+                .filter(s => s !== ""),
+        };
+
+        const hasQualification =
+            new_qualification.qualificationName?.trim() &&
+            new_qualification.qualificationLevel?.trim() &&
+            new_qualification.institution?.trim() &&
+            new_qualification.nqfLevel;
 
         if (hasQualification) {
-           requestBody.qualification = new_qualification;
+            requestBody.qualification = new_qualification;
         }
 
-        try{
-            
-            const res = await fetch('http://localhost:3000/api/users/profile', {
+        try {
+            await fetch('http://localhost:3000/api/users/profile', {
                 method: "PUT",
-                headers: {"content-type" : "application/json"},
-                credentials: 'include',
+                headers: { "content-type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify(requestBody)
             })
             const data = await res.json();
@@ -216,42 +259,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }catch(err){
             
         }
-    })
+    });
 
-    
-    window.uploadCV = async function () {
+    //function to upload cv
+    async function uploadCV() {
         const cvInput = document.getElementById("cv");
         const file = cvInput.files[0];
 
-        const uploadBtn = document.querySelector("button[onclick='uploadCV()']");
-
-        // no file selected
         if (!file) {
             alert("Please select a CV file");
-            uploadBtn.disabled = true;
-            return;
-        }
-
-        // file size limit (5MB)
-        const MAX_SIZE = 5 * 1024 * 1024;
-        if (file.size > MAX_SIZE) {
-            alert("File too large. Maximum allowed size is 5MB.");
-            cvInput.value = "";
-            uploadBtn.disabled = true;
-            return;
-        }
-
-        // optional: restrict file types
-        const allowedTypes = [
-            "application/pdf",
-            "application/msword",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ];
-
-        if (!allowedTypes.includes(file.type)) {
-            alert("Only PDF, DOC, or DOCX files are allowed.");
-            cvInput.value = "";
-            uploadBtn.disabled = true;
             return;
         }
 
@@ -260,35 +276,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         try {
             const response = await fetch("http://localhost:3000/api/users/upload-cv", {
-            method: "POST",
-            body: formData,
-            credentials: "include"
+                method: "POST",
+                body: formData,
+                credentials: "include"
             });
 
             const data = await response.json();
 
             if (data.success) {
+
+                const cvLink = document.getElementById("cv-link");
+
+                cvLink.style.display = "block";
+                cvLink.href = "http://localhost:3000" + data.cv;
+                cvLink.textContent = "View / Download CV";
+
                 alert("CV uploaded successfully!");
-
-                // reset UI
-                cvInput.value = "";
-                uploadBtn.disabled = true;
-
-                console.log("CV saved at:", data.cv);
-            } else {
-                alert(data.message || "Upload failed");
             }
 
         } catch (err) {
             console.error("CV upload error:", err);
-            alert("Something went wrong while uploading CV");
         }
-    };
+    }
+
+    //show cv link if cv exists and is uploaded by the user
+    if (user.cv) {
+        const cvLink = document.getElementById("cv-link");
+
+        cvLink.style.display = "block";
+        cvLink.href = "http://localhost:3000" + user.cv;
+        cvLink.textContent = "View / Download CV";
+    }
 
 });
-
-
-
-
-
-

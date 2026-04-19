@@ -8,7 +8,7 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
-        "test:ci": "jest --coverage --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=lcov"
+        "test:ci": "jest --coverage --silent --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=text-summary --coverageReporters=lcov"
     },
     "keywords": [],
     "author": "",

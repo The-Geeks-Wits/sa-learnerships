@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
@@ -26,7 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
 
-        const response = await fetch('http://localhost:3000/opportunities?status=Pending', {
+        const url = backendURL() + '/opportunities?status=Pending';
+        const response = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -50,7 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opportunityId = event.target.getAttribute('data-opportunity-id');
 
                 try {
-                    const response = await fetch('http://localhost:3000/opportunities/' + opportunityId + '/approve', {
+                    const url = backendURL() + `/opportunities/${opportunityId}/approve`;
+                    const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                     });
@@ -70,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opportunityId = event.target.previousElementSibling.getAttribute('data-opportunity-id');
 
                 try {
-                    const response = await fetch('http://localhost:3000/opportunities/' + opportunityId + '/reject', {
+                    const url = backendURL() + `/opportunities/${opportunityId}/reject`;
+                    const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                     });

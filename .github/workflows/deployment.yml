@@ -1,0 +1,31 @@
+name: Azure App Service Deployment
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4 # Clone the repo using the checkout GitHub action
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # Install Node.js
+        with:
+          node-version: '22'
+          cache: 'npm' # Cacheing npm dependencies results in faster subsequent runs
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci # Clean install
+        working-directory: backend
+      
+      - name: Azure app service deployment
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: salearnerships
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend
+

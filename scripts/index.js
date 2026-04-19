@@ -1,6 +1,8 @@
 // This file is for preparing and showing elements conditionally based on the users role
 // where all this is common such as in the side bar
 
+import { backendURL } from '../env.config.js';
+
 const opportunitiesNav = document.getElementById('opportunities-nav');
 const opportunitiesNavOptions = document.getElementById('opportunities-nav-options');
 const opportunitiesNavImage = document.getElementById('opportunities-nav-image');
@@ -25,24 +27,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Load the opportunities options on the sidebar based on the role of the user
         const applicantOptions = `<ul>
-            <li><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li><a href="/opportunities/analytics.html">Analytics</a></li>
+            <li><a href="./opportunities/index.html">All Opportunities</a></li>
+            <li><a href="./opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const providerOptions = `<ul>
-            <li><a href="/opportunities/mine.html">Your Opportunities</a></li>
-            <li><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li><a href="/opportunities/create.html">Create</a></li>
-            <li><a href="/opportunities/analytics.html">Analytics</a></li>
+            <li><a href="./opportunities/mine.html">Your Opportunities</a></li>
+            <li><a href="./opportunities/index.html">All Opportunities</a></li>
+            <li><a href="./opportunities/create.html">Create</a></li>
+            <li><a href="./opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const adminOptions = `<ul>
-            <li><a href="/opportunities/mine.html">Your Opportunities</a></li>
-            <li><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li><a href="/opportunities/pending.html">Pending</a></li>
-            <li><a href="/opportunities/rejected.html">Rejected</a></li>
-            <li><a href="/opportunities/create.html">Create</a></li>
-            <li><a href="/opportunities/analytics.html">Analytics</a></li>
+            <li><a href="./opportunities/mine.html">Your Opportunities</a></li>
+            <li><a href="./opportunities/index.html">All Opportunities</a></li>
+            <li><a href="./opportunities/pending.html">Pending</a></li>
+            <li><a href="./opportunities/rejected.html">Rejected</a></li>
+            <li><a href="./opportunities/create.html">Create</a></li>
+            <li><a href="./opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         // Get the user id
@@ -55,15 +57,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         console.log("PROFILE RESPONSE:", response.status, data);
 
-        if (!response.ok){
+        if (!response.ok) {
             window.location.href = '/login.html';
-            return
+            return;
         }
 
         const user = data.user;
-        if (!user){
+        if (!user) {
             return;
         }
+
         const userRole = user.role;
 
         profileElement.innerHTML = `
@@ -75,9 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <h3>${user.firstName[0].toUpperCase()}</h3>
         </a>
 `;
-    
 
-        
         if (userRole === 'applicant') opportunitiesNavOptions.innerHTML = applicantOptions;
         else if (userRole === 'provider') opportunitiesNavOptions.innerHTML = providerOptions;
         else if (userRole === 'admin') {
@@ -89,11 +90,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `<li>
                 <section id="control-center-nav" class="heading">
                     <p>Control Center</p>
-                    <img id="control-center-nav-image" src="/assets/right-arrow.png" />
+                    <img id="control-center-nav-image" src="./assets/right-arrow.png" />
                 </section>
                 <section id="control-center-nav-options">
                     <ul>
-                        <li><a href="/control-center/users.html">User Management</a></li>
+                        <li><a href="./control-center/users.html">User Management</a></li>
                     </ul>
                 </section>
             </li>`,
@@ -103,6 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const controlCenterNav = document.getElementById('control-center-nav');
             const controlCenterNavOptions = document.getElementById('control-center-nav-options');
             const controlCenterNavImage = document.getElementById('control-center-nav-image');
+
             controlCenterNav.addEventListener('click', () => {
                 toggleOptions(controlCenterNavOptions, controlCenterNavImage);
             });
@@ -121,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 appName.addEventListener('click', () => {
-    window.location.href = window.location.origin + '/home.html';
+    window.location.href = window.location.origin + './home.html';
 });
 
 opportunitiesNav.addEventListener('click', () => {
