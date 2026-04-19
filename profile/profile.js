@@ -37,6 +37,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const skills = document.getElementById("skills");
     const qualificationName = document.getElementById("qualification-name");
 
+    firstName.value = user.firstName;
+    lastName.value = user.lastName;
+    emailInput.value = user.email;
     phone.value = user.phone;
     gender.value = user.gender;
     location.value = user.location;
