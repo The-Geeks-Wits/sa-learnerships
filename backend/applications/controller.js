@@ -60,7 +60,7 @@ exports.getApplicationsForOpportunity = async (req, res) => {
             });
         }
 
-        const applications = await Application.find({ opportunity: opportunityId });
+        const applications = await Application.find({ opportunity: opportunityId }).populate('applicant', 'firstName lastName email');
 
         res.status(200).json({ applications });
     } catch (error) {

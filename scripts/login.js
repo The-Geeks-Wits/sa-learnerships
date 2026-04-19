@@ -44,6 +44,7 @@ form.addEventListener('submit', async function (event) {
                 // The token needs to come from the server as an http only cookie
                 window.location.href = 'home.html';
                 localStorage.setItem('userId', data.user.id);
+                localStorage.setItem('token', data.token);
             }
         } else {
             errorMessage.style.display = 'block';
