@@ -1,0 +1,64 @@
+<!-- This page is where providers can view their rejected opportunities -->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Rejected Opportunities</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/common.css" />
+        <link rel="stylesheet" href="./styles/pending.css" />
+    </head>
+    <body>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="/assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details">
+                    <section>
+                        <h4></h4>
+                        <p></p>
+                    </section>
+                    <h3></h3>
+                </li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="/assets/down-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Your Account</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                    <li>
+                        <section class="heading">
+                            <p>Settings</p>
+                            <img src="/assets/right-arrow.png" />
+                        </section>
+                    </li>
+                </ul>
+            </aside>
+            <section id="main-details">
+                <section id="page-state"></section>
+                <section id="page-container">
+                    <h1 id="page-title">Your Rejected Opportunities</h1>
+                    <ul id="opportunities"></ul>
+                </section>
+            </section>
+        </main>
+        <script type="module" src="./scripts/rejected-mine.js"></script>
+        <script type="module" src="../scripts/index.js"></script>
+    </body>
+</html>

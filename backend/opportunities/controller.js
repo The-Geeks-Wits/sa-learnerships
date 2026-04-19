@@ -38,6 +38,7 @@ exports.createOpportunity = async (req, res) => {
             closingDate,
             stipend,
             duration,
+            creator: req.user ? req.user.userId : null,
         });
 
         if (!opportunity) {
@@ -171,6 +172,90 @@ exports.approveOpportunity = async (req, res) => {
         await opportunity.save();
         res.status(200).json({
             message: 'Opportunity approved successfully!',
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
+        });
+        console.log(error);
+    }
+};
+
+exports.getMyRejectedOpportunities = async (req, res) => {
+    try {
+        const providerId = req.user.userId;
+
+        const opportunities = await Opportunity.find({
+            creator: providerId,
+            status: 'Rejected',
+        });
+
+        res.status(200).json({ opportunities });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
+        });
+        console.log(error);
+    }
+};
+
+exports.editOpportunity = async (req, res) => {
+    try {
+        if (!req.params || !req.params.id) {
+            return res.status(400).json({
+                error: 'Opportunity id required! Please provide a valid opportunity id',
+            });
+        }
+
+        const opportunity = await Opportunity.findById(req.params.id);
+        if (!opportunity) {
+            return res.status(404).json({
+                error: 'Opportunity not found! Please check your id and try again',
+            });
+        }
+
+        const title = req.body.title;
+        const description = req.body.description;
+        const requirements = req.body.requirements;
+        const location = req.body.location;
+        const closingDate = req.body.closingDate;
+        const stipend = req.body.stipend;
+        const duration = req.body.duration;
+
+        if (!title) {
+            return res.status(400).json({
+                error: 'Title required! Please provide the title of the opportunity',
+            });
+        }
+
+        if (!closingDate) {
+            return res.status(400).json({
+                error: 'Closing date required! Please provide the closing date of the opportunity',
+            });
+        }
+
+        opportunity.title = title;
+        opportunity.description = description;
+        opportunity.requirements = requirements;
+        opportunity.location = location;
+        opportunity.closingDate = closingDate;
+        opportunity.stipend = stipend;
+        opportunity.duration = duration;
+        opportunity.status = 'Pending';
+
+        await opportunity.save();
+
+        res.status(200).json({
+            id: opportunity._id,
+            title: opportunity.title,
+            description: opportunity.description,
+            requirements: opportunity.requirements,
+            location: opportunity.location,
+            closingDate: opportunity.closingDate,
+            stipend: opportunity.stipend,
+            duration: opportunity.duration,
+            status: opportunity.status,
+            createdAt: opportunity.createdAt,
         });
     } catch (error) {
         res.status(500).json({
