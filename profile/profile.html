@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Profile</title>
+    <link rel="stylesheet" href="./profile.css">
+</head>
+
+<body>
+
+    <header>
+        <button id="back" type="button">Back To Dashboard</button>
+        <h1>My Profile</h1>
+        <p>Complete your details to apply for opportunities</p>
+    </header>
+
+    <main>
+
+        <article class="profile">
+            <button id="edit-btn" type="button">Edit</button>
+
+            <section aria-label="Profile Summary">
+                <h2 id="full-name">Your Name</h2>
+                <p id="email">user@email.com</p>
+            </section>
+
+            <form id="profile-form">
+
+                <section>
+                    <h3>Personal Information</h3>
+
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="first-name" autocomplete="given-name" disabled>
+
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name" autocomplete="family-name" disabled>
+
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" autocomplete="sex" disabled>
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Prefer Not To Say">Prefer Not To Say</option>
+                    </select>
+
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dateOfBirth" autocomplete="bday" disabled>
+
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" disabled>
+
+                    <label for="email-input">Email</label>
+                    <input type="email" id="email-input" name="email-input" autocomplete="email" disabled>
+
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" autocomplete="address-level1" disabled>
+                </section>
+
+                <section>
+                    <h3>Education (NQF Aligned)</h3>
+
+                    <label for="qualification-level">Qualification Level</label>
+                    <select id="qualification-level" name="qualification-level" disabled>
+                        <option value="">Select qualification</option>
+                        <option value="matric">Matric</option>
+                        <option value="certificate">Certificate</option>
+                        <option value="diploma">Diploma</option>
+                        <option value="degree">Degree</option>
+                        <option value="honours">Honours</option>
+                        <option value="masters">Masters</option>
+                        <option value="phd">PhD</option>
+                    </select>
+
+                    <label for="qualification-name">Qualification Name</label>
+                    <input type="text" id="qualification-name" name="qualification-name" disabled>
+
+                    <label for="nqfLevel">NQF Level</label>
+                    <input type="number" id="nqfLevel" name="nqfLevel" disabled readonly>
+
+                    <label for="institution">Institution</label>
+                    <input type="text" id="institution" name="institution" autocomplete="organization" disabled>
+
+                    <section id="qualifications-container"></section>
+                </section>
+
+                <section>
+                    <h3>Skills</h3>
+
+                    <label for="skills">Add Skills</label>
+                    <input type="text" id="skills" name="skills" autocomplete="off"
+                        placeholder="e.g. JavaScript, Excel, CPP" disabled>
+
+                    <section id="skills-container"></section>
+                </section>
+
+                <section class="cv-section">
+                    <h3>CV Upload</h3>
+
+                    <label for="cv">Upload CV</label>
+                    <input type="file" id="cv" name="cv">
+
+                    <button type="button" id="upload-btn">Upload CV</button>
+
+                    <p id="cv-message">
+                        Upload your CV (PDF, DOC, DOCX). Uploading a new CV will replace the existing one automatically.
+                        If already uploaded, use the link below to view or download it.
+                    </p>
+
+                    <a id="cv-link" target="_blank" style="display:none;">View / Download CV</a>
+                </section>
+
+                <button type="submit" style="display: none" id="save-profile">Save Profile</button>
+                <p id="user-message"></p>
+
+            </form>
+        </article>
+
+    </main>
+
+    <footer>
+        <small>SETA Learnership Platform</small>
+    </footer>
+
+    <script type="module" src="profile.js"></script>
+
+</body>
+
+</html>

@@ -45,11 +45,15 @@ form.addEventListener('submit', async function (event) {
         if (response.ok) {
             const data = await response.json();
             if (data) {
-                // The token needs to come from the server as an http only cookie
-                window.location.href = '/home.html';
-                localStorage.setItem('userId', data.user.id);
+                if (data) {
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 100);
+                    localStorage.setItem('userId', data.user.id);
+                }
             }
         } else {
+            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Login failed';
         }

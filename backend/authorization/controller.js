@@ -46,14 +46,19 @@ exports.register = async (req, res) => {
 
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
+            secure: false,
             sameSite: 'Lax',
             maxAge: 3600000,
         });
 
         res.status(201).json({
             success: true,
-            user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email },
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            },
         });
     } catch (err) {
         res.status(500).json({
@@ -83,18 +88,14 @@ exports.login = async (req, res) => {
         const rememberMe = req.body.rememberMe;
         const token = utils.generateAccessToken(email, userExists._id);
 
-        let maxAge;
-        if (rememberMe) {
-            maxAge = 604800000;
-        } else {
-            maxAge = 3600000;
-        }
+        let maxAge = rememberMe ? 604800000 : 3600000;
 
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
+            secure: false,
             maxAge: maxAge,
             sameSite: 'Lax',
+            domain: 'localhost',
         });
 
         res.status(201).json({
@@ -135,6 +136,8 @@ exports.deleteUser = async (req, res) => {
                 },
             });
         }
+
+        res.json({ message: 'User disabled', user: user });
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -144,7 +147,7 @@ exports.deleteUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const { role, status } = req.body;
-        //arrays of roles and statuses
+
         const allowedRoles = ['applicant', 'provider', 'admin'];
         const allowedStatus = ['active', 'inactive', 'blocked'];
 
@@ -195,7 +198,7 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-//get all users also with  search and filter
+//get all users also with search and filter
 exports.getUsers = async (req, res) => {
     try {
         const { search, role } = req.query;
@@ -212,7 +215,6 @@ exports.getUsers = async (req, res) => {
 
         const users = await User.find(query);
 
-        // Remove passwords from the users data
         for (let i = 0; i < users.length; i++) {
             delete users[i].password;
         }
@@ -223,7 +225,7 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-//get  user by id
+//get user by id
 exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -241,5 +243,108 @@ exports.getUserById = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User Not Found' });
+        }
+
+        return res.json({ user });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+//update profile
+exports.saveProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const newQualification = req.body.qualification || {};
+        const newSkills = req.body.skills || [];
+
+        newSkills.forEach((skill) => {
+            const cleanSkill = skill.toLowerCase().trim();
+            if (cleanSkill && !user.skills.includes(cleanSkill)) {
+                user.skills.push(cleanSkill);
+            }
+        });
+
+        const isValidQualification =
+            newQualification &&
+            newQualification.institution?.trim() &&
+            newQualification.qualificationLevel?.trim() &&
+            newQualification.qualificationName?.trim() &&
+            newQualification.nqfLevel;
+
+        if (isValidQualification) {
+            const exists = user.qualifications.some(
+                (q) =>
+                    q.qualificationName === newQualification.qualificationName &&
+                    q.qualificationLevel === newQualification.qualificationLevel &&
+                    q.nqfLevel === newQualification.nqfLevel &&
+                    q.institution === newQualification.institution,
+            );
+
+            if (!exists) {
+                user.qualifications.push(newQualification);
+            }
+        }
+
+        user.firstName = req.body.firstName ?? user.firstName;
+        user.lastName = req.body.lastName ?? user.lastName;
+        user.phone = req.body.phone ?? user.phone;
+        user.location = req.body.location ?? user.location;
+        user.gender = req.body.gender ?? user.gender;
+        user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
+
+        await user.save();
+
+        return res.status(200).json({ success: true, user });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+///upload cv and save the file path to the backend.
+exports.uploadCV = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const fs = require('fs');
+        const path = require('path');
+
+        const user = await User.findById(req.user.userId);
+
+        if (user.cv) {
+            const oldFilePath = path.join(process.cwd(), user.cv);
+            if (fs.existsSync(oldFilePath)) {
+                fs.unlinkSync(oldFilePath);
+            }
+        }
+
+        const filePath = `/uploads/${req.file.filename}`;
+
+        user.cv = filePath;
+        await user.save();
+
+        res.json({
+            success: true,
+            cv: filePath,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Upload failed' });
     }
 };
