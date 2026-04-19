@@ -21,11 +21,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(cookieParser());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-<<<<<<< HEAD
-app.use(express.static(path.join(__dirname, 'public')));
-=======
 app.use('/profile', express.static(path.join(__dirname, 'profile')));
->>>>>>> origin/main
 
 passport.use(
     new GoogleStrategy(

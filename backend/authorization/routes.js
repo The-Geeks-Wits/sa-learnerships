@@ -56,14 +56,10 @@ const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
 
 // profile routes
 router.get('/profile', verifyTokenCookie, controller.getProfile);
-<<<<<<< HEAD
 router.put('/profile', verifyTokenCookie, controller.saveProfile );
 router.put('/remove-skill', verifyTokenCookie, controller.removeSkill);
 router.put('/remove-qualification', verifyTokenCookie, controller.removeQualification);
 
-=======
-router.put('/profile', verifyTokenCookie, controller.saveProfile);
->>>>>>> origin/main
 
 // users
 router.get('/', controller.getUsers);
