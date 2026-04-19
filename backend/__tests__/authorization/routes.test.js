@@ -27,14 +27,14 @@ describe('Auth & User Routes', () => {
         expect(express.Router).toHaveBeenCalled();
     });
 
-    it('calls the router GET method 2 times', () => {
+    it('calls the router GET method 5 times', () => {
         const mockRouter = express.Router();
-        expect(mockRouter.get).toHaveBeenCalledTimes(4);
+        expect(mockRouter.get).toHaveBeenCalledTimes(5);
     });
 
-    it('calls the router POST method', () => {
+    it('calls the router POST method 3 times', () => {
         const mockRouter = express.Router();
-        expect(mockRouter.post).toHaveBeenCalledTimes(2);
+        expect(mockRouter.post).toHaveBeenCalledTimes(3);
     });
 
     // it('calls the router GET method with the correct arguments', () => {
