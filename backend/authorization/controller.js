@@ -6,28 +6,34 @@ exports.register = async (req, res) => {
         if (!req.body || Object.keys(req.body).length === 0) {
             return res.status(400).json({ error: 'Request body is missing' });
         }
-        const firstName = req.body.firstName;
-        const lastName = req.body.lastName;
-        const password = req.body.password;
-        const email = req.body.email;
-        const confirmPassword = req.body.confirmPassword;
+        let firstName = req.body.firstName;
+        let lastName = req.body.lastName;
+        let password = req.body.password;
+        let email = req.body.email;
+        let confirmPassword = req.body.confirmPassword;
+
+        firstName = firstName?.trim();
+        lastName = lastName?.trim();
+        email = email?.trim();
+
+        if (!firstName || !lastName || !email || !password || !confirmPassword){
+            return res.status(400).json({error : "Please fill all the required fields"});
+        }
 
         const userExists = await User.findOne({ email: email });
+
         if (userExists) {
             return res.status(409).json({ error: 'User Already Exists!' });
-        }
-
-        if (!firstName?.trim() || !lastName?.trim() || !email?.trim() || !password?.trim() || !confirmPassword?.trim()){
-            return res.status(400).json({error: "Please Fill All TThe Required Fields"});
-        }
-
-        if (password != confirmPassword) {
-            return res.status(400).json({ error: 'Passwords do not match' });
         }
 
         if (password.length < 8) {
             return res.status(400).json({ error: 'Password length must be at least 8 characters long' });
         }
+
+        if (password !== confirmPassword) {
+            return res.status(400).json({ error: 'Passwords do not match' });
+        }
+
 
         if (!utils.isStrong(password)) {
             return res.status(400).json({
@@ -54,7 +60,7 @@ exports.register = async (req, res) => {
             maxAge: 3600000,
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             success: true,
             user: {
                 id: user._id,
@@ -65,7 +71,7 @@ exports.register = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             error: err.message,
         });
