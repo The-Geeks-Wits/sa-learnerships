@@ -33,7 +33,6 @@ exports.isStrong = (password) => {
         } else if (x >= '0' && x <= '9') {
             hasDigit = true;
         } else if (SpecialSymbols.includes(x)) {
-            console.log('Has Special symbol');
             HasSpecialSymbols = true;
         }
     }
