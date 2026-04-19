@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const controller = require('./controller.js');
+const { isAuthenticated, isAdmin } = require('../middlewares/auth.js');
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + '-' + file.originalname;
         cb(null, uniqueName);
-    }
+    },
 });
 
 const upload = multer({ storage });
@@ -50,26 +51,17 @@ router.get(
     },
 );
 
-//router.post("/registerGoogle", controller.registerGoogle);
-
-const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
-
 // profile routes
-router.get('/profile', verifyTokenCookie, controller.getProfile);
-router.put('/profile', verifyTokenCookie, controller.saveProfile);
+router.get('/profile', isAuthenticated, controller.getProfile);
+router.put('/profile', isAuthenticated, controller.saveProfile);
 
 // users
-router.get('/', controller.getUsers);
+router.get('/', isAuthenticated, isAdmin, controller.getUsers);
 router.get('/:id', controller.getUserById);
-router.put('/:id', controller.updateUser);
-router.delete('/:id', controller.deleteUser);
+router.put('/:id', isAuthenticated, isAdmin, controller.updateUser);
+router.delete('/:id', isAuthenticated, isAdmin, controller.deleteUser);
 
 // cv upload route
-router.post(
-    '/upload-cv',
-    verifyTokenCookie,
-    upload.single('cv'),
-    controller.uploadCV
-);
+router.post('/upload-cv', isAuthenticated, upload.single('cv'), controller.uploadCV);
 
 module.exports = router;

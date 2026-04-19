@@ -73,39 +73,42 @@ exports.login = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const userExists = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (!userExists) {
+        if (!user) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
-        const isPasswordValid = await utils.comparePasswords(password, userExists.password);
+        const isPasswordValid = await utils.comparePasswords(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
         const rememberMe = req.body.rememberMe;
-        const token = utils.generateAccessToken(email, userExists._id);
+        const token = utils.generateAccessToken(email, user._id);
 
-        let maxAge = rememberMe ? 604800000 : 3600000;
+        let maxAge;
+        if (rememberMe) {
+            maxAge = 604800000;
+        } else {
+            maxAge = 3600000;
+        }
 
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false,
+            secure: false, //we have to change to true after production/deployment
             maxAge: maxAge,
             sameSite: 'Lax',
             domain: 'localhost',
         });
 
-        res.status(201).json({
-            success: true,
-            user: {
-                id: userExists._id,
-                firstName: userExists.firstName,
-                lastName: userExists.lastName,
-                email: userExists.email,
-            },
+        res.status(200).json({
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
         });
     } catch (err) {
         res.status(500).json({
@@ -247,16 +250,11 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId).select('-password');
-
-        if (!user) {
-            return res.status(404).json({ message: 'User Not Found' });
-        }
-
-        return res.json({ user });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    // This is called after the isAuthenticated middleware, which adds user data to the request object
+    if (req.user) {
+        return res.status(200).json(req.user);
+    } else {
+        res.status(500).json({ message: 'Something went wrong! Please try again later' });
     }
 };
 
@@ -266,7 +264,7 @@ exports.saveProfile = async (req, res) => {
         const user = await User.findById(req.user.userId);
 
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(400).json({ error: 'User not found' });
         }
 
         const newQualification = req.body.qualification || {};
@@ -308,6 +306,8 @@ exports.saveProfile = async (req, res) => {
         user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
 
         await user.save();
+
+        delete user.password;
 
         return res.status(200).json({ success: true, user });
     } catch (err) {
