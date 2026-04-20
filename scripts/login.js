@@ -43,24 +43,14 @@ form.addEventListener('submit', async function (event) {
         });
 
         if (response.ok) {
-            const data = await response.json();
-            if (data) {
-                if (data) {
-                    setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 100);
-                    localStorage.setItem('userId', data.user.id);
-                }
-            }
+            window.location.href = 'home.html';
         } else {
-            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Login failed';
         }
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = 'Server error';
-        console.error('Login error:', err);
     } finally {
         loginButton.disabled = false;
         loginButton.textContent = 'Login';
