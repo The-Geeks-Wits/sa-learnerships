@@ -5,11 +5,14 @@ const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const opportunities = document.getElementById('opportunities');
 
-const getOpportunityElement = (id, title, location, closingDate) => {
+const getOpportunityElement = (id, title, status, location, closingDate) => {
     if (!location) location = 'Not provided';
 
     return `<li>
-        <h3>${title}</h3>
+        <section class="opportunity-heading">
+            <h3>${title}</h3>
+            <p>${status}</p>
+        </section>
         <section class="opportunity-details">
             <section>
                 <p><b>Location:</b> ${location}<p>
@@ -27,9 +30,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
 
-        const url = backendURL() + '/opportunities?status=Pending';
+        const url = backendURL() + '/opportunities/mine';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
         const response = await fetch(url, {
             method: 'GET',
+            headers: { Authorization: token },
         });
 
         if (response.ok) {
@@ -37,12 +45,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             pageContainer.style.display = 'block';
             if (data.opportunities.length == 0) {
-                opportunities.innerHTML = '<p class="no-data">No pending opportunities found</p>';
+                opportunities.innerHTML = '<p class="no-data">No opportunities found</p>';
                 return;
             }
 
-            data.opportunities.forEach(({ _id, title, location, closingDate }) => {
-                opportunities.innerHTML += getOpportunityElement(_id, title, location, closingDate);
+            data.opportunities.forEach(({ _id, title, status, location, closingDate }) => {
+                opportunities.innerHTML += getOpportunityElement(_id, title, status, location, closingDate);
             });
         }
     } catch (error) {

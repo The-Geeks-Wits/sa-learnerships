@@ -38,6 +38,11 @@ aside #opportunities-nav {
     line-height: 30px;
 }
 
+#page-description {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
 #opportunities {
     width: 100%;
     max-width: 800px;

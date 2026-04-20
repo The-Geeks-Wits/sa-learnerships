@@ -17,13 +17,7 @@
                     <img src="../assets/notifications.png" />
                     <p id="count">2</p>
                 </li>
-                <li id="profile-details">
-                    <section>
-                        <h4>Dikeledi Moatle</h4>
-                        <p>Applicant</p>
-                    </section>
-                    <h3>D</h3>
-                </li>
+                <li id="profile-details"></li>
             </ul>
         </nav>
         <main>
@@ -52,15 +46,16 @@
                 </ul>
             </aside>
             <section id="main-details">
+                <section id="page-state"></section>
+                <section id="page-error"></section>
                 <section id="page-container">
                     <h1 id="page-title">Your Opportunities</h1>
-                    <p>
-                        All the opportunities that you have created will appear here once this feature has been fully
-                        created. Maybe in another world we would have this ready by now
-                    </p>
+                    <p id="page-description">This is a list of all the opportunities that you have created</p>
+                    <ul id="opportunities"></ul>
                 </section>
             </section>
         </main>
         <script type="module" src="../scripts/index.js"></script>
+        <script type="module" src="./scripts/mine.js"></script>
     </body>
 </html>
