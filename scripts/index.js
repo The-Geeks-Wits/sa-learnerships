@@ -48,20 +48,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         </ul>`;
 
         const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { Authorization: token },
         });
 
         let userRole = 'applicant';
         if (response.ok) {
             const data = await response.json();
-            userRole = data.role;
+            const user = data.user;
+            userRole = user.role;
 
             profileElement.innerHTML = `<section>
-                <h4>${data.firstName} ${data.lastName}</h4>
-                <p>${data.role}</p>
-            </section><h3>${data.firstName[0].toUpperCase()}</h3>`;
+                <h4>${user.firstName} ${user.lastName}</h4>
+                <p>${user.role}</p>
+            </section><h3>${user.firstName[0].toUpperCase()}</h3>`;
         } else {
             profileElement.innerHTML = `<section>
                 <p>Couldn't load user details</p>
