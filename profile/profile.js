@@ -47,14 +47,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     ? user.dateOfBirth.split("T")[0] 
     : "";
 
-    // fixing:date input wasnt showing in frontend
-    if (user.dateOfBirth) {
-        const dob = new Date(user.dateOfBirth);
-        // Format date to YYYY-MM-DD for input value
-        dateOfBirth.value = dob.toISOString().split("T")[0];
-    } else {
-        dateOfBirth.value = "";
-    }
 
     //dispalying skills in the profile page
     const skillsContainer = document.getElementById("skills-container");
@@ -244,7 +236,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            await fetch('http://localhost:3000/api/users/profile', {
+            const res = await fetch('http://localhost:3000/api/users/profile', {
                 method: "PUT",
                 headers: { "content-type": "application/json" },
                 credentials: "include",
@@ -260,6 +252,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert(data.message || "Profile updated successfully");
             
         }catch(err){
+            console.error(err);
+            alert("Something went wrong");
             
         }
     });

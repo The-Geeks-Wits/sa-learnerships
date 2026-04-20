@@ -292,20 +292,21 @@ exports.saveProfile = async (req, res) => {
             newQualification.qualificationName?.trim() &&
             newQualification.nqfLevel;
 
+       
         let qualificationExists = false;
         if (isValidQualification) {
             const exists = user.qualifications.some(q =>
-                q.qualificationName === newQualification.qualificationName &&
-                q.qualificationLevel === newQualification.qualificationLevel &&
-                q.nqfLevel === newQualification.nqfLevel &&
-                q.institution === newQualification.institution
+                (q.qualificationName ?? "").trim().toLowerCase() === (newQualification.qualificationName ?? "").trim().toLowerCase() &&
+                (q.qualificationLevel ?? "").trim().toLowerCase() === (newQualification.qualificationLevel ?? "").trim().toLowerCase() &&
+                String(q.nqfLevel).trim() === String(newQualification.nqfLevel).trim() &&
+                (q.institution ?? "").trim().toLowerCase() === (newQualification.institution ?? "").trim().toLowerCase()
             );
 
             if (!exists) {
                 user.qualifications.push(newQualification);
             }
             else{
-                qualificationExists = true;
+                qualificationExists=true;
             }
         }
         
