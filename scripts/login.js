@@ -45,12 +45,12 @@ form.addEventListener('submit', async function (event) {
         if (response.ok) {
             const data = await response.json();
             if (data) {
-                if (data){
-                setTimeout(()=>{
-                    window.location.href = 'home.html';
-                },100);
-                localStorage.setItem('userId', data.user.id);
-            }
+                if (data) {
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 100);
+                    localStorage.setItem('userId', data.user.id);
+                }
             }
         } else {
             const data = await response.json();

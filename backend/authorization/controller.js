@@ -57,10 +57,9 @@ exports.register = async (req, res) => {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                email: user.email
+                email: user.email,
             },
         });
-
     } catch (err) {
         res.status(500).json({
             success: false,
@@ -96,7 +95,7 @@ exports.login = async (req, res) => {
             secure: false,
             maxAge: maxAge,
             sameSite: 'Lax',
-            domain: 'localhost'
+            domain: 'localhost',
         });
 
         res.status(201).json({
@@ -105,10 +104,9 @@ exports.login = async (req, res) => {
                 id: userExists._id,
                 firstName: userExists.firstName,
                 lastName: userExists.lastName,
-                email: userExists.email
+                email: userExists.email,
             },
         });
-
     } catch (err) {
         res.status(500).json({
             success: false,
@@ -125,11 +123,21 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ message: 'User not found' });
+        } else {
+            res.json({
+                message: 'User disabled',
+                user: {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                },
+            });
         }
 
         res.json({ message: 'User disabled', user: user });
-
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -182,9 +190,9 @@ exports.updateUser = async (req, res) => {
             _id: updatedUser._id,
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
-            email: updatedUser.email
+            email: updatedUser.email,
+            role: updatedUser.role,
         });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -202,10 +210,7 @@ exports.getUsers = async (req, res) => {
         }
 
         if (search) {
-            query.$or = [
-                { username: { $regex: search, $options: 'i' } },
-                { email: { $regex: search, $options: 'i' } }
-            ];
+            query.$or = [{ username: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
         }
 
         const users = await User.find(query);
@@ -215,7 +220,6 @@ exports.getUsers = async (req, res) => {
         }
 
         res.json(users);
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -234,9 +238,9 @@ exports.getUserById = async (req, res) => {
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
-            email: user.email
+            email: user.email,
+            role: user.role,
         });
-
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -244,14 +248,13 @@ exports.getUserById = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.userId).select('-password');
+        const user = await User.findById(req.user.userId);
 
         if (!user) {
-            return res.status(404).json({ message: "User Not Found" });
+            return res.status(404).json({ message: 'User Not Found' });
         }
 
         return res.json({ user });
-
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -263,13 +266,13 @@ exports.saveProfile = async (req, res) => {
         const user = await User.findById(req.user.userId);
 
         if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         const newQualification = req.body.qualification || {};
         const newSkills = req.body.skills || [];
 
-        newSkills.forEach(skill => {
+        newSkills.forEach((skill) => {
             const cleanSkill = skill.toLowerCase().trim();
             if (cleanSkill && !user.skills.includes(cleanSkill)) {
                 user.skills.push(cleanSkill);
@@ -284,11 +287,12 @@ exports.saveProfile = async (req, res) => {
             newQualification.nqfLevel;
 
         if (isValidQualification) {
-            const exists = user.qualifications.some(q =>
-                q.qualificationName === newQualification.qualificationName &&
-                q.qualificationLevel === newQualification.qualificationLevel &&
-                q.nqfLevel === newQualification.nqfLevel &&
-                q.institution === newQualification.institution
+            const exists = user.qualifications.some(
+                (q) =>
+                    q.qualificationName === newQualification.qualificationName &&
+                    q.qualificationLevel === newQualification.qualificationLevel &&
+                    q.nqfLevel === newQualification.nqfLevel &&
+                    q.institution === newQualification.institution,
             );
 
             if (!exists) {
@@ -306,7 +310,6 @@ exports.saveProfile = async (req, res) => {
         await user.save();
 
         return res.status(200).json({ success: true, user });
-
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
@@ -316,11 +319,11 @@ exports.saveProfile = async (req, res) => {
 exports.uploadCV = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
+            return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const fs = require("fs");
-        const path = require("path");
+        const fs = require('fs');
+        const path = require('path');
 
         const user = await User.findById(req.user.userId);
 
@@ -338,11 +341,10 @@ exports.uploadCV = async (req, res) => {
 
         res.json({
             success: true,
-            cv: filePath
+            cv: filePath,
         });
-
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: "Upload failed" });
+        res.status(500).json({ message: 'Upload failed' });
     }
 };
