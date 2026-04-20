@@ -71,6 +71,17 @@ button {
     width: 50%;
 }
 
+#approve-btn,
+#reject-btn {
+    margin-top: 0px;
+}
+
 #approve-btn {
-    margin-right: 10px;
+    margin-right: 15px;
+}
+
+#reject-btn {
+    margin-left: 15px;
+    border-color: #e63946;
+    color: #e63946;
 }

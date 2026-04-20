@@ -3,3 +3,9 @@
     max-width: 800px;
     font-size: 16px;
 }
+
+/* Highlight the right border of the your opportunities sidebar tab */
+aside #opportunities-nav-options #your-opportunities-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}

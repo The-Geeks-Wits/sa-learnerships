@@ -11,6 +11,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Auth - Is Admin', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     it('should return a 403 status code when the user is not an admin', () => {
         // Mock request object
         const req = { user: { role: 'test-role' } };
@@ -65,6 +69,9 @@ describe('Auth - Is Admin', () => {
 });
 
 describe('Auth - Is Provider', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
     it('should return a 403 status code when the user is not a provider', () => {
         // Mock request object
         const req = { user: { role: 'test-role' } };
@@ -119,6 +126,10 @@ describe('Auth - Is Provider', () => {
 });
 
 describe('Auth - Is Authenticated', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     // TODO: Test what happens when the cookies are not provided
     it('should return a 401 status when there is no token in cookies', async () => {
         // Mock request object
@@ -290,5 +301,143 @@ describe('Auth - Is Authenticated', () => {
         await middleware.isAuthenticated(req, res);
         const json = res.json.mock.calls[0][0];
         expect(json.message).toBeDefined();
+    });
+});
+
+describe('Auth - Auth Middleware', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should return a 401 status code when token is not found in the headers', async () => {
+        // Mock request object
+        const req = { headers: {} };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.authMiddleware(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+    });
+
+    it('should return an object with a message property when the user is not found', async () => {
+        // Mock request object
+        const req = { headers: {} };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.authMiddleware(req, res);
+        const json = res.json.mock.calls[0][0];
+        expect(json.message).toBeDefined();
+    });
+
+    it('should call the next function on success', async () => {
+        // Mock request object
+        const req = { headers: { authorization: 'test-token' } };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        // Mock next function
+        const next = jest.fn();
+
+        await middleware.authMiddleware(req, res, next);
+        expect(next).toHaveBeenCalled();
+    });
+});
+
+describe('Auth - Verify Token Cookie', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    // TODO: Test what happens when the cookies are not provided
+    it('should return a 401 status when there is no token in cookies', async () => {
+        // Mock request object
+        const req = { cookies: {} };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.verifyTokenCookie(req, res);
+        expect(res.status).toHaveBeenCalledWith(401);
+    });
+
+    it('should return an object with a message property when there is no token in cookies', async () => {
+        // Mock request object
+        const req = { cookies: {} };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.verifyTokenCookie(req, res);
+        const json = res.json.mock.calls[0][0];
+        expect(json.message).toBeDefined();
+    });
+
+    it('should verify and decode the jwt', async () => {
+        process.env.JWT_SECRET = 'test-secret';
+        // Mock request object
+        const req = { cookies: { jwt: 'test-token' } };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.verifyTokenCookie(req, res);
+        expect(jwt.verify).toHaveBeenCalledWith(req.cookies.jwt, process.env.JWT_SECRET);
+    });
+
+    it('should add the user details to the request object', async () => {
+        // jwt gets mocked, hence the mockResolvedValue function exists
+        const details = { id: 'test-id' };
+        jwt.verify.mockReturnValue(details);
+
+        // Mock request object
+        const req = { cookies: { jwt: 'test-token' } };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        await middleware.verifyTokenCookie(req, res);
+        expect(req.user).toBe(details);
+    });
+
+    it('should call the next function on success', async () => {
+        // Mock request object
+        const req = { cookies: { jwt: 'test-token' } };
+
+        // Mock response object
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+
+        // Mock next function
+        const next = jest.fn();
+
+        await middleware.verifyTokenCookie(req, res, next);
+        expect(next).toHaveBeenCalled();
     });
 });

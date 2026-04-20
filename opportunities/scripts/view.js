@@ -14,6 +14,7 @@ const locationElement = document.getElementById('location');
 const closingDate = document.getElementById('closing-date');
 const approveButton = document.getElementById('approve-btn');
 const viewApplicationsBtn = document.getElementById('view-applications-btn');
+const rejectButton = document.getElementById('reject-btn');
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -90,9 +91,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 approveButton.addEventListener('click', async () => {
-    const id = new URLSearchParams(window.location.search).get('id');
-
     try {
+        const id = new URLSearchParams(window.location.search).get('id');
         const url = backendURL() + `/opportunities/${id}/approve`;
         const response = await fetch(url, {
             method: 'POST',
@@ -103,7 +103,6 @@ approveButton.addEventListener('click', async () => {
 
         if (response.ok) {
             approveButton.disabled = true;
-            approveButton.textContent = 'Approved';
             approveButton.style.cursor = 'not-allowed';
             alert('Opportunity approved successfully!');
         } else {
@@ -132,6 +131,13 @@ applyButton.addEventListener('click', async () => {
                 'Authorization': 'Bearer ' + token,
             },
             credentials: 'include',
+rejectButton.addEventListener('click', async () => {
+    try {
+        const id = new URLSearchParams(window.location.search).get('id');
+        const url = backendURL() + `/opportunities/${id}/reject`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
         });
 
         const data = await response.json();
@@ -156,4 +162,14 @@ applyButton.addEventListener('click', async () => {
 viewApplicationsBtn.addEventListener('click', () => {
     const id = new URLSearchParams(window.location.search).get('id');
     window.location.href = '/applications/index.html?id=' + id;
+});
+            rejectButton.disabled = true;
+            rejectButton.style.cursor = 'not-allowed';
+            alert('Opportunity rejected successfully!');
+        } else {
+            alert(data.error);
+        }
+    } catch (error) {
+        alert('Something went wrong! Please try again later');
+    }
 });
