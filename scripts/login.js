@@ -52,6 +52,12 @@ form.addEventListener('submit', async function (event) {
                 localStorage.setItem('userId', data.user.id);
                 localStorage.setItem('token', data.token);
             }
+                if (data) {
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 100);
+                    localStorage.setItem('userId', data.user.id);
+                }
             }
         } else {
             const data = await response.json();

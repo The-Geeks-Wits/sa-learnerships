@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = require('../../authorization/routes.js');
 const controller = require('../../authorization/controller.js');
+const multer = require('multer');
 
 jest.mock('express', () => {
     const mockRouter = {
@@ -10,6 +11,12 @@ jest.mock('express', () => {
         delete: jest.fn(),
     };
     return { Router: jest.fn(() => mockRouter) };
+});
+
+jest.mock('multer', () => {
+    const multerMock = jest.fn().mockReturnValue({ single: jest.fn() });
+    multerMock.diskStorage = jest.fn();
+    return multerMock;
 });
 
 // We have tested the controller and assume that it is working as inteded so here we mock it to test everything as a unit
@@ -37,14 +44,7 @@ describe('Auth & User Routes', () => {
         expect(mockRouter.post).toHaveBeenCalledTimes(3);
     });
 
-    // it('calls the router GET method with the correct arguments', () => {
-    //     const mockRouter = express.Router();
-    //     expect(mockRouter.get).toHaveBeenCalledWith('/', controller.getAllOpportunities);
-    //     expect(mockRouter.get).toHaveBeenCalledWith('/:id', controller.getOpportunity);
-    // });
-
-    // it('calls the router POST method with the correct arguments', () => {
-    //     const mockRouter = express.Router();
-    //     expect(mockRouter.post).toHaveBeenCalledWith('/', controller.createOpportunity);
-    // });
+    it('calls the disk storage function from multer', () => {
+        expect(multer.diskStorage).toHaveBeenCalled();
+    });
 });
