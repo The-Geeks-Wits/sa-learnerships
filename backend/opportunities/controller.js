@@ -164,8 +164,6 @@ exports.resubmitOpportunity = async (req, res) => {
             });
         }
 
-        console.log(opportunity);
-
         opportunity.status = 'Pending';
         await opportunity.save();
         res.status(200).json({
