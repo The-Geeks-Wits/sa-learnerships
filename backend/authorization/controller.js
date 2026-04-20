@@ -44,20 +44,14 @@ exports.register = async (req, res) => {
 
         const token = utils.generateAccessToken(email, user._id);
 
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'Lax',
-            maxAge: 3600000,
-        });
-
         res.status(201).json({
-            success: true,
+            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                role: user.role
             },
         });
     } catch (err) {
@@ -88,27 +82,15 @@ exports.login = async (req, res) => {
         const rememberMe = req.body.rememberMe;
         const token = utils.generateAccessToken(email, user._id);
 
-        let maxAge;
-        if (rememberMe) {
-            maxAge = 604800000;
-        } else {
-            maxAge = 3600000;
-        }
-
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
-            maxAge: maxAge,
-            sameSite: 'Lax',
-            domain: 'localhost',
-        });
-
         res.status(200).json({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
+            token,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role
+            },
         });
     } catch (err) {
         res.status(500).json({

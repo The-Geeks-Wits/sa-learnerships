@@ -43,6 +43,8 @@ form.addEventListener('submit', async function (event) {
         });
 
         if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('jwt', data.token);
             window.location.href = 'home.html';
         } else {
             errorMessage.style.display = 'block';

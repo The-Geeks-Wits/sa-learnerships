@@ -66,7 +66,7 @@ form.addEventListener('submit', async (event) => {
             const data = await response.json();
 
             if (data) {
-                // The token needs to come from the server as an http only cookie
+                localStorage.setItem('jwt', data.token);
                 window.location.href = '/home.html';
             }
         } else {
