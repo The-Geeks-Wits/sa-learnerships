@@ -123,8 +123,18 @@ nav #notifications #count {
     left: 18%;
     top: 5%;
 }
+
 nav #app-name:hover {
     cursor: pointer;
+}
+
+nav #profile-letter {
+    transition: opacity 0.2s ease;
+}
+
+nav #profile-letter:hover {
+    cursor: pointer;
+    opacity: 0.85;
 }
 
 /* Main styles */

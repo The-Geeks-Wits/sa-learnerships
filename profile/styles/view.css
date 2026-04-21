@@ -1,0 +1,101 @@
+#page-title {
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 30px;
+    font-size: 38px;
+    max-width: 800px;
+    line-height: 30px;
+}
+
+#profile,
+#profile ul {
+    list-style: none;
+}
+
+#profile {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 800px;
+}
+
+#personal-details {
+    width: 100%;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+#profile-img {
+    width: 100px;
+    height: 100px;
+    margin-right: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    background-color: #34a853;
+}
+
+#profile-img p {
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#name-email-details {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#full-name {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 600;
+}
+
+#email {
+    color: #505050;
+    font-size: 18px;
+}
+
+#user-role {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+}
+
+#user-role img {
+    width: 24px;
+    height: 24px;
+    margin-right: 14px;
+}
+
+#user-role p {
+    color: #505050;
+    font-size: 18px;
+}
+
+#profile-tab {
+    border-bottom: 1.5px solid #dfdfdf;
+}
+
+#profile-tab ul {
+    display: flex;
+}
+
+#profile-tab ul li {
+    margin-right: 40px;
+    margin-bottom: -2px;
+    font-size: 18px;
+    line-height: 50px;
+}
+
+#profile-tab ul li p:hover {
+    cursor: pointer;
+}
+
+#profile-tab ul .visible {
+    border-bottom: 1.5px solid #1562f2;
+}

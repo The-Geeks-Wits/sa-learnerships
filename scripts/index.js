@@ -66,7 +66,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             profileElement.innerHTML = `<section>
                 <h4>${user.firstName} ${user.lastName}</h4>
                 <p>${user.role}</p>
-            </section><h3>${user.firstName[0].toUpperCase()}</h3>`;
+            </section><h3 id="profile-letter">${user.firstName[0].toUpperCase()}</h3>`;
+
+            document.getElementById('profile-letter').addEventListener('click', () => {
+                window.location.href = '../profile/view.html';
+            });
         } else {
             profileElement.innerHTML = `<section>
                 <p>Couldn't load user details</p>
