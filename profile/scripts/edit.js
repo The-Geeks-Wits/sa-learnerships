@@ -5,12 +5,64 @@ const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
 
+const addFormSubmitListener = (formElement, user) => {
+    formElement.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '../../login.html');
+
+        // Get all the input fields elements
+        const firstNameElement = document.getElementById('firstName');
+        const lastNameElement = document.getElementById('lastName');
+        const emailElement = document.getElementById('email');
+        const locationElement = document.getElementById('location');
+        const phoneElement = document.getElementById('phone');
+
+        // Build the request body
+        const requestBody = {};
+
+        if (firstNameElement.value !== '' && firstNameElement.value !== user.firstName) {
+            requestBody.firstName = firstNameElement.value;
+        }
+
+        if (lastNameElement.value !== '' && lastNameElement.value !== user.lastName) {
+            requestBody.lastName = lastNameElement.value;
+        }
+
+        if (emailElement.value !== '' && emailElement.value !== user.email) {
+            requestBody.email = emailElement.value;
+        }
+
+        if (locationElement.value !== '' && locationElement.value !== user.location) {
+            requestBody.location = locationElement.value;
+        }
+
+        if (phoneElement.value !== '' && phoneElement.value !== user.phone) {
+            requestBody.phone = phoneElement.value;
+        }
+
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                Authorization: token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        console.log(await response.json());
+    });
+};
+
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
 
-    visibleDetails.innerHTML = `<form>
+    visibleDetails.innerHTML = `<form id="personal-details-form">
         <section class="input-group">
             <label for="firstName">First Name</label>
             <section class="input-wrapper">
@@ -30,6 +82,19 @@ const showPersonalDetails = (user) => {
             </section>
         </section>
         <section class="input-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender">
+                <option value="">Select gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Prefer Not To Say">Prefer Not To Say</option>
+            </select>
+        </section>
+        <section class="input-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" />
+        </section>
+        <section class="input-group">
             <label for="location">Location</label>
             <section class="input-wrapper">
                 <input type="text" id="location" name="location" value="${user.location || ''}" />
@@ -41,7 +106,11 @@ const showPersonalDetails = (user) => {
                 <input type="text" id="phone" name="phone" value="${user.phone || ''}" />
             </section>
         </section>
+        <button id="save-profile-btn" class="coloured-btn">Save profile</button>
     </form>`;
+
+    const form = document.getElementById('personal-details-form');
+    addFormSubmitListener(form, user);
 };
 
 const showEducationDetails = (user) => {

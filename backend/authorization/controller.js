@@ -51,7 +51,7 @@ exports.register = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                role: user.role
+                role: user.role,
             },
         });
     } catch (err) {
@@ -89,7 +89,7 @@ exports.login = async (req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                role: user.role
+                role: user.role,
             },
         });
     } catch (err) {
@@ -232,62 +232,77 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    if(req.user) return res.status(200).json({user: req.user});
+    if (req.user) return res.status(200).json({ user: req.user });
     return res.status(400).json({ message: 'User not found! Please check your token and try again later' });
 };
 
 //update profile
 exports.saveProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.userId);
-
-        if (!user) {
-            return res.status(400).json({ error: 'User not found' });
+        if (!req.user) {
+            return res.status(400).json({ error: 'User required! Please provide the user of the profile' });
         }
 
-        const newQualification = req.body.qualification || {};
-        const newSkills = req.body.skills || [];
-
-        newSkills.forEach((skill) => {
-            const cleanSkill = skill.toLowerCase().trim();
-            if (cleanSkill && !user.skills.includes(cleanSkill)) {
-                user.skills.push(cleanSkill);
-            }
-        });
-
-        const isValidQualification =
-            newQualification &&
-            newQualification.institution?.trim() &&
-            newQualification.qualificationLevel?.trim() &&
-            newQualification.qualificationName?.trim() &&
-            newQualification.nqfLevel;
-
-        if (isValidQualification) {
-            const exists = user.qualifications.some(
-                (q) =>
-                    q.qualificationName === newQualification.qualificationName &&
-                    q.qualificationLevel === newQualification.qualificationLevel &&
-                    q.nqfLevel === newQualification.nqfLevel &&
-                    q.institution === newQualification.institution,
-            );
-
-            if (!exists) {
-                user.qualifications.push(newQualification);
-            }
+        if (!req.body) {
+            return res.status(400).json({ error: 'Update fields required! Please provide some fields to update' });
         }
 
-        user.firstName = req.body.firstName ?? user.firstName;
-        user.lastName = req.body.lastName ?? user.lastName;
-        user.phone = req.body.phone ?? user.phone;
-        user.location = req.body.location ?? user.location;
-        user.gender = req.body.gender ?? user.gender;
-        user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
+        const updateOptions = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            gender: req.body.gender,
+            dateOfBirth: req.body.dateOfBirth,
+            location: req.body.location,
+            phone: req.body.phone,
+        };
 
-        await user.save();
+        // Fields that are undefined will get ignored
+        const user = await User.findByIdAndUpdate(req.user._id, updateOptions);
 
-        delete user.password;
+        // const newQualification = req.body.qualification || {};
+        // const newSkills = req.body.skills || [];
 
-        return res.status(200).json({ success: true, user });
+        // newSkills.forEach((skill) => {
+        //     const cleanSkill = skill.toLowerCase().trim();
+        //     if (cleanSkill && !user.skills.includes(cleanSkill)) {
+        //         user.skills.push(cleanSkill);
+        //     }
+        // });
+
+        // const isValidQualification =
+        //     newQualification &&
+        //     newQualification.institution?.trim() &&
+        //     newQualification.qualificationLevel?.trim() &&
+        //     newQualification.qualificationName?.trim() &&
+        //     newQualification.nqfLevel;
+
+        // if (isValidQualification) {
+        //     const exists = user.qualifications.some(
+        //         (q) =>
+        //             q.qualificationName === newQualification.qualificationName &&
+        //             q.qualificationLevel === newQualification.qualificationLevel &&
+        //             q.nqfLevel === newQualification.nqfLevel &&
+        //             q.institution === newQualification.institution,
+        //     );
+
+        //     if (!exists) {
+        //         user.qualifications.push(newQualification);
+        //     }
+        // }
+
+        // user.firstName = req.body.firstName ?? user.firstName;
+        // user.lastName = req.body.lastName ?? user.lastName;
+        // user.phone = req.body.phone ?? user.phone;
+        // user.location = req.body.location ?? user.location;
+        // user.gender = req.body.gender ?? user.gender;
+        // user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
+
+        // Remove the password from the user details
+        const userObj = user.toObject();
+        delete userObj.password;
+
+        return res.status(200).json({ user: userObj });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }

@@ -57,7 +57,8 @@ label {
     margin-bottom: 6px;
 }
 
-input {
+input,
+select {
     width: 100%;
     padding: 12px 20px;
     background-color: #ffffff;
@@ -70,12 +71,22 @@ input {
     transition: border-color 0.2s ease;
 }
 
-input:focus {
+input:focus,
+select:focus {
     border-color: #1562f2;
+}
+
+select {
+    appearance: none;
 }
 
 .input-group {
     margin-bottom: 16px;
+}
+
+#save-profile-btn {
+    width: 100%;
+    margin: 20px 0px;
 }
 
 /* body {

@@ -101,11 +101,17 @@
 }
 
 #visible-profile-details {
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 #visible-details li {
+    width: 100%;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#visible-details li section {
     display: flex;
 }
 

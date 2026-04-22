@@ -38,12 +38,24 @@ const showPersonalDetails = (user) => {
 
     visibleDetails.innerHTML = `<ul id="visible-details">
         <li>
-            <h4>Location</h4>
-            <p>${user.location || 'Not provided'}</p>
+            <section>
+                <h4>Gender</h4>
+                <p>${user.gender || 'Not provided'}</p>
+            </section>
+            <section>
+                <h4>Date Of Birth</h4>
+                <p>${user.dateOfBirth || 'Not provided'}</p>
+            </section>
         </li>
         <li>
-            <h4>Phone</h4>
+            <section>
+                <h4>Location</h4>
+                <p>${user.location || 'Not provided'}</p>
+            </section>
+            <section>
+                <h4>Phone</h4>
             <p>${user.phone || 'Not provided'}</p>
+            </section>
         </li>
     </ul>`;
 };
@@ -53,7 +65,17 @@ const showEducationDetails = (user) => {
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
 
-    visibleDetails.innerHTML = '';
+    const qualifications = user.qualifications || [];
+    if (qualifications.length === 0) {
+        visibleDetails.innerHTML = `<ul id="visible-details">
+            <li><p>Not provided</p></li>
+        </ul>`;
+        return;
+    }
+
+    visibleDetails.innerHTML = `<ul id="visible-details">
+
+    </ul>`;
 };
 
 const showSkillsDetails = (user) => {
@@ -61,7 +83,23 @@ const showSkillsDetails = (user) => {
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
 
-    visibleDetails.innerHTML = '';
+    const skills = user.skills || [];
+
+    if (skills.length === 0) {
+        visibleDetails.innerHTML = `<ul id="visible-details">
+            <li><p>Not provided</p></li>
+        </ul>`;
+        return;
+    }
+
+    let skillsElement = '';
+    for (let i = 0; i < skills.length; i++) {
+        skillsElement += `<li><p>${skills[i]}</p></li>`;
+    }
+
+    visibleDetails.innerHTML = `<ul id="visible-details">
+        ${skillsElement}
+    </ul>`;
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
