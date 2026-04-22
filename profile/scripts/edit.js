@@ -101,6 +101,34 @@ const addEducationSubmitListener = (formElement, user) => {
     });
 };
 
+const addSkillSubmitListener = (formElement, user) => {
+    formElement.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '../../login.html');
+
+        const skillElement = document.getElementById('skill');
+
+        if (skillElement.value) {
+            user.skills.push(skillElement.value);
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ skills: user.skills }),
+            });
+
+            // Alert something
+            console.log(await response.json());
+        }
+    });
+};
+
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -165,17 +193,17 @@ const showEducationDetails = (user) => {
     visibleDetails.innerHTML = `<form id="education-form">
         <section class="input-group">
             <label for="qualification-name">Qualification Name</label>
-            <input type="text" id="qualification-name" name="qualification-name" />
+            <input type="text" id="qualification-name" name="qualification-name" placeholder="Please enter your qualification name" />
         </section>
         <section class="input-group">
             <label for="institution">Institution</label>
-            <input type="text" id="institution" name="institution" />
+            <input type="text" id="institution" name="institution" placeholder="Please enter your institution name" />
         </section>
         <button id="add-education-btn" class="coloured-btn">Add education</button>
     </form>`;
 
     const form = document.getElementById('education-form');
-    addEducationSubmitListener(form, user);
+    addSkillSubmitListener(form, user);
 };
 
 const showSkillsDetails = (user) => {
@@ -183,7 +211,16 @@ const showSkillsDetails = (user) => {
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
 
-    visibleDetails.innerHTML = '';
+    visibleDetails.innerHTML = `<form id="skill-form">
+        <section class="input-group">
+            <label for="skill">Skill</label>
+            <input type="text" id="skill" name="skill" placeholder="Please enter your skill name" />
+        </section>
+        <button id="add-skill-btn" class="coloured-btn">Add skill</button>
+    </form>`;
+
+    const form = document.getElementById('skill-form');
+    addSkillSubmitListener(form, user);
 };
 
 document.addEventListener('DOMContentLoaded', async () => {

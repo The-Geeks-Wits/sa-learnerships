@@ -7,6 +7,12 @@
     line-height: 30px;
 }
 
+#page-description {
+    width: 100%;
+    max-width: 800px;
+    font-size: 16px;
+}
+
 /* Highlight the left border of the profile sidebar tab */
 aside #settings-nav-options #profile-nav-tab {
     border-left-color: #1562f2;
@@ -24,7 +30,7 @@ aside #settings-nav-options {
 }
 
 #profile {
-    margin-top: 50px;
+    margin-top: 30px;
     width: 100%;
     max-width: 800px;
 }
