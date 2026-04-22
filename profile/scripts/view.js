@@ -38,7 +38,7 @@ const showPersonalDetails = (user) => {
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
 
-    visibleDetails.innerHTML = `<ul id="visible-details">
+    visibleDetails.innerHTML = `<ul class="visible-details">
         <li>
             <h4>Date Of Birth</h4>
             <p>${user.dateOfBirth || 'Not provided'}</p>
@@ -65,14 +65,22 @@ const showEducationDetails = (user) => {
 
     const qualifications = user.qualifications || [];
     if (qualifications.length === 0) {
-        visibleDetails.innerHTML = `<ul id="visible-details">
+        visibleDetails.innerHTML = `<ul class="visible-details">
             <li><p>Not provided</p></li>
         </ul>`;
         return;
     }
 
-    visibleDetails.innerHTML = `<ul id="visible-details">
+    let qualificationsElement = '';
+    for (let i = 0; i < qualifications.length; i++) {
+        qualificationsElement += `<li class="card">
+            <h4>${qualifications[i].qualificationName}</h4>
+            <p>${qualifications[i].institution}</p>
+        </li>`;
+    }
 
+    visibleDetails.innerHTML = `<ul id="education-visible-details" class="visible-details">
+        ${qualificationsElement}
     </ul>`;
 };
 
@@ -84,7 +92,7 @@ const showSkillsDetails = (user) => {
     const skills = user.skills || [];
 
     if (skills.length === 0) {
-        visibleDetails.innerHTML = `<ul id="visible-details">
+        visibleDetails.innerHTML = `<ul class="visible-details">
             <li><p>Not provided</p></li>
         </ul>`;
         return;
@@ -95,7 +103,7 @@ const showSkillsDetails = (user) => {
         skillsElement += `<li><p>${skills[i]}</p></li>`;
     }
 
-    visibleDetails.innerHTML = `<ul id="visible-details">
+    visibleDetails.innerHTML = `<ul class="visible-details">
         ${skillsElement}
     </ul>`;
 };

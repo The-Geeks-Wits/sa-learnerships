@@ -115,17 +115,26 @@ aside #settings-nav-options {
     margin-top: 40px;
 }
 
-#visible-details li {
+.visible-details li {
     margin-bottom: 20px;
     display: flex;
 }
 
-#visible-details li h4 {
+.visible-details li h4 {
     width: 200px;
     font-size: 18px;
 }
 
-#visible-details li p {
+.visible-details li p {
     color: #505050;
     font-size: 16px;
+}
+
+#education-visible-details li {
+    padding: 20px;
+    flex-direction: column;
+}
+
+#education-visible-details li h4 {
+    margin-bottom: 6px;
 }

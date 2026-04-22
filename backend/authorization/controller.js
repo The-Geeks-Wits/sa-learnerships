@@ -236,8 +236,7 @@ exports.getProfile = async (req, res) => {
     return res.status(400).json({ message: 'User not found! Please check your token and try again later' });
 };
 
-//update profile
-exports.saveProfile = async (req, res) => {
+exports.editProfile = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({ error: 'User required! Please provide the user of the profile' });
@@ -247,6 +246,7 @@ exports.saveProfile = async (req, res) => {
             return res.status(400).json({ error: 'Update fields required! Please provide some fields to update' });
         }
 
+        // Build the update options and add personal details
         const updateOptions = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -255,6 +255,8 @@ exports.saveProfile = async (req, res) => {
             dateOfBirth: new Date(req.body.dateOfBirth || req.user.dateOfBirth),
             location: req.body.location,
             phone: req.body.phone,
+            qualifications: req.body.qualifications,
+            skills: req.body.skills,
         };
 
         // Fields that are undefined will get ignored

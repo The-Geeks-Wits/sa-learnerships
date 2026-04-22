@@ -53,7 +53,7 @@ router.get(
 
 // profile routes
 router.get('/profile', isAuthenticated, controller.getProfile);
-router.patch('/profile', isAuthenticated, controller.saveProfile);
+router.patch('/profile', isAuthenticated, controller.editProfile);
 
 // users
 router.get('/', isAuthenticated, isAdmin, controller.getUsers);

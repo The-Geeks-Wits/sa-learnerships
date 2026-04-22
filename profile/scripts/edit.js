@@ -5,7 +5,7 @@ const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
 
-const addFormSubmitListener = (formElement, user) => {
+const addPersonalDetailsSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -54,8 +54,6 @@ const addFormSubmitListener = (formElement, user) => {
             requestBody.phone = phoneElement.value;
         }
 
-        console.log(requestBody);
-
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
@@ -65,7 +63,41 @@ const addFormSubmitListener = (formElement, user) => {
             body: JSON.stringify(requestBody),
         });
 
+        // Alert something
         console.log(await response.json());
+    });
+};
+
+const addEducationSubmitListener = (formElement, user) => {
+    formElement.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '../../login.html');
+
+        const qualificationNameElement = document.getElementById('qualification-name');
+        const institutionElement = document.getElementById('institution');
+
+        if (qualificationNameElement.value && institutionElement.value) {
+            const qualification = {
+                qualificationName: qualificationNameElement.value,
+                institution: institutionElement.value,
+            };
+            user.qualifications.push(qualification);
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ qualifications: user.qualifications }),
+            });
+
+            // Alert something
+            console.log(await response.json());
+        }
     });
 };
 
@@ -122,7 +154,7 @@ const showPersonalDetails = (user) => {
     </form>`;
 
     const form = document.getElementById('personal-details-form');
-    addFormSubmitListener(form, user);
+    addPersonalDetailsSubmitListener(form, user);
 };
 
 const showEducationDetails = (user) => {
@@ -130,7 +162,20 @@ const showEducationDetails = (user) => {
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
 
-    visibleDetails.innerHTML = '';
+    visibleDetails.innerHTML = `<form id="education-form">
+        <section class="input-group">
+            <label for="qualification-name">Qualification Name</label>
+            <input type="text" id="qualification-name" name="qualification-name" />
+        </section>
+        <section class="input-group">
+            <label for="institution">Institution</label>
+            <input type="text" id="institution" name="institution" />
+        </section>
+        <button id="add-education-btn" class="coloured-btn">Add education</button>
+    </form>`;
+
+    const form = document.getElementById('education-form');
+    addEducationSubmitListener(form, user);
 };
 
 const showSkillsDetails = (user) => {

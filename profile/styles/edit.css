@@ -95,7 +95,7 @@ select {
     margin-bottom: 16px;
 }
 
-#save-profile-btn {
+form button {
     width: 100%;
     margin: 20px 0px;
 }
