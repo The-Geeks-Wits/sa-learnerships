@@ -6,32 +6,35 @@ const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
 
-const getPersonalDetailsElement = (user) => {
-    const element = `
-        <section id="profile-img">
-            <p>${user.firstName[0].toUpperCase()}</p>
+const setPersonalDetails = (user) => {
+    personalDetails.innerHTML += `
+    <section id="profile-img">
+        <p>${user.firstName[0].toUpperCase()}</p>
+    </section>
+    <section id="profile-main-details">
+        <section id="name-email-details">
+            <section>
+                <p id="full-name">${user.firstName} ${user.lastName}</p>
+                <p id="email">${user.email}</p>
+            </section>
+            <button id="edit-profile" class="coloured-btn">Edit profile</button>
         </section>
-        <section id="profile-main-details">
-            <section id="name-email-details">
-                <section>
-                    <p id="full-name">${user.firstName} ${user.lastName}</p>
-                    <p id="email">${user.email}</p>
-                </section>
-                <button class="coloured-btn">Edit profile</button>
-            </section>
-            <section id="user-role">
-                <img src="../../assets/user.svg" />
-                <p>${user.role}</p>
-            </section>
-        </section>`;
-    return element;
+        <section id="user-role">
+            <img src="../../assets/user.svg" />
+            <p>${user.role}</p>
+        </section>
+    </section>`;
+
+    const editProfileBtn = document.getElementById('edit-profile');
+    editProfileBtn.addEventListener('click', () => {
+        window.location.href = 'edit.html';
+    });
 };
 
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
-    console.log(user);
 
     visibleDetails.innerHTML = `<ul id="visible-details">
         <li>
@@ -75,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (response.ok) {
         const data = await response.json();
 
-        personalDetails.innerHTML += getPersonalDetailsElement(data.user);
+        setPersonalDetails(data.user);
 
         personalTab.addEventListener('click', () => showPersonalDetails(data.user));
         educationTab.addEventListener('click', () => showEducationDetails(data.user));

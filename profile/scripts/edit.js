@@ -1,3 +1,88 @@
+import { backendURL } from '../../env.config.js';
+
+const visibleDetails = document.getElementById('visible-profile-details');
+const personalTab = document.getElementById('personal-tab');
+const educationTab = document.getElementById('education-tab');
+const skillsTab = document.getElementById('skills-tab');
+
+const showPersonalDetails = (user) => {
+    personalTab.classList.add('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.remove('visible');
+
+    visibleDetails.innerHTML = `<form>
+        <section class="input-group">
+            <label for="firstName">First Name</label>
+            <section class="input-wrapper">
+                <input type="text"  id="firstName" name="firstName" value="${user.firstName}"/>
+            </section>
+        </section>
+        <section class="input-group">
+            <label for="lastName">Last Name</label>
+            <section class="input-wrapper">
+                <input type="text" id="lastName" name="lastName" value="${user.lastName}" />
+            </section>
+        </section>
+        <section class="input-group">
+            <label for="email">Email</label>
+            <section class="input-wrapper">
+                <input type="email" id="email" name="email" value="${user.email}" />
+            </section>
+        </section>
+        <section class="input-group">
+            <label for="location">Location</label>
+            <section class="input-wrapper">
+                <input type="text" id="location" name="location" value="${user.location || ''}" />
+            </section>
+        </section>
+        <section class="input-group">
+            <label for="phone">Phone</label>
+            <section class="input-wrapper">
+                <input type="text" id="phone" name="phone" value="${user.phone || ''}" />
+            </section>
+        </section>
+    </form>`;
+};
+
+const showEducationDetails = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.add('visible');
+    skillsTab.classList.remove('visible');
+
+    visibleDetails.innerHTML = '';
+};
+
+const showSkillsDetails = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.add('visible');
+
+    visibleDetails.innerHTML = '';
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const url = backendURL() + '/api/users/profile';
+
+    const token = localStorage.getItem('jwt');
+    if (!token) return (window.location.href = '/login.html');
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: { Authorization: token },
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+
+        personalTab.addEventListener('click', () => showPersonalDetails(data.user));
+        educationTab.addEventListener('click', () => showEducationDetails(data.user));
+        skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+
+        // Start with personal details
+        showPersonalDetails(data.user);
+    }
+});
+
 // document.addEventListener("DOMContentLoaded", async () => {
 
 //     //fetch user data from backens
