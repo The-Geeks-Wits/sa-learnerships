@@ -7,6 +7,17 @@
     line-height: 30px;
 }
 
+/* Highlight the left border of the profile sidebar tab */
+aside #settings-nav-options #profile-nav-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
+/* Show the settings sidebar options */
+aside #settings-nav-options {
+    display: block;
+}
+
 #profile,
 #profile ul {
     list-style: none;
@@ -105,18 +116,12 @@
 }
 
 #visible-details li {
-    width: 100%;
     margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-
-#visible-details li section {
     display: flex;
 }
 
 #visible-details li h4 {
-    width: 150px;
+    width: 200px;
     font-size: 18px;
 }
 

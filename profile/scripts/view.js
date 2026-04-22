@@ -36,26 +36,24 @@ const showPersonalDetails = (user) => {
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
 
+    if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
+
     visibleDetails.innerHTML = `<ul id="visible-details">
         <li>
-            <section>
-                <h4>Gender</h4>
-                <p>${user.gender || 'Not provided'}</p>
-            </section>
-            <section>
-                <h4>Date Of Birth</h4>
-                <p>${user.dateOfBirth || 'Not provided'}</p>
-            </section>
+            <h4>Date Of Birth</h4>
+            <p>${user.dateOfBirth || 'Not provided'}</p>
         </li>
         <li>
-            <section>
-                <h4>Location</h4>
-                <p>${user.location || 'Not provided'}</p>
-            </section>
-            <section>
-                <h4>Phone</h4>
+            <h4>Gender</h4>
+            <p>${user.gender || 'Not provided'}</p>
+        </li>
+        <li>
+            <h4>Location</h4>
+            <p>${user.location || 'Not provided'}</p>
+        </li>
+        <li>
+            <h4>Phone</h4>
             <p>${user.phone || 'Not provided'}</p>
-            </section>
         </li>
     </ul>`;
 };

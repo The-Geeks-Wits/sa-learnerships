@@ -252,7 +252,7 @@ exports.saveProfile = async (req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             gender: req.body.gender,
-            dateOfBirth: req.body.dateOfBirth,
+            dateOfBirth: new Date(req.body.dateOfBirth || req.user.dateOfBirth),
             location: req.body.location,
             phone: req.body.phone,
         };

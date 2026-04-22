@@ -20,6 +20,8 @@ const addFormSubmitListener = (formElement, user) => {
         const emailElement = document.getElementById('email');
         const locationElement = document.getElementById('location');
         const phoneElement = document.getElementById('phone');
+        const dobElement = document.getElementById('dob');
+        const genderElement = document.getElementById('gender');
 
         // Build the request body
         const requestBody = {};
@@ -28,21 +30,31 @@ const addFormSubmitListener = (formElement, user) => {
             requestBody.firstName = firstNameElement.value;
         }
 
-        if (lastNameElement.value !== '' && lastNameElement.value !== user.lastName) {
+        if (lastNameElement.value && lastNameElement.value !== user.lastName) {
             requestBody.lastName = lastNameElement.value;
         }
 
-        if (emailElement.value !== '' && emailElement.value !== user.email) {
+        if (emailElement.value && emailElement.value !== user.email) {
             requestBody.email = emailElement.value;
         }
 
-        if (locationElement.value !== '' && locationElement.value !== user.location) {
+        if (dobElement.value && dobElement.value !== user.dateOfBirth) {
+            requestBody.dateOfBirth = dobElement.value;
+        }
+
+        if (genderElement.value && genderElement.value !== user.genger) {
+            requestBody.gender = genderElement.value;
+        }
+
+        if (locationElement.value && locationElement.value !== user.location) {
             requestBody.location = locationElement.value;
         }
 
-        if (phoneElement.value !== '' && phoneElement.value !== user.phone) {
+        if (phoneElement.value && phoneElement.value !== user.phone) {
             requestBody.phone = phoneElement.value;
         }
+
+        console.log(requestBody);
 
         const response = await fetch(url, {
             method: 'PATCH',

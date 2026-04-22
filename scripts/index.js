@@ -6,6 +6,9 @@ import { backendURL } from '../env.config.js';
 const opportunitiesNav = document.getElementById('opportunities-nav');
 const opportunitiesNavOptions = document.getElementById('opportunities-nav-options');
 const opportunitiesNavImage = document.getElementById('opportunities-nav-image');
+const settingsNav = document.getElementById('settings-nav');
+const settingsNavOptions = document.getElementById('settings-nav-options');
+const settingsNavImage = document.getElementById('settings-nav-image');
 const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
@@ -125,4 +128,8 @@ appName.addEventListener('click', () => {
 
 opportunitiesNav.addEventListener('click', () => {
     toggleOptions(opportunitiesNavOptions, opportunitiesNavImage);
+});
+
+settingsNav.addEventListener('click', () => {
+    toggleOptions(settingsNavOptions, settingsNavImage);
 });
