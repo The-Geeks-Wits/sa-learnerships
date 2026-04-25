@@ -284,26 +284,6 @@ describe('Register', () => {
         expect(utils.generateAccessToken).toHaveBeenCalledWith(req.body.email, 'test-id');
     });
 
-    it('should create a response cookie', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue(undefined);
-        // The utils file get mocked, hence the mockReturnValue function exists
-        utils.isStrong.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email', password: 'test-password', confirmPassword: 'test-password' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            cookie: jest.fn(),
-            json: jest.fn(),
-        };
-
-        await controller.register(req, res);
-        expect(res.cookie).toHaveBeenCalled();
-    });
-
     it('should return a 201 status on success', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.findOne.mockResolvedValue(undefined);

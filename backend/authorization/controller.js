@@ -262,44 +262,6 @@ exports.editProfile = async (req, res) => {
         // Fields that are undefined will get ignored
         const user = await User.findByIdAndUpdate(req.user._id, updateOptions);
 
-        // const newQualification = req.body.qualification || {};
-        // const newSkills = req.body.skills || [];
-
-        // newSkills.forEach((skill) => {
-        //     const cleanSkill = skill.toLowerCase().trim();
-        //     if (cleanSkill && !user.skills.includes(cleanSkill)) {
-        //         user.skills.push(cleanSkill);
-        //     }
-        // });
-
-        // const isValidQualification =
-        //     newQualification &&
-        //     newQualification.institution?.trim() &&
-        //     newQualification.qualificationLevel?.trim() &&
-        //     newQualification.qualificationName?.trim() &&
-        //     newQualification.nqfLevel;
-
-        // if (isValidQualification) {
-        //     const exists = user.qualifications.some(
-        //         (q) =>
-        //             q.qualificationName === newQualification.qualificationName &&
-        //             q.qualificationLevel === newQualification.qualificationLevel &&
-        //             q.nqfLevel === newQualification.nqfLevel &&
-        //             q.institution === newQualification.institution,
-        //     );
-
-        //     if (!exists) {
-        //         user.qualifications.push(newQualification);
-        //     }
-        // }
-
-        // user.firstName = req.body.firstName ?? user.firstName;
-        // user.lastName = req.body.lastName ?? user.lastName;
-        // user.phone = req.body.phone ?? user.phone;
-        // user.location = req.body.location ?? user.location;
-        // user.gender = req.body.gender ?? user.gender;
-        // user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
-
         // Remove the password from the user details
         const userObj = user.toObject();
         delete userObj.password;

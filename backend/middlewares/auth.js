@@ -18,6 +18,8 @@ exports.isAuthenticated = async (req, res, next) => {
         }
 
         const userObj = user.toObject();
+
+        console.log(userObj);
         delete userObj.password;
         req.user = userObj;
 
