@@ -114,21 +114,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('jwt');
     if (!token) return (window.location.href = '/login.html');
 
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: { Authorization: token },
-    });
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { Authorization: token },
+        });
 
-    if (response.ok) {
-        const data = await response.json();
+        if (response.ok) {
+            const data = await response.json();
 
-        setPersonalDetails(data.user);
+            setPersonalDetails(data.user);
 
-        personalTab.addEventListener('click', () => showPersonalDetails(data.user));
-        educationTab.addEventListener('click', () => showEducationDetails(data.user));
-        skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+            personalTab.addEventListener('click', () => showPersonalDetails(data.user));
+            educationTab.addEventListener('click', () => showEducationDetails(data.user));
+            skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
 
-        // Start with personal details
-        showPersonalDetails(data.user);
+            // Start with personal details
+            showPersonalDetails(data.user);
+        }
+    } catch (err) {
+        console.log(err);
     }
 });

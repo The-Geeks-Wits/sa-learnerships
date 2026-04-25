@@ -114,17 +114,22 @@ const addSkillSubmitListener = (formElement, user) => {
 
         if (skillElement.value) {
             user.skills.push(skillElement.value);
-            const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ skills: user.skills }),
-            });
 
-            // Alert something
-            console.log(await response.json());
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        Authorization: token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ skills: user.skills }),
+                });
+
+                // Alert something
+                console.log(await response.json());
+            } catch (err) {
+                console.log(err);
+            }
         }
     });
 };
