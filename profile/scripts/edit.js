@@ -186,6 +186,8 @@ const showPersonalDetails = (user) => {
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
 
+    if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
+
     visibleDetails.innerHTML = `<form id="personal-details-form">
         <section class="input-group">
             <label for="firstName">First Name</label>
@@ -209,14 +211,14 @@ const showPersonalDetails = (user) => {
             <label for="gender">Gender</label>
             <select id="gender" name="gender">
                 <option value="">Select gender</option>
-                <option value="Female">Female</option>
-                <option value="Male">Male</option>
-                <option value="Prefer Not To Say">Prefer Not To Say</option>
+                <option value="female" ${user.gender === 'female' ? 'selected' : ''}>Female</option>
+                <option value="male" ${user.gender === 'male' ? 'selected' : ''}>Male</option>
+                <option value="prefer not to say" ${user.gender === 'prefer not to say' ? 'selected' : ''}>Prefer not to say</option>
             </select>
         </section>
         <section class="input-group">
             <label for="dob">Date of Birth</label>
-            <input type="date" id="dob" name="dob" />
+            <input type="date" id="dob" name="dob" value="${user.dateOfBirth || ''}" />
         </section>
         <section class="input-group">
             <label for="location">Location</label>
