@@ -23,21 +23,28 @@ exports.isAuthenticated = async (req, res, next) => {
 
         next();
     } catch (err) {
-        return res.status(401).json({ message: 'Invalid Token' });
+        return res.status(500).json({ message: 'Something went wrong! Please try again later' });
     }
 };
 
-//middleware to check if the user is admin or not
 exports.isAdmin = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'You are not logged in! Please log in to continue' });
+    }
+
     if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Access denied' });
+        return res.status(401).json({ message: 'Access denied! Missing the required role to perform action' });
     }
     next();
 };
 
 exports.isProvider = (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'You are not logged in! Please log in to continue' });
+    }
+
     if (req.user.role !== 'provider') {
-        return res.status(403).json({ message: 'Access denied' });
+        return res.status(401).json({ message: 'Access denied! Missing the required role to perform action' });
     }
     next();
 };

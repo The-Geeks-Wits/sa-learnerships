@@ -6,6 +6,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./authorization/User.js');
 const jwt = require('jsonwebtoken');
 const connectDatabase = require('./database.js');
+const applicationsRouter = require('./applications/routes.js');
 const opportunitiesRouter = require('./opportunities/routes.js');
 const userRoutes = require('./authorization/routes.js');
 const cookieParser = require('cookie-parser');
@@ -40,12 +41,11 @@ passport.use(
                         lastName: profile.name.familyName || 'User',
                         email: profile.emails[0].value,
                         googleId: profile.id,
-                        signupMethod: "google",
-
+                        signupMethod: 'google',
                     });
                 }
 
-                const token = jwt.sign({ email: user.email, userId : user._id }, process.env.JWT_SECRET, {
+                const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET, {
                     expiresIn: '24h',
                 });
 
@@ -61,11 +61,12 @@ passport.use(
 // routes
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
+app.use('/applications', applicationsRouter);
 
 // Health status check route (For confirming that the app is up and running when deployed)
 app.use('/health', (req, res) => {
-    res.status(200).json({ status: 'healthy' })
-})
+    res.status(200).json({ status: 'healthy' });
+});
 
 // Error handling middleware
 app.use((req, res) => {
