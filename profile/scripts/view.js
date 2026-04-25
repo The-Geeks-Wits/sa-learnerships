@@ -31,6 +31,7 @@ const setPersonalDetails = (user) => {
     });
 };
 
+// Renders personal details when the user clicks the skills tab
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -38,7 +39,7 @@ const showPersonalDetails = (user) => {
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
 
-    visibleDetails.innerHTML = `<ul class="visible-details">
+    visibleDetails.innerHTML = `<ul class="visible-details personal-details">
         <li>
             <h4>Date Of Birth</h4>
             <p>${user.dateOfBirth || 'Not provided'}</p>
@@ -58,6 +59,7 @@ const showPersonalDetails = (user) => {
     </ul>`;
 };
 
+// Renders education details when the user clicks the education tab
 const showEducationDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
@@ -84,6 +86,7 @@ const showEducationDetails = (user) => {
     </ul>`;
 };
 
+// Renders skills details when the user clicks the skills tab
 const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
@@ -109,12 +112,12 @@ const showSkillsDetails = (user) => {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const url = backendURL() + '/api/users/profile';
-
-    const token = localStorage.getItem('jwt');
-    if (!token) return (window.location.href = '/login.html');
-
     try {
+        const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { Authorization: token },
@@ -134,5 +137,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (err) {
         console.log(err);
+        // Show the error on the page
     }
 });
