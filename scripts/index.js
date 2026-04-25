@@ -55,6 +55,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
 
+        profileElement.innerHTML = `<section id="profile-state">
+            <p>Loading...</p>
+        </section>`;
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { Authorization: token },
@@ -115,10 +119,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     } catch (error) {
-        profileElement.innerHTML = `<section>
-            <p>Couldn't load user details</p>
+        profileElement.innerHTML = `<section id="profile-error">
+            <p>Couldn't load profile details</p>
         </section>`;
-        console.log(error);
     }
 });
 

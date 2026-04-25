@@ -7,14 +7,14 @@ exports.isAuthenticated = async (req, res, next) => {
         const token = req.headers.authorization;
 
         if (!token) {
-            return res.status(401).json({ message: 'Access denied! Missing verification token' });
+            return res.status(401).json({ error: 'Access denied! Missing verification token' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.id);
 
         if (!user) {
-            return res.status(401).json({ message: 'User not found! Please check your token and try again later' });
+            return res.status(401).json({ error: 'User not found! Please check your token and try again later' });
         }
 
         const userObj = user.toObject();
@@ -23,28 +23,28 @@ exports.isAuthenticated = async (req, res, next) => {
 
         next();
     } catch (err) {
-        return res.status(500).json({ message: 'Something went wrong! Please try again later' });
+        return res.status(500).json({ error: 'Something went wrong! Please try again later' });
     }
 };
 
 exports.isAdmin = (req, res, next) => {
     if (!req.user) {
-        return res.status(401).json({ message: 'You are not logged in! Please log in to continue' });
+        return res.status(401).json({ error: 'You are not logged in! Please log in to continue' });
     }
 
     if (req.user.role !== 'admin') {
-        return res.status(401).json({ message: 'Access denied! Missing the required role to perform action' });
+        return res.status(401).json({ error: 'Access denied! Missing the required role to perform action' });
     }
     next();
 };
 
 exports.isProvider = (req, res, next) => {
     if (!req.user) {
-        return res.status(401).json({ message: 'You are not logged in! Please log in to continue' });
+        return res.status(401).json({ error: 'You are not logged in! Please log in to continue' });
     }
 
     if (req.user.role !== 'provider') {
-        return res.status(401).json({ message: 'Access denied! Missing the required role to perform action' });
+        return res.status(401).json({ error: 'Access denied! Missing the required role to perform action' });
     }
     next();
 };

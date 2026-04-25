@@ -4,10 +4,24 @@ const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
+const pageError = document.getElementById('page-error');
+const pageState = document.getElementById('page-state');
 
 // Adds an event listener to the save profile button under the personal tab
 const addPersonalDetailsSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
+        // Get all the input fields elements. The elements are available only after the method to show personal details has been called
+        // Hence we cannot get them from outside
+        const firstNameElement = document.getElementById('firstName');
+        const lastNameElement = document.getElementById('lastName');
+        const emailElement = document.getElementById('email');
+        const locationElement = document.getElementById('location');
+        const phoneElement = document.getElementById('phone');
+        const dobElement = document.getElementById('dob');
+        const genderElement = document.getElementById('gender');
+        const saveBtn = document.getElementById('save-profile-btn');
+        const errorElement = document.getElementById('error-message');
+
         try {
             event.preventDefault();
 
@@ -15,15 +29,6 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
 
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
-
-            // Get all the input fields elements
-            const firstNameElement = document.getElementById('firstName');
-            const lastNameElement = document.getElementById('lastName');
-            const emailElement = document.getElementById('email');
-            const locationElement = document.getElementById('location');
-            const phoneElement = document.getElementById('phone');
-            const dobElement = document.getElementById('dob');
-            const genderElement = document.getElementById('gender');
 
             // Build the request body
             const requestBody = {};
@@ -56,6 +61,7 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
                 requestBody.phone = phoneElement.value;
             }
 
+            saveBtn.textContent = 'Loading...';
             const response = await fetch(url, {
                 method: 'PATCH',
                 headers: {
@@ -70,11 +76,12 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
                 // Since we are updating by category, we can easily alert information about the specific category
                 alert('Personal details updated successfully!');
             } else {
-                alert(data.error);
+                errorElement.innerHTML = data.error;
             }
         } catch (err) {
-            console.log(err);
-            // Show an error on the page
+            errorElement.innerHTML = 'Something went wrong! Please try again later';
+        } finally {
+            saveBtn.textContent = 'Save profile';
         }
     });
 };
@@ -82,6 +89,13 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
 // Adds an event listener to the save profile button under the education tab
 const addEducationSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
+        // Get all the input fields elements. The elements are available only after the method to show education details has been called
+        // Hence we cannot get them from outside
+        const qualificationNameElement = document.getElementById('qualification-name');
+        const institutionElement = document.getElementById('institution');
+        const saveBtn = document.getElementById('save-profile-btn');
+        const errorElement = document.getElementById('error-message');
+
         try {
             event.preventDefault();
 
@@ -89,9 +103,6 @@ const addEducationSubmitListener = (formElement, user) => {
 
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
-
-            const qualificationNameElement = document.getElementById('qualification-name');
-            const institutionElement = document.getElementById('institution');
 
             if (qualificationNameElement.value && institutionElement.value) {
                 const qualification = {
@@ -113,12 +124,13 @@ const addEducationSubmitListener = (formElement, user) => {
                     // Since we are updating by category, we can easily alert information about the specific category
                     alert('Education details updated successfully!');
                 } else {
-                    alert(data.error);
+                    errorElement.innerHTML = data.error;
                 }
             }
         } catch (err) {
-            console.log(err);
-            // Show an error on the page
+            errorElement.innerHTML = 'Something went wrong! Please try again later';
+        } finally {
+            saveBtn.textContent = 'Save profile';
         }
     });
 };
@@ -126,6 +138,12 @@ const addEducationSubmitListener = (formElement, user) => {
 // Adds an event listener to the save profile button under the skills tab
 const addSkillSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
+        // Get all the input fields elements. The elements are available only after the method to show education details has been called
+        // Hence we cannot get them from outside
+        const skillElement = document.getElementById('skill');
+        const saveBtn = document.getElementById('save-profile-btn');
+        const errorElement = document.getElementById('error-message');
+
         try {
             event.preventDefault();
 
@@ -133,8 +151,6 @@ const addSkillSubmitListener = (formElement, user) => {
 
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
-
-            const skillElement = document.getElementById('skill');
 
             if (skillElement.value) {
                 user.skills.push(skillElement.value);
@@ -153,12 +169,13 @@ const addSkillSubmitListener = (formElement, user) => {
                     // Since we are updating by category, we can easily alert information about the specific category
                     alert('Skills details updated successfully!');
                 } else {
-                    alert(data.error);
+                    errorElement.innerHTML = data.error;
                 }
             }
         } catch (err) {
-            console.log(err);
-            // Show an error on the page
+            errorElement.innerHTML = 'Something went wrong! Please try again later';
+        } finally {
+            saveBtn.textContent = 'Save profile';
         }
     });
 };
@@ -213,6 +230,7 @@ const showPersonalDetails = (user) => {
                 <input type="text" id="phone" name="phone" value="${user.phone || ''}" />
             </section>
         </section>
+        <p id="error-message"></p>
         <button id="save-profile-btn" class="coloured-btn">Save profile</button>
     </form>`;
 
@@ -234,6 +252,7 @@ const showEducationDetails = (user) => {
             <label for="institution">Institution</label>
             <input type="text" id="institution" name="institution" placeholder="Please enter your institution name" />
         </section>
+        <p id="error-message"></p>
         <button id="add-education-btn" class="coloured-btn">Add education</button>
     </form>`;
 
@@ -252,6 +271,7 @@ const showSkillsDetails = (user) => {
             <label for="skill">Skill</label>
             <input type="text" id="skill" name="skill" placeholder="Please enter your skill name" />
         </section>
+        <p id="error-message"></p>
         <button id="add-skill-btn" class="coloured-btn">Add skill</button>
     </form>`;
 
@@ -266,23 +286,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
 
+        pageState.style.display = 'flex';
+        pageState.innerHTML = 'Loading...';
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { Authorization: token },
         });
 
+        const data = await response.json();
         if (response.ok) {
-            const data = await response.json();
-
             personalTab.addEventListener('click', () => showPersonalDetails(data.user));
             educationTab.addEventListener('click', () => showEducationDetails(data.user));
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
 
             // Start with personal details
             showPersonalDetails(data.user);
+        } else {
+            pageError.style.display = 'flex';
+            pageError.innerHTML = `<p>${data.error}</p>`;
         }
     } catch (err) {
-        console.log(err);
-        // Show the error on the page
+        pageError.style.display = 'flex';
+        pageError.innerHTML = 'Something went wrong! Please try again later';
+    } finally {
+        pageState.style.display = 'none';
+        pageState.innerHTML = '';
     }
 });

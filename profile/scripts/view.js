@@ -5,6 +5,8 @@ const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
+const pageError = document.getElementById('page-error');
+const pageState = document.getElementById('page-state');
 
 const setPersonalDetails = (user) => {
     personalDetails.innerHTML += `
@@ -118,14 +120,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
 
+        pageState.style.display = 'flex';
+        pageState.innerHTML = 'Loading...';
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { Authorization: token },
         });
 
+        const data = await response.json();
         if (response.ok) {
-            const data = await response.json();
-
             setPersonalDetails(data.user);
 
             personalTab.addEventListener('click', () => showPersonalDetails(data.user));
@@ -134,9 +138,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Start with personal details
             showPersonalDetails(data.user);
+        } else {
+            pageError.style.display = 'flex';
+            pageError.innerHTML = `<p>${data.error}</p>`;
         }
     } catch (err) {
-        console.log(err);
-        // Show the error on the page
+        pageError.style.display = 'flex';
+        pageError.innerHTML = 'Something went wrong! Please try again later';
+    } finally {
+        pageState.style.display = 'none';
+        pageState.innerHTML = '';
     }
 });

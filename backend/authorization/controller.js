@@ -233,7 +233,7 @@ exports.getUserById = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     if (req.user) return res.status(200).json({ user: req.user });
-    return res.status(400).json({ message: 'User not found! Please check your token and try again later' });
+    return res.status(400).json({ error: 'User not found! Please check your token and try again later' });
 };
 
 exports.editProfile = async (req, res) => {

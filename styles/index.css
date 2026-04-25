@@ -137,6 +137,11 @@ nav #profile-letter:hover {
     opacity: 0.85;
 }
 
+nav #profile-error,
+nav #profile-state {
+    margin: 10px 0px;
+}
+
 /* Main styles */
 main {
     height: 100%;
