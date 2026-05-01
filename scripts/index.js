@@ -12,6 +12,7 @@ const settingsNavImage = document.getElementById('settings-nav-image');
 const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
+const applyBtn = document.getElementById('apply-btn');
 
 // optionsElement -> The element that has the list of all the options
 // imageElement -> The element used to change the toggle image
@@ -126,7 +127,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 appName.addEventListener('click', () => {
-    window.location.href = window.location.origin + './home.html';
+    window.location.href = '/home.html';
+});
+
+applyBtn.addEventListener('click', () => {
+    window.location.href = '/opportunities/index.html';
 });
 
 opportunitiesNav.addEventListener('click', () => {
@@ -136,3 +141,5 @@ opportunitiesNav.addEventListener('click', () => {
 settingsNav.addEventListener('click', () => {
     toggleOptions(settingsNavOptions, settingsNavImage);
 });
+
+applyBtn.addEventListener('click', () => {});

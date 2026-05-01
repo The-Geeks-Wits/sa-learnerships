@@ -9,13 +9,13 @@ exports.submitApplication = async (req, res) => {
             });
         }
 
-        if (!req.params || !req.params.id) {
+        if (!req.body || !req.body.opportunityId) {
             return res.status(400).json({
                 error: 'Opportunity id required! Please provide a valid opportunity id',
             });
         }
 
-        const opportunityId = req.params.id;
+        const opportunityId = req.body.opportunityId;
         const applicantId = req.user._id;
 
         const opportunity = await Opportunity.findById(opportunityId);
@@ -57,7 +57,7 @@ exports.submitApplication = async (req, res) => {
     }
 };
 
-exports.getApplicationsForOpportunity = async (req, res) => {
+exports.getApplication = async (req, res) => {
     try {
         const opportunityId = req.params.id;
 

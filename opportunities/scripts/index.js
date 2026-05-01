@@ -5,6 +5,22 @@ const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const opportunities = document.getElementById('opportunities');
 
+const getOpportunityElement = (id, title, location, closingDate) => {
+    return `<li>
+        <h3>${title}</h3>   
+        <section class="opportunity-details">
+            <section>
+                <p><b>Location:</b> ${location || 'Not provided'}<p>
+                <p><b>Closes:</b> ${closingDate.slice(0, 10)}</p>   
+            </section>
+            <secttion>
+                <button class="coloured-btn opportunity-apply-btn" data-id="${id}">Apply</button>
+                <button class="transparent-btn full-details-btn" data-id="${id}">Full Details</button>
+            </section>
+        </section>
+    </li>`;
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
@@ -21,19 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.ok) {
             pageContainer.style.display = 'block';
             data.opportunities.forEach(({ _id, title, location, closingDate }) => {
-                opportunities.innerHTML += `<li>
-                    <h3>${title}</h3>   
-                    <section class="opportunity-details">
-                        <section>
-                            <p><b>Location:</b> ${location || 'Not provided'}<p>
-                            <p><b>Closes:</b> ${closingDate.slice(0, 10)}</p>   
-                        </section>
-                        <secttion>
-                            <button class="coloured-btn">Apply</button>
-                            <button class="transparent-btn full-details-btn" data-id="${_id}">Full Details</button>
-                        </section>
-                    </section>
-                </li>`;
+                opportunities.innerHTML += getOpportunityElement(_id, title, location, closingDate);
             });
         }
     } catch (error) {
@@ -50,5 +54,8 @@ opportunities.addEventListener('click', (event) => {
     if (event.target.classList.contains('full-details-btn')) {
         const id = event.target.getAttribute('data-id');
         window.location.href = `/opportunities/view.html?id=${id}`;
+    } else if (event.target.classList.contains('opportunity-apply-btn')) {
+        const id = event.target.getAttribute('data-id');
+        window.location.href = `/opportunities/apply.html?id=${id}`;
     }
 });

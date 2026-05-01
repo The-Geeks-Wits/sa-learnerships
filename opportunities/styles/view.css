@@ -24,6 +24,12 @@ p {
     line-height: 22px;
 }
 
+/* Highlight the left border of the all opportunities sidebar tab */
+aside #opportunities-nav-options #all-opportunities-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
 #description {
     margin-bottom: 30px;
 }

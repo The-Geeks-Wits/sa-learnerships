@@ -1,0 +1,106 @@
+#page-title {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    font-size: 38px;
+    max-width: 800px;
+    line-height: 30px;
+}
+
+#page-state,
+#page-error {
+    width: 100%;
+    max-width: 800px;
+    margin: 100px 0px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#page-state p,
+#page-error p {
+    font-size: 16px;
+}
+
+/* Highlight the left border of the all opportunities sidebar tab */
+aside #opportunities-nav-options #all-opportunities-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
+aside #opportunities-nav-options {
+    display: block;
+}
+
+#main-details {
+    max-width: 800px;
+}
+
+#progess-line {
+    margin-left: 60px;
+    border: 1px solid #dfdfdf;
+}
+
+#application-progress {
+    margin-bottom: 50px;
+    margin-left: -23px;
+    list-style: none;
+    display: flex;
+}
+
+#application-progress li {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#application-progress li section {
+    width: 14px;
+    height: 14px;
+    margin-top: -8px;
+    border: none;
+    border-radius: 50%;
+    background-color: #dfdfdf;
+}
+
+#application-progress .highlight {
+    width: 18px;
+    height: 18px;
+    margin-top: -10px;
+    border: 6px solid #fcc350;
+    background-color: #ffffff;
+}
+
+#application-progress li p {
+    margin-top: 10px;
+}
+
+/* Profile stuff... Remove this */
+#profile,
+#profile ul {
+    list-style: none;
+}
+
+#profile-tab {
+    border-bottom: 1.5px solid #dfdfdf;
+}
+
+#profile-tab ul {
+    display: flex;
+}
+
+#profile-tab ul li {
+    margin-right: 40px;
+    margin-bottom: -1.5px;
+    font-size: 18px;
+    line-height: 50px;
+}
+
+#profile-tab ul li p:hover {
+    cursor: pointer;
+}
+
+#profile-tab ul .visible {
+    border-bottom: 1.5px solid #1562f2;
+}

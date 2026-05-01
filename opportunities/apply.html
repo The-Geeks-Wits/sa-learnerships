@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Opportunity | Apply</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/apply.css" />
+    </head>
+    <body>
+        <nav>
+            <h1 id="app-name">SA - Learnerships</h1>
+            <ul>
+                <li id="notifications">
+                    <img src="../assets/notifications.png" />
+                    <p id="count">2</p>
+                </li>
+                <li id="profile-details"></li>
+            </ul>
+        </nav>
+        <main>
+            <aside>
+                <button id="apply-btn" class="coloured-btn">Apply</button>
+                <ul id="sidebar-options">
+                    <li>
+                        <section id="opportunities-nav" class="heading">
+                            <p>Opportunities</p>
+                            <img id="opportunities-nav-image" src="../assets/down-arrow.png" />
+                        </section>
+                        <section id="opportunities-nav-options"></section>
+                    </li>
+                    <li>
+                        <section id="settings-nav" class="heading">
+                            <p>Settings</p>
+                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                        </section>
+                        <section id="settings-nav-options">
+                            <ul>
+                                <li id="profile-nav-tab">
+                                    <a href="/profile/view.html">Profile</a>
+                                </li>
+                                <li id="appearance-tab">
+                                    <a href="#">Subscriptions</a>
+                                </li>
+                                <li id="appearance-tab">
+                                    <a href="#">Appearance</a>
+                                </li>
+                            </ul>
+                        </section>
+                    </li>
+                </ul>
+            </aside>
+            <section id="main-details">
+                <h2 id="page-title">Opportunity Application</h2>
+                <hr id="progess-line" />
+                <ul id="application-progress">
+                    <li>
+                        <section class="highlight"></section>
+                        <p>My Information</p>
+                    </li>
+                    <li>
+                        <section></section>
+                        <p>Questions</p>
+                    </li>
+                    <li>
+                        <section></section>
+                        <p>Review</p>
+                    </li>
+                </ul>
+                <ul id="profile">
+                    <li id="personal-details"></li>
+                    <li id="profile-tab">
+                        <ul>
+                            <li id="personal-tab" class="visible"><p>Personal</p></li>
+                            <li id="education-tab"><p>Education</p></li>
+                            <li id="skills-tab"><p>Skills</p></li>
+                        </ul>
+                    </li>
+                    <li id="visible-profile-details"></li>
+                </ul>
+                <section id="page-state"></section>
+                <section id="page-error"></section>
+            </section>
+        </main>
+        <script type="module" src="../scripts/index.js"></script>
+        <script type="module" src="./scripts/apply.js"></script>
+    </body>
+</html>
