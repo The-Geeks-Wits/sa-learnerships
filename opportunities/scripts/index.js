@@ -21,6 +21,30 @@ const getOpportunityElement = (id, title, location, closingDate) => {
     </li>`;
 };
 
+const submitApplication = async (opportunityId) => {
+    try {
+        const url = backendURL() + '/applications';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: token,
+            },
+            body: JSON.stringify({ opportunityId }),
+        });
+
+        if (response.ok) {
+            window.location.href = '/applications/pending.html';
+        }
+    } catch (err) {
+        // Alert or show the error as a modal
+    }
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
@@ -57,5 +81,8 @@ opportunities.addEventListener('click', (event) => {
     } else if (event.target.classList.contains('opportunity-apply-btn')) {
         // Show a modal and ask the applicant if they really want to apply to this opportunity
         // When they click yes then we should just take their details make an application for them in the backend
+        // For now just send the request directly
+        const id = event.target.getAttribute('data-id');
+        submitApplication(id);
     }
 });

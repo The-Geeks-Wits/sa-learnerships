@@ -1,0 +1,25 @@
+/* Highlight the right border of the analytics sidebar tab */
+aside #applications-nav-options #pending-nav-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
+aside #applications-nav-options {
+    display: block;
+}
+
+#page-title {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 30px;
+    font-size: 38px;
+    max-width: 800px;
+    line-height: 30px;
+}
+
+#page-description {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}

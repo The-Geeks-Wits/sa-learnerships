@@ -9,6 +9,9 @@ const opportunitiesNavImage = document.getElementById('opportunities-nav-image')
 const settingsNav = document.getElementById('settings-nav');
 const settingsNavOptions = document.getElementById('settings-nav-options');
 const settingsNavImage = document.getElementById('settings-nav-image');
+const applicationsNav = document.getElementById('applications-nav');
+const applicationsNavOptions = document.getElementById('applications-nav-options');
+const applicationsNavImage = document.getElementById('applications-nav-image');
 const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
@@ -140,6 +143,10 @@ opportunitiesNav.addEventListener('click', () => {
 
 settingsNav.addEventListener('click', () => {
     toggleOptions(settingsNavOptions, settingsNavImage);
+});
+
+applicationsNav.addEventListener('click', () => {
+    toggleOptions(applicationsNavOptions, applicationsNavImage);
 });
 
 applyBtn.addEventListener('click', () => {});

@@ -1,24 +1,18 @@
-<!-- ====================== FILE INSTRUCTIONS =========================
-    This is a home page 
-    It's placed on the main project folder so that the url to it can be '/home.html' 
-    It's styles can be found on the main scripts folder as other pages that are on the main project folder
--->
-
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Home</title>
-        <link rel="stylesheet" href="/styles/index.css" />
-        <link rel="stylesheet" href="/styles/home.css" />
+        <title>Pending Applicaitons</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/pending.css" />
     </head>
     <body>
         <nav>
             <h1 id="app-name">SA - Learnerships</h1>
             <ul>
                 <li id="notifications">
-                    <img src="/assets/notifications.png" />
+                    <img src="../assets/notifications.png" />
                     <p id="count">2</p>
                 </li>
                 <li id="profile-details"></li>
@@ -31,7 +25,7 @@
                     <li>
                         <section id="applications-nav" class="heading">
                             <p>Applications</p>
-                            <img id="applications-nav-image" src="../assets/right-arrow.png" />
+                            <img id="applications-nav-image" src="../assets/down-arrow.png" />
                         </section>
                         <section id="applications-nav-options" class="sidebar-nav-options">
                             <ul>
@@ -49,14 +43,14 @@
                             <p>Opportunities</p>
                             <img id="opportunities-nav-image" src="../assets/right-arrow.png" />
                         </section>
-                        <section id="opportunities-nav-options" class="sidebar-nav-options"></section>
+                        <section id="opportunities-nav-options"></section>
                     </li>
                     <li>
                         <section id="settings-nav" class="heading">
                             <p>Settings</p>
                             <img id="settings-nav-image" src="../assets/right-arrow.png" />
                         </section>
-                        <section id="settings-nav-options" class="sidebar-nav-options">
+                        <section id="settings-nav-options">
                             <ul>
                                 <li id="profile-nav-tab">
                                     <a href="/profile/view.html">Profile</a>
@@ -67,33 +61,25 @@
                                 <li id="appearance-tab">
                                     <a href="#">Appearance</a>
                                 </li>
-                                <li id="notifications-tab">
-                                    <a href="/notifications/index.html">Notifications</a>
-                                    <section>2</section>
-                                </li>
                             </ul>
                         </section>
                     </li>
                 </ul>
             </aside>
             <section id="main-details">
-                <ul id="insights">
-                    <li class="card">
-                        <h4>500</h4>
-                        <p>Total Opportunities</p>
-                    </li>
-                    <li class="card">
-                        <h4>80%</h4>
-                        <p>Acceptance Rate</p>
-                    </li>
-                    <li class="card">
-                        <h4>10.89</h4>
-                        <p>Application Volume</p>
-                    </li>
-                </ul>
+                <section id="page-state"></section>
+                <section id="page-error"></section>
+                <section id="page-container">
+                    <h1 id="page-title">Pending Opportunities</h1>
+                    <p id="page-description">
+                        This is a list of applications that you have submitted and are still under review. We will send
+                        you an opportunity whenever there are any changes to your applications
+                    </p>
+                    <ul id="applications"></ul>
+                </section>
             </section>
         </main>
-        <script type="module" src="/scripts/home.js"></script>
-        <script type="module" src="/scripts/index.js"></script>
+        <script type="module" src="../scripts/index.js"></script>
+        <script type="module" src="./scripts/pending.js"></script>
     </body>
 </html>
