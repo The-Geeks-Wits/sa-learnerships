@@ -1,24 +1,18 @@
-<!-- ====================== FILE INSTRUCTIONS =========================
-    This is a home page 
-    It's placed on the main project folder so that the url to it can be '/home.html' 
-    It's styles can be found on the main scripts folder as other pages that are on the main project folder
--->
-
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Home</title>
-        <link rel="stylesheet" href="/styles/index.css" />
-        <link rel="stylesheet" href="/styles/home.css" />
+        <title>Notifications</title>
+        <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/index.css" />
     </head>
     <body>
         <nav>
             <h1 id="app-name">SA - Learnerships</h1>
             <ul>
                 <li id="notifications">
-                    <img src="/assets/notifications.png" />
+                    <img src="../assets/notifications.png" />
                     <p id="count">2</p>
                 </li>
                 <li id="profile-details"></li>
@@ -38,7 +32,7 @@
                     <li>
                         <section id="settings-nav" class="heading">
                             <p>Settings</p>
-                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                            <img id="settings-nav-image" src="../assets/down-arrow.png" />
                         </section>
                         <section id="settings-nav-options">
                             <ul>
@@ -61,23 +55,16 @@
                 </ul>
             </aside>
             <section id="main-details">
-                <ul id="insights">
-                    <li class="card">
-                        <h4>500</h4>
-                        <p>Total Opportunities</p>
-                    </li>
-                    <li class="card">
-                        <h4>80%</h4>
-                        <p>Acceptance Rate</p>
-                    </li>
-                    <li class="card">
-                        <h4>10.89</h4>
-                        <p>Application Volume</p>
-                    </li>
-                </ul>
+                <section id="page-container">
+                    <h1 id="page-title">Notifications</h1>
+                    <p id="page-description">
+                        This is where all in app notifications that you receive will be visible. Maybe in another world
+                        we would have this ready by now
+                    </p>
+                </section>
+                <script type="module" src="../scripts/index.js"></script>
+                <script type="module" src="../scripts/index.js"></script>
             </section>
         </main>
-        <script type="module" src="/scripts/home.js"></script>
-        <script type="module" src="/scripts/index.js"></script>
     </body>
 </html>

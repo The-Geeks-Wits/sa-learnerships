@@ -238,6 +238,30 @@ aside #apply-btn {
     margin: 30px 20px;
 }
 
+aside #settings-nav-options ul #notifications-tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+aside #settings-nav-options ul #notifications-tab a {
+    flex: 1;
+}
+
+aside #settings-nav-options ul #notifications-tab section {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1562f2;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Class styles goes here i.e. Every style that is applied using the element class selector should put here */
 
 .transparent-btn {
