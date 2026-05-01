@@ -80,3 +80,32 @@ exports.getApplication = async (req, res) => {
         console.log(error);
     }
 };
+
+exports.getMyApplications = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({
+                error: 'Creator required! Please provide the creator of opportunities',
+            });
+        }
+
+        const queryOptions = { applicant: req.user._id };
+        if (req.query && req.query.status) {
+            queryOptions.status = req.query.status;
+        }
+
+        const applications = await Application.find(queryOptions);
+
+        // Populate opportunity details instead of returning ids to the user
+        for (let i = 0; i < applications.length; i++) {
+            const application = applications[i].toObject();
+            const details = await Opportunity.findById(application.opportunity);
+            const detailsObj = details.toObject();
+            applications[i] = { ...application, opportunity: detailsObj };
+        }
+
+        res.status(200).json({ applications });
+    } catch {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+    }
+};

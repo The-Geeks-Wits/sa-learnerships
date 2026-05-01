@@ -6,8 +6,10 @@ const router = express.Router();
 
 const submitApplication = applicationsController.submitApplication;
 const getApplication = applicationsController.getApplication;
+const getMyApplications = applicationsController.getMyApplications;
 
 router.post('/', isAuthenticated, submitApplication);
+router.get('/mine', isAuthenticated, getMyApplications);
 router.get('/:id', isAuthenticated, getApplication);
 
 module.exports = router;
