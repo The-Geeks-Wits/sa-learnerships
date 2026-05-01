@@ -4,6 +4,7 @@ const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
+const attachmentsTab = document.getElementById('attachments-tab');
 const pageError = document.getElementById('page-error');
 const pageState = document.getElementById('page-state');
 
@@ -185,6 +186,7 @@ const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
 
@@ -244,6 +246,7 @@ const showEducationDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     visibleDetails.innerHTML = `<form id="education-form">
         <section class="input-group">
@@ -267,6 +270,7 @@ const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
+    attachmentsTab.classList.remove('visible');
 
     visibleDetails.innerHTML = `<form id="skill-form">
         <section class="input-group">
@@ -279,6 +283,18 @@ const showSkillsDetails = (user) => {
 
     const form = document.getElementById('skill-form');
     addSkillSubmitListener(form, user);
+};
+
+// Renders attachments when the user clicks the attachments tab
+const showAttachments = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.remove('visible');
+    attachmentsTab.classList.add('visible');
+
+    visibleDetails.innerHTML = `<ul class="visible-details">
+        <li><p>Still yet to implement this</p></li>
+    </ul>`;
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -301,6 +317,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             personalTab.addEventListener('click', () => showPersonalDetails(data.user));
             educationTab.addEventListener('click', () => showEducationDetails(data.user));
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+            attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
             // Start with personal details
             showPersonalDetails(data.user);

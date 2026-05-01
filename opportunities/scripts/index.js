@@ -55,7 +55,7 @@ opportunities.addEventListener('click', (event) => {
         const id = event.target.getAttribute('data-id');
         window.location.href = `/opportunities/view.html?id=${id}`;
     } else if (event.target.classList.contains('opportunity-apply-btn')) {
-        const id = event.target.getAttribute('data-id');
-        window.location.href = `/opportunities/apply.html?id=${id}`;
+        // Show a modal and ask the applicant if they really want to apply to this opportunity
+        // When they click yes then we should just take their details make an application for them in the backend
     }
 });
