@@ -35,14 +35,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Load the opportunities options on the sidebar based on the role of the user
         const applicantOptions = `<ul>
             <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const providerOptions = `<ul>
             <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
             <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
             <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
-            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const adminOptions = `<ul>
@@ -51,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <li id="pending-opportunities-tab"><a href="/opportunities/pending.html">Pending</a></li>
             <li id="rejected-opportunities-tab"><a href="/opportunities/rejected.html">Rejected</a></li>
             <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
-            <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
         const url = backendURL() + '/api/users/profile';
