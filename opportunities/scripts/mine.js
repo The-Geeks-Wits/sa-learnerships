@@ -20,6 +20,7 @@ const getOpportunityElement = (id, title, status, location, closingDate) => {
             </section>
             <section>
                 <button class="full-details-btn transparent-btn" data-id="${id}">Full Details</button>
+                <button class="applications-btn coloured-btn" data-id="${id}">Applications</button>
             </section>
         </section>
     </li>`;

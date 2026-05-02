@@ -54,6 +54,24 @@ const getOpportunitiesOptions = (role) => {
     else return adminOptions;
 };
 
+// Returns the correct applications options for the sidebar based on the user rolw
+const getApplicationsOptions = (role) => {
+    const applicantOptions = `<ul>
+        <li id="pending-nav-tab"><a href="/applications/pending.html">Pending</a></li>
+        <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
+    </ul>`;
+
+    const providerOptions = `<ul>
+        <li id="shorlisted-nav-tab"><a href="/applications/shorlisted.html">Shortlisted</a></li>
+        <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
+    </ul>`;
+
+    // Admins should not see the applications tab on the sidebar
+    if (role === 'applicant') return applicantOptions;
+    else if (role === 'provider') return providerOptions;
+    else return '';
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
@@ -91,6 +109,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
+        applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
 
         if (userRole === 'admin') {
             // Add a control center navigation option on the sidebar
