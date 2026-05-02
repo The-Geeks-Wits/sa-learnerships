@@ -16,9 +16,6 @@ const getApplicationElement = (opportunity, dateSubmitted) => {
                 <p><b>Location:</b> ${location}<p>
                 <p><b>Date submitted:</b> ${dateSubmitted.slice(0, 10)}</p>
             </section>
-            <section>
-                <button class="full-details-btn transparent-btn" data-id="${opportunity._id}">Withdraw</button>
-            </section>
         </section>
     </li>`;
 };
