@@ -242,18 +242,18 @@ aside #apply-btn {
     margin: 30px 20px;
 }
 
-aside #settings-nav-options ul #notifications-tab {
+aside #settings-nav-options ul #notifications-nav-tab {
     display: flex;
     flex-direction: row;
     justify-content: left;
     align-items: center;
 }
 
-aside #settings-nav-options ul #notifications-tab a {
+aside #settings-nav-options ul #notifications-nav-tab a {
     flex: 1;
 }
 
-aside #settings-nav-options ul #notifications-tab section {
+aside #settings-nav-options ul #notifications-nav-tab section {
     width: 18px;
     height: 18px;
     font-size: 12px;

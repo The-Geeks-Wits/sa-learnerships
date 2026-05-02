@@ -1,5 +1,5 @@
 /* Highlight the right border of the analytics sidebar tab */
-aside #settings-nav-options #notifications-tab {
+aside #settings-nav-options #notifications-nav-tab {
     border-left-color: #1562f2;
     border-left-width: 2.5px;
 }
