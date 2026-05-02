@@ -30,27 +30,32 @@ const toggleOptions = (optionsElement, imageElement) => {
     }
 };
 
+// Returns the correct opportunity options for the sidebar based on the user rolw
+const getOpportunitiesOptions = (role) => {
+    const applicantOptions = `<ul>
+        <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
+    </ul>`;
+
+    const providerOptions = `<ul>
+        <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
+        <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
+    </ul>`;
+
+    const adminOptions = `<ul>
+        <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
+        <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
+        <li id="pending-opportunities-tab"><a href="/opportunities/pending.html">Pending</a></li>
+        <li id="rejected-opportunities-tab"><a href="/opportunities/rejected.html">Rejected</a></li>
+        <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
+    </ul>`;
+
+    if (role === 'applicant') return applicantOptions;
+    else if (role === 'provider') return providerOptions;
+    else return adminOptions;
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Load the opportunities options on the sidebar based on the role of the user
-        const applicantOptions = `<ul>
-            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
-        </ul>`;
-
-        const providerOptions = `<ul>
-            <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
-            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
-        </ul>`;
-
-        const adminOptions = `<ul>
-            <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
-            <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
-            <li id="pending-opportunities-tab"><a href="/opportunities/pending.html">Pending</a></li>
-            <li id="rejected-opportunities-tab"><a href="/opportunities/rejected.html">Rejected</a></li>
-            <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
-        </ul>`;
-
         const url = backendURL() + '/api/users/profile';
 
         const token = localStorage.getItem('jwt');
@@ -85,11 +90,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             </section>`;
         }
 
-        if (userRole === 'applicant') opportunitiesNavOptions.innerHTML = applicantOptions;
-        else if (userRole === 'provider') opportunitiesNavOptions.innerHTML = providerOptions;
-        else if (userRole === 'admin') {
-            opportunitiesNavOptions.innerHTML = adminOptions;
+        opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
 
+        if (userRole === 'admin') {
             // Add a control center navigation option on the sidebar
             sidebarOptions.insertAdjacentHTML(
                 'beforeend',
