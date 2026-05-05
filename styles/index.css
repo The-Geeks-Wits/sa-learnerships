@@ -93,10 +93,14 @@ nav #profile-details p {
 }
 
 nav #notifications {
-    width: 50px;
+    width: 40px;
     margin-right: 30px;
     border-right: 1.5px solid #dfdfdf;
     position: relative;
+}
+
+nav #notifications:hover {
+    cursor: pointer;
 }
 
 nav #notifications img {
