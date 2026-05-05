@@ -15,9 +15,18 @@ const opportunitiesRouter = require('./opportunities/routes.js');
 const userRoutes = require('./authorization/routes.js');
 const notificationsRouter = require('./notifications/routes.js');
 
+// --- ADDED: load reference data and data router ---
+const dataRoutes = require('./authorization/dataRoutes.js');
+const qualifications = require('../data/qualifications.json');
+const institutions = require('../data/institutions.json');
+
 dotenv.config();
 
 const app = express();
+
+// --- ADDED: make data available to all routes ---
+app.locals.qualifications = qualifications;
+app.locals.institutions = institutions;
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -60,6 +69,9 @@ passport.use(
         },
     ),
 );
+
+// --- ADDED: data routes (must be before /api/users to avoid /:id catch) ---
+app.use('/api/users/data', dataRoutes);
 
 // routes
 app.use('/api/users', userRoutes);

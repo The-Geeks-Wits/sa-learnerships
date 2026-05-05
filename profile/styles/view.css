@@ -156,3 +156,31 @@ aside #settings-nav-options {
 #education-visible-details li h4 {
     margin-bottom: 6px;
 }
+.qualification-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.qualification-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.qualification-details .detail {
+    background: #f5f5f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+.qualification-fields {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+.qualification-fields li {
+    margin-bottom: 4px;
+}
