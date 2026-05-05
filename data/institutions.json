@@ -1,0 +1,40 @@
+{
+  "universities": [
+    "University of Cape Town",
+    "University of Pretoria",
+    "University of Johannesburg",
+    "University of the Witwatersrand",
+    "Stellenbosch University",
+    "University of KwaZulu-Natal",
+    "University of Free State",
+    "University of Limpopo",
+    "Rhodes University",
+    "University of Venda",
+    "North-West University",
+    "University of Fort Hare",
+    "University of South Africa",
+    "University of Zululand",
+    "Walter Sisulu University"
+  ],
+
+  "universitiesOfTechnology": [
+    "Cape Peninsula University of Technology",
+    "Durban University of Technology",
+    "Tshwane University of Technology",
+    "Vaal University of Technology",
+    "Central University of Technology",
+    "Mangosuthu University of Technology"
+  ],
+
+  "tvetColleges": [
+    "Central Johannesburg TVET College",
+    "Ekurhuleni West TVET College",
+    "Tshwane North TVET College",
+    "Coastal TVET College",
+    "Majuba TVET College",
+    "Buffalo City TVET College",
+    "Eastcape Midlands TVET College",
+    "Port Elizabeth TVET College",
+    "West Coast TVET College"
+  ]
+}

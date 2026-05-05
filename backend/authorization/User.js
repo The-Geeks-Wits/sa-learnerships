@@ -48,11 +48,13 @@ const userSchema = new Schema(
         },
 
         qualifications: [
-            {
-                qualificationName: { type: String },
-                institution: { type: String },
-            },
-        ],
+    {
+        qualificationName: { type: String },
+        qualificationLevel: { type: String },   
+        nqfLevel: { type: Number },            
+        institution: { type: String },
+    },
+],
 
         skills: { type: [String], default: [] },
     },

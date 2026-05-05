@@ -279,29 +279,35 @@ exports.uploadCV = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const fs = require('fs');
-        const path = require('path');
-
         const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
+        // Safely delete old CV (if any) – won't crash on error
         if (user.cv) {
-            const oldFilePath = path.join(process.cwd(), user.cv);
-            if (fs.existsSync(oldFilePath)) {
-                fs.unlinkSync(oldFilePath);
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const oldFilePath = path.join(process.cwd(), user.cv);
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            } catch (err) {
+                console.warn('Could not delete old CV file:', err.message);
             }
         }
 
         const filePath = `/uploads/${req.file.filename}`;
-
         user.cv = filePath;
         await user.save();
 
-        res.json({
+        return res.json({
             success: true,
             cv: filePath,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Upload failed' });
+        console.error('❌ Error in uploadCV:', err);
+        return res.status(500).json({ message: 'Upload failed' });
     }
 };
