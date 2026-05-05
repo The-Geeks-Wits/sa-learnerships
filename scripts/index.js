@@ -16,6 +16,7 @@ const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
 const applyBtn = document.getElementById('apply-btn');
+const notificationsElement = document.getElementById('notifications');
 const notificationCountElements = document.getElementsByClassName('notifications-count');
 
 // optionsElement -> The element that has the list of all the options
@@ -181,6 +182,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 appName.addEventListener('click', () => {
     window.location.href = '/home.html';
+});
+
+notificationsElement.addEventListener('click', () => {
+    window.location.href = '/notifications/index.html';
 });
 
 applyBtn.addEventListener('click', () => {
