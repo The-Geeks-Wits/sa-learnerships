@@ -123,8 +123,23 @@ nav #notifications #count {
     left: 18%;
     top: 5%;
 }
+
 nav #app-name:hover {
     cursor: pointer;
+}
+
+nav #profile-letter {
+    transition: opacity 0.2s ease;
+}
+
+nav #profile-letter:hover {
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+nav #profile-error,
+nav #profile-state {
+    margin: 10px 0px;
 }
 
 /* Main styles */
@@ -184,12 +199,14 @@ aside ul li .heading img {
 }
 
 aside #opportunities-nav-options,
-aside #control-center-nav-options {
+aside #control-center-nav-options,
+aside #settings-nav-options {
     display: none;
 }
 
 aside #opportunities-nav-options ul,
-aside #control-center-nav-options ul {
+aside #control-center-nav-options ul,
+aside #settings-nav-options ul {
     margin-top: 10px;
     padding-left: 30px;
     list-style: none;
@@ -198,7 +215,8 @@ aside #control-center-nav-options ul {
 }
 
 aside #opportunities-nav-options ul li,
-aside #control-center-nav-options ul li {
+aside #control-center-nav-options ul li,
+aside #settings-nav-options ul li {
     height: 40px;
     margin: 0px;
     padding-left: 10px;
@@ -208,7 +226,8 @@ aside #control-center-nav-options ul li {
 }
 
 aside #opportunities-nav-options ul li a,
-aside #control-center-nav-options ul li a {
+aside #control-center-nav-options ul li a,
+aside #settings-nav-options ul li a {
     font-size: 16px;
     color: #505050;
     text-decoration: none;

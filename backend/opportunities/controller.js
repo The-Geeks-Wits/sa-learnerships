@@ -8,6 +8,12 @@ exports.createOpportunity = async (req, res) => {
             });
         }
 
+        if (!req.user) {
+            return res.status(400).json({
+                error: 'Creator required! Please provide the creator of this opportunity',
+            });
+        }
+
         const title = req.body.title;
         const description = req.body.description;
         const requirements = req.body.requirements;
@@ -15,6 +21,7 @@ exports.createOpportunity = async (req, res) => {
         const closingDate = req.body.closingDate;
         const stipend = req.body.stipend;
         const duration = req.body.duration;
+        const creator = req.user._id;
 
         if (!title) {
             return res.status(400).json({
@@ -32,6 +39,7 @@ exports.createOpportunity = async (req, res) => {
 
         const opportunity = await Opportunity.create({
             title,
+            creator,
             description,
             requirements,
             location,
@@ -64,6 +72,22 @@ exports.createOpportunity = async (req, res) => {
             error: 'Something went wrong! Please try again later',
         });
         console.log(error);
+    }
+};
+
+exports.getMyOpportunities = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({
+                error: 'Creator required! Please provide the creator of opportunities',
+            });
+        }
+
+        const opportunities = await Opportunity.find({ creator: req.user._id });
+
+        res.status(200).json({ opportunities });
+    } catch {
+        res.status(500).json({ success: false, message: 'Something went wrong! Please try again later' });
     }
 };
 
@@ -107,6 +131,7 @@ exports.getOpportunity = async (req, res) => {
         res.status(200).json({
             id: opportunity._id,
             title: opportunity.title,
+            creator: opportunity.creator,
             requirements: opportunity.requirements,
             description: opportunity.description,
             duration: opportunity.duration,
@@ -115,6 +140,34 @@ exports.getOpportunity = async (req, res) => {
             stipend: opportunity.stipend,
             status: opportunity.status,
             createdAt: opportunity.createdAt,
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
+        });
+        console.log(error);
+    }
+};
+
+exports.resubmitOpportunity = async (req, res) => {
+    try {
+        if (!req.params || !req.params.id) {
+            return res.status(400).json({
+                error: 'Opportunity id required! Please provide a valid opportunity id',
+            });
+        }
+
+        const opportunity = await Opportunity.findById(req.params.id);
+        if (!opportunity) {
+            return res.status(400).json({
+                error: 'Opportunity not found! Please check your id and try again',
+            });
+        }
+
+        opportunity.status = 'Pending';
+        await opportunity.save();
+        res.status(200).json({
+            message: 'Opportunity re-submitted successfully!',
         });
     } catch (error) {
         res.status(500).json({

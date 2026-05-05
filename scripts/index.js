@@ -6,6 +6,9 @@ import { backendURL } from '../env.config.js';
 const opportunitiesNav = document.getElementById('opportunities-nav');
 const opportunitiesNavOptions = document.getElementById('opportunities-nav-options');
 const opportunitiesNavImage = document.getElementById('opportunities-nav-image');
+const settingsNav = document.getElementById('settings-nav');
+const settingsNavOptions = document.getElementById('settings-nav-options');
+const settingsNavImage = document.getElementById('settings-nav-image');
 const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
@@ -47,37 +50,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             <li id="analytics-tab"><a href="/opportunities/analytics.html">Analytics</a></li>
         </ul>`;
 
-        // Get the user id
-        const response = await fetch('http://localhost:3000/api/users/profile', {
+        const url = backendURL() + '/api/users/profile';
+
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
+        profileElement.innerHTML = `<section id="profile-state">
+            <p>Loading...</p>
+        </section>`;
+
+        const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { Authorization: token },
         });
 
-        const data = await response.json();
+        let userRole = 'applicant';
+        if (response.ok) {
+            const data = await response.json();
+            const user = data.user;
+            userRole = user.role;
 
-        console.log('PROFILE RESPONSE:', response.status, data);
+            profileElement.innerHTML = `<section>
+                <h4>${user.firstName} ${user.lastName}</h4>
+                <p>${user.role}</p>
+            </section><h3 id="profile-letter">${user.firstName[0].toUpperCase()}</h3>`;
 
-        if (!response.ok) {
-            window.location.href = '/login.html';
-            return;
+            document.getElementById('profile-letter').addEventListener('click', () => {
+                window.location.href = '../profile/view.html';
+            });
+        } else {
+            profileElement.innerHTML = `<section>
+                <p>Couldn't load user details</p>
+            </section>`;
         }
-
-        const user = data.user;
-        if (!user) {
-            return;
-        }
-
-        const userRole = user.role;
-
-        profileElement.innerHTML = `
-        <section>
-            <h4>${user.firstName} ${user.lastName}</h4>
-            <p>${user.role}</p>
-        </section>
-        <a href="../profile/profile.html">
-            <h3>${user.firstName[0].toUpperCase()}</h3>
-        </a>
-`;
 
         if (userRole === 'applicant') opportunitiesNavOptions.innerHTML = applicantOptions;
         else if (userRole === 'provider') opportunitiesNavOptions.innerHTML = providerOptions;
@@ -104,7 +109,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const controlCenterNav = document.getElementById('control-center-nav');
             const controlCenterNavOptions = document.getElementById('control-center-nav-options');
             const controlCenterNavImage = document.getElementById('control-center-nav-image');
-
             controlCenterNav.addEventListener('click', () => {
                 toggleOptions(controlCenterNavOptions, controlCenterNavImage);
             });
@@ -115,10 +119,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     } catch (error) {
-        profileElement.innerHTML = `<section>
-            <p>Couldn't load user details</p>
+        profileElement.innerHTML = `<section id="profile-error">
+            <p>Couldn't load profile details</p>
         </section>`;
-        console.log(error);
     }
 });
 
@@ -128,4 +131,8 @@ appName.addEventListener('click', () => {
 
 opportunitiesNav.addEventListener('click', () => {
     toggleOptions(opportunitiesNavOptions, opportunitiesNavImage);
+});
+
+settingsNav.addEventListener('click', () => {
+    toggleOptions(settingsNavOptions, settingsNavImage);
 });

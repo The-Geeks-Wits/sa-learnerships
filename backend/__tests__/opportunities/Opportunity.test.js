@@ -1,7 +1,25 @@
 const mongoose = require('mongoose');
 const Opportunity = require('../../opportunities/Opportunity.js');
 
-jest.mock('mongoose', () => ({ Schema: jest.fn(() => ({})), model: jest.fn() }));
+jest.mock('mongoose', () => {
+    const mockSchema = jest.fn(() => ({
+        Types: {
+            ObjectId: jest.fn(),
+        },
+    }));
+
+    mockSchema.Types = {
+        ObjectId: jest.fn(),
+    };
+
+    return {
+        Schema: mockSchema,
+        model: jest.fn(),
+        Types: {
+            ObjectId: jest.fn(),
+        },
+    };
+});
 
 describe('Opportunity Schema', () => {
     it('gets created', () => {
@@ -11,6 +29,8 @@ describe('Opportunity Schema', () => {
 
         const mockModel = mongoose.model;
         expect(mockModel).toHaveBeenCalled();
-        expect(mockModel).toHaveBeenCalledWith('Opportunity', mockSchema());
+
+        const passedSchema = mockModel.mock.calls[0][1];
+        expect(mockModel).toHaveBeenCalledWith('Opportunity', passedSchema);
     });
 });

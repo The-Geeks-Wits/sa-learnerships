@@ -1,0 +1,188 @@
+import { backendURL } from '../../env.config.js';
+
+const personalDetails = document.getElementById('personal-details');
+const visibleDetails = document.getElementById('visible-profile-details');
+const personalTab = document.getElementById('personal-tab');
+const educationTab = document.getElementById('education-tab');
+const skillsTab = document.getElementById('skills-tab');
+const pageError = document.getElementById('page-error');
+const pageState = document.getElementById('page-state');
+
+const setPersonalDetails = (user) => {
+    personalDetails.innerHTML += `
+    <section id="profile-img">
+        <p>${user.firstName[0].toUpperCase()}</p>
+    </section>
+    <section id="profile-main-details">
+        <section id="name-email-details">
+            <section>
+                <p id="full-name">${user.firstName} ${user.lastName}</p>
+                <p id="email">${user.email}</p>
+            </section>
+            <button id="edit-profile" class="coloured-btn">Edit profile</button>
+        </section>
+        <section id="user-role">
+            <img src="../../assets/user.svg" />
+            <p>${user.role}</p>
+        </section>
+    </section>`;
+
+    const editProfileBtn = document.getElementById('edit-profile');
+    editProfileBtn.addEventListener('click', () => {
+        window.location.href = 'edit.html';
+    });
+};
+
+// Renders personal details
+const showPersonalDetails = (user) => {
+    personalTab.classList.add('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.remove('visible');
+
+    if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
+
+    visibleDetails.innerHTML = `<ul class="visible-details personal-details">
+        <li>
+            <h4>Date Of Birth</h4>
+            <p>${user.dateOfBirth || 'Not provided'}</p>
+        </li>
+        <li>
+            <h4>Gender</h4>
+            <p>${user.gender || 'Not provided'}</p>
+        </li>
+        <li>
+            <h4>Location</h4>
+            <p>${user.location || 'Not provided'}</p>
+        </li>
+        <li>
+            <h4>Phone</h4>
+            <p>${user.phone || 'Not provided'}</p>
+        </li>
+    </ul>`;
+};
+
+// Clean, properly stacked education cards update for professionalism
+const showEducationDetails = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.add('visible');
+    skillsTab.classList.remove('visible');
+
+    const qualifications = user.qualifications || [];
+
+    let contentHtml = '';
+    if (qualifications.length === 0) {
+        contentHtml = `<p style="color:#666; font-size:0.95rem;">No qualifications added yet. Click “Edit profile” to add your qualifications.</p>`;
+    } else {
+        // Welcome header
+        contentHtml = `<div style="margin-bottom: 16px;">
+            <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
+                Your Qualifications
+            </h3>
+            <p style="margin:0; font-size:0.9rem; color:#666;">
+                These are your registered qualifications aligned with the South African NQF framework.
+            </p>
+        </div>`;
+
+        let cardsHtml = '';
+        for (let i = 0; i < qualifications.length; i++) {
+            const q = qualifications[i];
+            cardsHtml += `
+            <li style="
+                list-style: none;
+                background: #ffffff;
+                border-radius: 8px;
+                padding: 16px 20px;
+                margin-bottom: 12px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            ">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="margin:0; font-size:1.1rem; font-weight:600; color:#1a202c;">
+                        ${q.qualificationName || 'N/A'}
+                    </h4>
+                    <span style="
+                        background: #ebf4ff;
+                        color: #2b6cb0;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                    ">NQF ${q.nqfLevel ?? 'N/A'}</span>
+                </div>
+                <div style="color: #4a5568; font-size: 0.92rem; line-height: 1.5;">
+                    <p style="margin: 0 0 4px 0;">
+                        <span style="font-weight:500;">Qualification Level:</span> ${q.qualificationLevel || 'N/A'}
+                    </p>
+                    <p style="margin: 0;">
+                        <span style="font-weight:500;">Institution:</span> ${q.institution || 'N/A'}
+                    </p>
+                </div>
+            </li>`;
+        }
+        contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
+    }
+
+    visibleDetails.innerHTML = `<div>${contentHtml}</div>`;
+};
+
+// Renders skills details
+const showSkillsDetails = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.add('visible');
+
+    const skills = user.skills || [];
+
+    if (skills.length === 0) {
+        visibleDetails.innerHTML = `<ul class="visible-details">
+            <li><p>No skills added yet.</p></li>
+        </ul>`;
+        return;
+    }
+
+    let skillsElement = '';
+    for (let i = 0; i < skills.length; i++) {
+        skillsElement += `<li><p>${skills[i]}</p></li>`;
+    }
+
+    visibleDetails.innerHTML = `<ul class="visible-details">
+        ${skillsElement}
+    </ul>`;
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const url = backendURL() + '/api/users/profile';
+        const token = localStorage.getItem('jwt');
+        if (!token) return (window.location.href = '/login.html');
+
+        pageState.style.display = 'flex';
+        pageState.innerHTML = 'Loading...';
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { Authorization: token },
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            setPersonalDetails(data.user);
+
+            personalTab.addEventListener('click', () => showPersonalDetails(data.user));
+            educationTab.addEventListener('click', () => showEducationDetails(data.user));
+            skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+
+            // Start with personal details
+            showPersonalDetails(data.user);
+        } else {
+            pageError.style.display = 'flex';
+            pageError.innerHTML = `<p>${data.error}</p>`;
+        }
+    } catch (err) {
+        pageError.style.display = 'flex';
+        pageError.innerHTML = 'Something went wrong! Please try again later';
+    } finally {
+        pageState.style.display = 'none';
+        pageState.innerHTML = '';
+    }
+});

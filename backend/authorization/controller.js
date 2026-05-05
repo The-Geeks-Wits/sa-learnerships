@@ -44,20 +44,14 @@ exports.register = async (req, res) => {
 
         const token = utils.generateAccessToken(email, user._id);
 
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'Lax',
-            maxAge: 3600000,
-        });
-
         res.status(201).json({
-            success: true,
+            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                role: user.role,
             },
         });
     } catch (err) {
@@ -73,38 +67,29 @@ exports.login = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const userExists = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (!userExists) {
+        if (!user) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
-        const isPasswordValid = await utils.comparePasswords(password, userExists.password);
+        const isPasswordValid = await utils.comparePasswords(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
         const rememberMe = req.body.rememberMe;
-        const token = utils.generateAccessToken(email, userExists._id);
+        const token = utils.generateAccessToken(email, user._id);
 
-        let maxAge = rememberMe ? 604800000 : 3600000;
-
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: false,
-            maxAge: maxAge,
-            sameSite: 'Lax',
-            domain: 'localhost',
-        });
-
-        res.status(201).json({
-            success: true,
+        res.status(200).json({
+            token,
             user: {
-                id: userExists._id,
-                firstName: userExists.firstName,
-                lastName: userExists.lastName,
-                email: userExists.email,
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
             },
         });
     } catch (err) {
@@ -247,69 +232,41 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId);
-
-        if (!user) {
-            return res.status(404).json({ message: 'User Not Found' });
-        }
-
-        return res.json({ user });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+    if (req.user) return res.status(200).json({ user: req.user });
+    return res.status(400).json({ error: 'User not found! Please check your token and try again later' });
 };
 
-//update profile
-exports.saveProfile = async (req, res) => {
+exports.editProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.userId);
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+        if (!req.user) {
+            return res.status(400).json({ error: 'User required! Please provide the user of the profile' });
         }
 
-        const newQualification = req.body.qualification || {};
-        const newSkills = req.body.skills || [];
-
-        newSkills.forEach((skill) => {
-            const cleanSkill = skill.toLowerCase().trim();
-            if (cleanSkill && !user.skills.includes(cleanSkill)) {
-                user.skills.push(cleanSkill);
-            }
-        });
-
-        const isValidQualification =
-            newQualification &&
-            newQualification.institution?.trim() &&
-            newQualification.qualificationLevel?.trim() &&
-            newQualification.qualificationName?.trim() &&
-            newQualification.nqfLevel;
-
-        if (isValidQualification) {
-            const exists = user.qualifications.some(
-                (q) =>
-                    q.qualificationName === newQualification.qualificationName &&
-                    q.qualificationLevel === newQualification.qualificationLevel &&
-                    q.nqfLevel === newQualification.nqfLevel &&
-                    q.institution === newQualification.institution,
-            );
-
-            if (!exists) {
-                user.qualifications.push(newQualification);
-            }
+        if (!req.body) {
+            return res.status(400).json({ error: 'Update fields required! Please provide some fields to update' });
         }
 
-        user.firstName = req.body.firstName ?? user.firstName;
-        user.lastName = req.body.lastName ?? user.lastName;
-        user.phone = req.body.phone ?? user.phone;
-        user.location = req.body.location ?? user.location;
-        user.gender = req.body.gender ?? user.gender;
-        user.dateOfBirth = req.body.dateOfBirth ?? user.dateOfBirth;
+        // Build the update options and add personal details
+        const updateOptions = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            gender: req.body.gender,
+            dateOfBirth: new Date(req.body.dateOfBirth || req.user.dateOfBirth),
+            location: req.body.location,
+            phone: req.body.phone,
+            qualifications: req.body.qualifications,
+            skills: req.body.skills,
+        };
 
-        await user.save();
+        // Fields that are undefined will get ignored
+        const user = await User.findByIdAndUpdate(req.user._id, updateOptions);
 
-        return res.status(200).json({ success: true, user });
+        // Remove the password from the user details
+        const userObj = user.toObject();
+        delete userObj.password;
+
+        return res.status(200).json({ user: userObj });
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
@@ -322,29 +279,35 @@ exports.uploadCV = async (req, res) => {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        const fs = require('fs');
-        const path = require('path');
-
         const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
+        // Safely delete old CV (if any) – won't crash on error
         if (user.cv) {
-            const oldFilePath = path.join(process.cwd(), user.cv);
-            if (fs.existsSync(oldFilePath)) {
-                fs.unlinkSync(oldFilePath);
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const oldFilePath = path.join(process.cwd(), user.cv);
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            } catch (err) {
+                console.warn('Could not delete old CV file:', err.message);
             }
         }
 
         const filePath = `/uploads/${req.file.filename}`;
-
         user.cv = filePath;
         await user.save();
 
-        res.json({
+        return res.json({
             success: true,
             cv: filePath,
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Upload failed' });
+        console.error('❌ Error in uploadCV:', err);
+        return res.status(500).json({ message: 'Upload failed' });
     }
 };

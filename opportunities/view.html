@@ -17,13 +17,7 @@
                     <img src="../assets/notifications.png" />
                     <p id="count">2</p>
                 </li>
-                <li id="profile-details">
-                    <section>
-                        <h4>Dikeledi Moatle</h4>
-                        <p>Applicant</p>
-                    </section>
-                    <h3>D</h3>
-                </li>
+                <li id="profile-details"></li>
             </ul>
         </nav>
         <main>
@@ -38,15 +32,22 @@
                         <section id="opportunities-nav-options"></section>
                     </li>
                     <li>
-                        <section class="heading">
-                            <p>Your Account</p>
-                            <img src="../assets/right-arrow.png" />
-                        </section>
-                    </li>
-                    <li>
-                        <section class="heading">
+                        <section id="settings-nav" class="heading">
                             <p>Settings</p>
-                            <img src="../assets/right-arrow.png" />
+                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                        </section>
+                        <section id="settings-nav-options">
+                            <ul>
+                                <li id="profile-nav-tab">
+                                    <a href="/profile/view.html">Profile</a>
+                                </li>
+                                <li id="appearance-tab">
+                                    <a href="#">Subscriptions</a>
+                                </li>
+                                <li id="appearance-tab">
+                                    <a href="#">Appearance</a>
+                                </li>
+                            </ul>
                         </section>
                     </li>
                 </ul>
@@ -82,12 +83,7 @@
                             <p id="closing-date"></p>
                         </section>
                     </section>
-                    <!-- Actions that should only be visible to the admin -->
-                    <hr />
-                    <section id="actions">
-                        <button id="approve-btn" class="coloured-btn">Approve</button>
-                        <button id="reject-btn" class="transparent-btn">Reject</button>
-                    </section>
+                    <section id="actions"></section>
                 </section>
             </section>
         </main>

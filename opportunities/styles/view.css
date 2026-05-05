@@ -64,6 +64,13 @@ hr {
 }
 
 #actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#actions section {
+    width: 100%;
     display: flex;
 }
 
@@ -72,15 +79,19 @@ button {
 }
 
 #approve-btn,
-#reject-btn {
+#resubmit-btn,
+#reject-btn,
+#delete-btn {
     margin-top: 0px;
 }
 
-#approve-btn {
+#approve-btn,
+#resubmit-btn {
     margin-right: 15px;
 }
 
-#reject-btn {
+#reject-btn,
+#delete-btn {
     margin-left: 15px;
     border-color: #e63946;
     color: #e63946;

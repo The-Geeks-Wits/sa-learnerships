@@ -1,13 +1,11 @@
-<!-- This page shows all opportunities which are available to receive applications (i.e Those that are approved) It should be accessible to everyone -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>All Opportunities</title>
+        <title>Profile</title>
         <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/index.css" />
-        <link rel="stylesheet" href="./styles/common.css" />
+        <link rel="stylesheet" href="./styles/view.css" />
     </head>
     <body>
         <nav>
@@ -27,14 +25,14 @@
                     <li>
                         <section id="opportunities-nav" class="heading">
                             <p>Opportunities</p>
-                            <img id="opportunities-nav-image" src="../assets/down-arrow.png" />
+                            <img id="opportunities-nav-image" src="../assets/right-arrow.png" />
                         </section>
                         <section id="opportunities-nav-options"></section>
                     </li>
                     <li>
                         <section id="settings-nav" class="heading">
                             <p>Settings</p>
-                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                            <img id="settings-nav-image" src="../assets/down-arrow.png" />
                         </section>
                         <section id="settings-nav-options">
                             <ul>
@@ -53,20 +51,23 @@
                 </ul>
             </aside>
             <section id="main-details">
+                <h2 id="page-title">Your Profile</h2>
+                <ul id="profile">
+                    <li id="personal-details"></li>
+                    <li id="profile-tab">
+                        <ul>
+                            <li id="personal-tab" class="visible"><p>Personal</p></li>
+                            <li id="education-tab"><p>Education</p></li>
+                            <li id="skills-tab"><p>Skills</p></li>
+                        </ul>
+                    </li>
+                    <li id="visible-profile-details"></li>
+                </ul>
                 <section id="page-state"></section>
                 <section id="page-error"></section>
-                <section id="page-container">
-                    <h1 id="page-title">All Opportunities</h1>
-                    <p id="page-description">
-                        This is a list of all opportunities that are available for applications. Click full details on
-                        an opportunity to view all the necessary details or click apply to begin your application
-                        process
-                    </p>
-                    <ul id="opportunities"></ul>
-                </section>
             </section>
         </main>
+        <script type="module" src="./scripts/view.js"></script>
         <script type="module" src="../scripts/index.js"></script>
-        <script type="module" src="./scripts/index.js"></script>
     </body>
 </html>
