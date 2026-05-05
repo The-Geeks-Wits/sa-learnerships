@@ -5,16 +5,19 @@ const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const applications = document.getElementById('applications');
 
-const getApplicationElement = (opportunity, dateSubmitted) => {
+const getApplicationElement = (opportunity, application) => {
     let location = opportunity.location;
     if (!location) location = 'Not provided';
 
     return `<li>
-        <h3>${opportunity.title}</h3>
+        <section class="application-heading">
+            <h3>${opportunity.title}</h3>
+            <p>${application.status}</p>
+        </section>
         <section class="application-details">
             <section>
                 <p><b>Location:</b> ${location}<p>
-                <p><b>Date submitted:</b> ${dateSubmitted.slice(0, 10)}</p>
+                <p><b>Date submitted:</b> ${application.createdAt.slice(0, 10)}</p>
             </section>
         </section>
     </li>`;
@@ -28,7 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
 
-        const url = backendURL() + '/applications/mine?status=Pending';
+        const url = backendURL() + '/applications/mine';
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { Authorization: token },
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageContainer.style.display = 'block';
             data.applications.forEach((application) => {
                 const opportunity = application.opportunity;
-                applications.innerHTML += getApplicationElement(opportunity, application.createdAt);
+                applications.innerHTML += getApplicationElement(opportunity, application);
             });
         } else {
             pageError.style.display = 'flex';
