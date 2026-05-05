@@ -57,12 +57,14 @@ const getOpportunitiesOptions = (role) => {
 // Returns the correct applications options for the sidebar based on the user rolw
 const getApplicationsOptions = (role) => {
     const applicantOptions = `<ul>
+        <li id="all-applications-nav-tab"><a href="/applications/index.html">All Applications</a></li>
         <li id="pending-nav-tab"><a href="/applications/pending.html">Pending</a></li>
         <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
     </ul>`;
 
     const providerOptions = `<ul>
         <li id="all-applications-nav-tab"><a href="/applications/index.html">All Applications</a></li>
+        <li id="pending-nav-tab"><a href="/applications/pending.html">Pending</a></li>
         <li id="shortlisted-nav-tab"><a href="/applications/shortlisted.html">Shortlisted</a></li>
         <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
     </ul>`;
