@@ -4,6 +4,7 @@ const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
+const attachmentsTab = document.getElementById('attachments-tab');
 const pageError = document.getElementById('page-error');
 const pageState = document.getElementById('page-state');
 
@@ -33,16 +34,12 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
                 requestBody.firstName = firstNameElement.value;
             if (lastNameElement.value && lastNameElement.value !== user.lastName)
                 requestBody.lastName = lastNameElement.value;
-            if (emailElement.value && emailElement.value !== user.email)
-                requestBody.email = emailElement.value;
-            if (dobElement.value && dobElement.value !== user.dateOfBirth)
-                requestBody.dateOfBirth = dobElement.value;
-            if (genderElement.value && genderElement.value !== user.genger)
-                requestBody.gender = genderElement.value;
+            if (emailElement.value && emailElement.value !== user.email) requestBody.email = emailElement.value;
+            if (dobElement.value && dobElement.value !== user.dateOfBirth) requestBody.dateOfBirth = dobElement.value;
+            if (genderElement.value && genderElement.value !== user.genger) requestBody.gender = genderElement.value;
             if (locationElement.value && locationElement.value !== user.location)
                 requestBody.location = locationElement.value;
-            if (phoneElement.value && phoneElement.value !== user.phone)
-                requestBody.phone = phoneElement.value;
+            if (phoneElement.value && phoneElement.value !== user.phone) requestBody.phone = phoneElement.value;
 
             saveBtn.textContent = 'Loading...';
             const response = await fetch(url, {
@@ -68,7 +65,6 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
 
 //education tab submission with confirmation
 const addEducationSubmitListener = (formElement, user, qualifications) => {
-    
     formElement.addEventListener('submit', async (event) => {
         const qualificationLevelElement = document.getElementById('qualification-level');
         const qualificationNameElement = document.getElementById('qualification-name');
@@ -82,7 +78,11 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
 
-            if (!qualificationLevelElement.value || !qualificationNameElement.value.trim() || !institutionElement.value) {
+            if (
+                !qualificationLevelElement.value ||
+                !qualificationNameElement.value.trim() ||
+                !institutionElement.value
+            ) {
                 errorElement.innerHTML = 'Please fill all three fields.';
                 return;
             }
@@ -90,7 +90,7 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
             if (!confirm('Are you sure you want to add this qualification?')) return;
 
             const selectedLevel = qualificationLevelElement.value;
-            const matchingQual = qualifications.find(q => q.qualificationLevel === selectedLevel);
+            const matchingQual = qualifications.find((q) => q.qualificationLevel === selectedLevel);
             const qualification = {
                 qualificationLevel: selectedLevel,
                 qualificationName: qualificationNameElement.value.trim(),
@@ -123,7 +123,6 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
 
 //skills submission with confirmation
 const addSkillSubmitListener = (formElement, user) => {
-    
     formElement.addEventListener('submit', async (event) => {
         const skillElement = document.getElementById('skill');
         const saveBtn = document.getElementById('save-profile-btn');
@@ -165,6 +164,7 @@ const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
 
@@ -228,17 +228,18 @@ const showEducationDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     try {
         const [qualResponse, instResponse] = await Promise.all([
             fetch(backendURL() + '/api/users/data/qualifications'),
-            fetch(backendURL() + '/api/users/data/institutions')
+            fetch(backendURL() + '/api/users/data/institutions'),
         ]);
         const qualifications = await qualResponse.json();
         const institutionGroups = await instResponse.json();
 
         const levelMap = new Map();
-        qualifications.forEach(q => {
+        qualifications.forEach((q) => {
             if (!levelMap.has(q.qualificationLevel)) {
                 levelMap.set(q.qualificationLevel, q.nqfLevel);
             }
@@ -248,9 +249,9 @@ const showEducationDetails = async (user) => {
             .join('');
 
         let instOptionsHtml = '<option value="">Select an institution</option>';
-        institutionGroups.forEach(group => {
+        institutionGroups.forEach((group) => {
             instOptionsHtml += `<optgroup label="${group.label}">`;
-            group.options.forEach(i => {
+            group.options.forEach((i) => {
                 instOptionsHtml += `<option value="${i}">${i}</option>`;
             });
             instOptionsHtml += `</optgroup>`;
@@ -288,7 +289,7 @@ const showEducationDetails = async (user) => {
 
         levelSelect.addEventListener('change', () => {
             const selectedLevel = levelSelect.value;
-            const qual = qualifications.find(q => q.qualificationLevel === selectedLevel);
+            const qual = qualifications.find((q) => q.qualificationLevel === selectedLevel);
             if (qual) {
                 nqfDisplay.textContent = `Level ${qual.nqfLevel}`;
             } else {
@@ -307,6 +308,7 @@ const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
+    attachmentsTab.classList.remove('visible');
 
     visibleDetails.innerHTML = `<form id="skill-form">
         <section class="input-group">
@@ -321,7 +323,18 @@ const showSkillsDetails = (user) => {
     addSkillSubmitListener(form, user);
 };
 
-//loading education details in the profile page
+// Renders attachments when the user clicks the attachments tab
+const showAttachments = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.remove('visible');
+    attachmentsTab.classList.add('visible');
+
+    visibleDetails.innerHTML = `<ul class="visible-details">
+        <li><p>Still yet to implement this</p></li>
+    </ul>`;
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
@@ -341,6 +354,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             personalTab.addEventListener('click', () => showPersonalDetails(data.user));
             educationTab.addEventListener('click', () => showEducationDetails(data.user));
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+            attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
             showPersonalDetails(data.user);
         } else {

@@ -1,13 +1,12 @@
-<!-- This page shows pending opportunities. It should be accessible to the admins only -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pending Opportunities</title>
+        <title>All Applicaitons</title>
         <link rel="stylesheet" href="../styles/index.css" />
+        <link rel="stylesheet" href="./styles/index.css" />
         <link rel="stylesheet" href="./styles/common.css" />
-        <link rel="stylesheet" href="./styles/pending.css" />
     </head>
     <body>
         <nav>
@@ -27,14 +26,14 @@
                     <li>
                         <section id="applications-nav" class="heading">
                             <p>Applications</p>
-                            <img id="applications-nav-image" src="../assets/right-arrow.png" />
+                            <img id="applications-nav-image" src="../assets/down-arrow.png" />
                         </section>
                         <section id="applications-nav-options" class="sidebar-nav-options"></section>
                     </li>
                     <li>
                         <section id="opportunities-nav" class="heading">
                             <p>Opportunities</p>
-                            <img id="opportunities-nav-image" src="../assets/down-arrow.png" />
+                            <img id="opportunities-nav-image" src="../assets/right-arrow.png" />
                         </section>
                         <section id="opportunities-nav-options"></section>
                     </li>
@@ -58,15 +57,20 @@
                 </ul>
             </aside>
             <section id="main-details">
+                <section id="page-container">
+                    <h1 id="page-title">All Applications</h1>
+                    <p id="page-description">
+                        This is where you can view applications for all the opportunities that you created. You can
+                        search for an opportunity and filter applications by it if you want to review and make changes
+                        to candidate applications
+                    </p>
+                    <ul id="applications"></ul>
+                </section>
                 <section id="page-state"></section>
                 <section id="page-error"></section>
-                <section id="page-container">
-                    <h1 id="page-title">Pending Opportunities</h1>
-                    <ul id="opportunities"></ul>
-                </section>
             </section>
         </main>
-        <script type="module" src="./scripts/pending.js"></script>
         <script type="module" src="../scripts/index.js"></script>
+        <script type="module" src="./scripts/pending.js"></script>
     </body>
 </html>

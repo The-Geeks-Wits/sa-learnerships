@@ -1,13 +1,11 @@
-<!-- This page shows pending opportunities. It should be accessible to the admins only -->
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pending Opportunities</title>
+        <title>Notifications</title>
         <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/common.css" />
-        <link rel="stylesheet" href="./styles/pending.css" />
+        <link rel="stylesheet" href="./styles/index.css" />
     </head>
     <body>
         <nav>
@@ -34,14 +32,14 @@
                     <li>
                         <section id="opportunities-nav" class="heading">
                             <p>Opportunities</p>
-                            <img id="opportunities-nav-image" src="../assets/down-arrow.png" />
+                            <img id="opportunities-nav-image" src="../assets/right-arrow.png" />
                         </section>
                         <section id="opportunities-nav-options"></section>
                     </li>
                     <li>
                         <section id="settings-nav" class="heading">
                             <p>Settings</p>
-                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                            <img id="settings-nav-image" src="../assets/down-arrow.png" />
                         </section>
                         <section id="settings-nav-options">
                             <ul>
@@ -58,15 +56,24 @@
                 </ul>
             </aside>
             <section id="main-details">
-                <section id="page-state"></section>
-                <section id="page-error"></section>
                 <section id="page-container">
-                    <h1 id="page-title">Pending Opportunities</h1>
-                    <ul id="opportunities"></ul>
+                    <h1 id="page-title">Notifications</h1>
+                    <p id="page-description">
+                        This is where you can find all your notifications. It is important that you visit this often as
+                        we currently do not send you emails about your notifications
+                    </p>
+                    <ul id="notifications-tab">
+                        <li id="all-notifications-tab" class="visible"><p>All</p></li>
+                        <li id="unread-notifications-tab"><p>Unread</p></li>
+                        <li id="read-notifications-tab"><p>Read</p></li>
+                    </ul>
+                    <ul id="notifications-list"></ul>
+                    <section id="page-state"></section>
+                    <section id="page-error"></section>
                 </section>
+                <script type="module" src="../scripts/index.js"></script>
+                <script type="module" src="./scripts/index.js"></script>
             </section>
         </main>
-        <script type="module" src="./scripts/pending.js"></script>
-        <script type="module" src="../scripts/index.js"></script>
     </body>
 </html>

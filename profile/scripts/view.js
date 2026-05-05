@@ -5,6 +5,7 @@ const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
 const skillsTab = document.getElementById('skills-tab');
+const attachmentsTab = document.getElementById('attachments-tab');
 const pageError = document.getElementById('page-error');
 const pageState = document.getElementById('page-state');
 
@@ -38,6 +39,7 @@ const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
 
@@ -66,6 +68,7 @@ const showEducationDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
+    attachmentsTab.classList.remove('visible');
 
     const qualifications = user.qualifications || [];
 
@@ -130,6 +133,7 @@ const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
+    attachmentsTab.classList.remove('visible');
 
     const skills = user.skills || [];
 
@@ -147,6 +151,29 @@ const showSkillsDetails = (user) => {
 
     visibleDetails.innerHTML = `<ul class="visible-details">
         ${skillsElement}
+    </ul>`;
+};
+
+// Renders attachments when the user clicks the attachments tab
+const showAttachments = (user) => {
+    personalTab.classList.remove('visible');
+    educationTab.classList.remove('visible');
+    skillsTab.classList.remove('visible');
+    attachmentsTab.classList.add('visible');
+
+    const attachments = user.attachments || [];
+
+    let attachmentsElement = '';
+    if (attachments.length === 0) {
+        visibleDetails.innerHTML = `<ul class="visible-details">
+            <li><p>No attachments found</p></li>
+            <li><button class="coloured-btn">Add</button></li>
+        </ul>`;
+        return;
+    }
+
+    visibleDetails.innerHTML = `<ul class="visible-details">
+        ${attachmentsElement}
     </ul>`;
 };
 
@@ -171,7 +198,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             personalTab.addEventListener('click', () => showPersonalDetails(data.user));
             educationTab.addEventListener('click', () => showEducationDetails(data.user));
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
+            attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
+            // TODO: Set a tab query param so that we start with the tab provided provided
             // Start with personal details
             showPersonalDetails(data.user);
         } else {
