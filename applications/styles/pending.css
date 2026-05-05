@@ -2,84 +2,8 @@ button {
     margin-top: 24px;
 }
 
-#page-container {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 50px;
-    display: none;
-}
-
-/* Highlight the right border of the analytics sidebar tab */
+/* Highlight the left border of the pending applications sidebar tab */
 aside #applications-nav-options #pending-nav-tab {
     border-left-color: #1562f2;
     border-left-width: 2.5px;
-}
-
-aside #applications-nav-options {
-    display: block;
-}
-
-#page-title {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 30px;
-    font-size: 38px;
-    max-width: 800px;
-    line-height: 30px;
-}
-
-#page-description {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
-    font-size: 16px;
-}
-
-#page-state,
-#page-error {
-    width: 100%;
-    height: 100%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-
-#page-state p,
-#page-error p {
-    font-size: 18px;
-}
-
-#applications {
-    width: 100%;
-    max-width: 800px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#applications li {
-    width: 100%;
-    margin-top: 20px;
-    padding: 20px;
-    border: 2px solid #dfdfdf;
-    border-radius: 10px;
-}
-
-#applications li h3 {
-    font-size: 24px;
-}
-
-#applications li p {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-#applications li p b {
-    font-size: 16px;
-}
-
-.application-details {
-    display: flex;
-    justify-content: space-between;
 }

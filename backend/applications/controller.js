@@ -109,3 +109,32 @@ exports.getMyApplications = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
     }
 };
+
+exports.getAllApplications = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({
+                error: 'Creator required! Please provide the creator of opportunities',
+            });
+        }
+
+        const opportunities = await Opportunity.find({ creator: req.user._id });
+
+        const applications = [];
+        for (let i = 0; i < opportunities.length; i++) {
+            const opportunity = opportunities[i].toObject();
+            const opportunityApplications = await Application.find({ opportunity: opportunity._id });
+
+            for (let i = 0; i < opportunityApplications.length; i++) {
+                const application = opportunityApplications[i].toObject();
+                opportunityApplications[i] = { ...application, opportunity: opportunity };
+            }
+
+            applications.push(opportunityApplications);
+        }
+
+        res.status(200).json({ applications });
+    } catch {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+    }
+};

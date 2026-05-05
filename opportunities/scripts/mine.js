@@ -67,5 +67,8 @@ opportunities.addEventListener('click', async (event) => {
     if (event.target.classList.contains('full-details-btn')) {
         const id = event.target.getAttribute('data-id');
         window.location.href = `/opportunities/view.html?id=${id}`;
+    } else if (event.target.classList.contains('applications-btn')) {
+        const id = event.target.getAttribute('data-id');
+        window.location.href = `/applications/index.html?opportunityId=${id}`;
     }
 });
