@@ -4,17 +4,20 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./authorization/User.js');
+const path = require('path');
 const jwt = require('jsonwebtoken');
 const connectDatabase = require('./database.js');
+const cookieParser = require('cookie-parser');
+
+// Routers imports
 const applicationsRouter = require('./applications/routes.js');
 const opportunitiesRouter = require('./opportunities/routes.js');
 const userRoutes = require('./authorization/routes.js');
-const cookieParser = require('cookie-parser');
+const notificationsRouter = require('./notifications/routes.js');
 
 dotenv.config();
 
 const app = express();
-const path = require('path');
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -62,6 +65,7 @@ passport.use(
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
 app.use('/applications', applicationsRouter);
+app.use('/notifications', notificationsRouter);
 
 // Health status check route (For confirming that the app is up and running when deployed)
 app.use('/health', (req, res) => {

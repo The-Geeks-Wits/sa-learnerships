@@ -108,17 +108,7 @@ nav #notifications img {
     transform: translate(0%, -50%);
 }
 
-nav #notifications #count {
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    border: none;
-    border-radius: 50%;
-    background-color: #1562f2;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+nav #notifications .notifications-count {
     position: absolute;
     left: 18%;
     top: 5%;
@@ -253,19 +243,6 @@ aside #settings-nav-options ul #notifications-nav-tab a {
     flex: 1;
 }
 
-aside #settings-nav-options ul #notifications-nav-tab section {
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-    border: none;
-    border-radius: 50%;
-    background-color: #1562f2;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 /* Class styles goes here i.e. Every style that is applied using the element class selector should put here */
 
 .transparent-btn {
@@ -283,4 +260,17 @@ aside #settings-nav-options ul #notifications-nav-tab section {
     background-color: transparent;
     border: 1.5px solid #dfdfdf;
     border-radius: 6px;
+}
+
+.notifications-count {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1562f2;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
