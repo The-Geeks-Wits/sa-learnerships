@@ -7,7 +7,7 @@ const skillsTab = document.getElementById('skills-tab');
 const pageError = document.getElementById('page-error');
 const pageState = document.getElementById('page-state');
 
-// ── Personal tab submit (with confirmation) ──
+//personal tab submission with confirmation
 const addPersonalDetailsSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
         const firstNameElement = document.getElementById('firstName');
@@ -66,9 +66,9 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
     });
 };
 
-// ── Education tab submit (unchanged) ──
+//education tab submission with confirmation
 const addEducationSubmitListener = (formElement, user, qualifications) => {
-    // ... unchanged ...
+    
     formElement.addEventListener('submit', async (event) => {
         const qualificationLevelElement = document.getElementById('qualification-level');
         const qualificationNameElement = document.getElementById('qualification-name');
@@ -121,9 +121,9 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
     });
 };
 
-// ── Skills tab submit (unchanged) ──
+//skills submission with confirmation
 const addSkillSubmitListener = (formElement, user) => {
-    // ... unchanged ...
+    
     formElement.addEventListener('submit', async (event) => {
         const skillElement = document.getElementById('skill');
         const saveBtn = document.getElementById('save-profile-btn');
@@ -160,7 +160,7 @@ const addSkillSubmitListener = (formElement, user) => {
     });
 };
 
-// ── Personal details (CV upload removed) ──
+//these are user personal details
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -221,7 +221,9 @@ const showPersonalDetails = (user) => {
     addPersonalDetailsSubmitListener(form, user);
 };
 
-// ── Education tab (unchanged) ──
+//education info tab
+//i used inner html so that i decouple the html of the full profile from the education one
+//more testable and maintainable this way
 const showEducationDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
@@ -300,8 +302,7 @@ const showEducationDetails = async (user) => {
         visibleDetails.innerHTML = `<p>Failed to load education options. Please try again later.</p>`;
     }
 };
-
-// ── Skills tab (unchanged) ──
+//showing verified skills in the profile page
 const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
@@ -320,7 +321,7 @@ const showSkillsDetails = (user) => {
     addSkillSubmitListener(form, user);
 };
 
-// ── Initial page load ──
+//loading education details in the profile page
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
