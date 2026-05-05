@@ -33,7 +33,7 @@ const setPersonalDetails = (user) => {
     });
 };
 
-// Renders personal details when the user clicks the skills tab
+// Renders personal details
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -61,34 +61,71 @@ const showPersonalDetails = (user) => {
     </ul>`;
 };
 
-// Renders education details when the user clicks the education tab
+// Clean, properly stacked education cards update for professionalism
 const showEducationDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
 
     const qualifications = user.qualifications || [];
+
+    let contentHtml = '';
     if (qualifications.length === 0) {
-        visibleDetails.innerHTML = `<ul class="visible-details">
-            <li><p>Not provided</p></li>
-        </ul>`;
-        return;
+        contentHtml = `<p style="color:#666; font-size:0.95rem;">No qualifications added yet. Click “Edit profile” to add your qualifications.</p>`;
+    } else {
+        // Welcome header
+        contentHtml = `<div style="margin-bottom: 16px;">
+            <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
+                Your Qualifications
+            </h3>
+            <p style="margin:0; font-size:0.9rem; color:#666;">
+                These are your registered qualifications aligned with the South African NQF framework.
+            </p>
+        </div>`;
+
+        let cardsHtml = '';
+        for (let i = 0; i < qualifications.length; i++) {
+            const q = qualifications[i];
+            cardsHtml += `
+            <li style="
+                list-style: none;
+                background: #ffffff;
+                border-radius: 8px;
+                padding: 16px 20px;
+                margin-bottom: 12px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            ">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                    <h4 style="margin:0; font-size:1.1rem; font-weight:600; color:#1a202c;">
+                        ${q.qualificationName || 'N/A'}
+                    </h4>
+                    <span style="
+                        background: #ebf4ff;
+                        color: #2b6cb0;
+                        padding: 4px 10px;
+                        border-radius: 20px;
+                        font-size: 0.8rem;
+                        font-weight: 600;
+                    ">NQF ${q.nqfLevel ?? 'N/A'}</span>
+                </div>
+                <div style="color: #4a5568; font-size: 0.92rem; line-height: 1.5;">
+                    <p style="margin: 0 0 4px 0;">
+                        <span style="font-weight:500;">Qualification Level:</span> ${q.qualificationLevel || 'N/A'}
+                    </p>
+                    <p style="margin: 0;">
+                        <span style="font-weight:500;">Institution:</span> ${q.institution || 'N/A'}
+                    </p>
+                </div>
+            </li>`;
+        }
+        contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
     }
 
-    let qualificationsElement = '';
-    for (let i = 0; i < qualifications.length; i++) {
-        qualificationsElement += `<li class="card">
-            <h4>${qualifications[i].qualificationName}</h4>
-            <p>${qualifications[i].institution}</p>
-        </li>`;
-    }
-
-    visibleDetails.innerHTML = `<ul id="education-visible-details" class="visible-details">
-        ${qualificationsElement}
-    </ul>`;
+    visibleDetails.innerHTML = `<div>${contentHtml}</div>`;
 };
 
-// Renders skills details when the user clicks the skills tab
+// Renders skills details
 const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
@@ -98,7 +135,7 @@ const showSkillsDetails = (user) => {
 
     if (skills.length === 0) {
         visibleDetails.innerHTML = `<ul class="visible-details">
-            <li><p>Not provided</p></li>
+            <li><p>No skills added yet.</p></li>
         </ul>`;
         return;
     }
@@ -116,7 +153,6 @@ const showSkillsDetails = (user) => {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
-
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
 

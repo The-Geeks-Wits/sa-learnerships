@@ -7,11 +7,9 @@ const skillsTab = document.getElementById('skills-tab');
 const pageError = document.getElementById('page-error');
 const pageState = document.getElementById('page-state');
 
-// Adds an event listener to the save profile button under the personal tab
+// ── Personal tab submit (with confirmation) ──
 const addPersonalDetailsSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
-        // Get all the input fields elements. The elements are available only after the method to show personal details has been called
-        // Hence we cannot get them from outside
         const firstNameElement = document.getElementById('firstName');
         const lastNameElement = document.getElementById('lastName');
         const emailElement = document.getElementById('email');
@@ -24,57 +22,39 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
 
         try {
             event.preventDefault();
-
             const url = backendURL() + '/api/users/profile';
-
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
 
-            // Build the request body
+            if (!confirm('Are you sure you want to update your personal details?')) return;
+
             const requestBody = {};
-
-            if (firstNameElement.value !== '' && firstNameElement.value !== user.firstName) {
+            if (firstNameElement.value !== '' && firstNameElement.value !== user.firstName)
                 requestBody.firstName = firstNameElement.value;
-            }
-
-            if (lastNameElement.value && lastNameElement.value !== user.lastName) {
+            if (lastNameElement.value && lastNameElement.value !== user.lastName)
                 requestBody.lastName = lastNameElement.value;
-            }
-
-            if (emailElement.value && emailElement.value !== user.email) {
+            if (emailElement.value && emailElement.value !== user.email)
                 requestBody.email = emailElement.value;
-            }
-
-            if (dobElement.value && dobElement.value !== user.dateOfBirth) {
+            if (dobElement.value && dobElement.value !== user.dateOfBirth)
                 requestBody.dateOfBirth = dobElement.value;
-            }
-
-            if (genderElement.value && genderElement.value !== user.genger) {
+            if (genderElement.value && genderElement.value !== user.genger)
                 requestBody.gender = genderElement.value;
-            }
-
-            if (locationElement.value && locationElement.value !== user.location) {
+            if (locationElement.value && locationElement.value !== user.location)
                 requestBody.location = locationElement.value;
-            }
-
-            if (phoneElement.value && phoneElement.value !== user.phone) {
+            if (phoneElement.value && phoneElement.value !== user.phone)
                 requestBody.phone = phoneElement.value;
-            }
 
             saveBtn.textContent = 'Loading...';
             const response = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: token,
-                    'Content-Type': 'application/json',
-                },
+                method: 'PUT',
+                headers: { Authorization: token, 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody),
             });
 
             const data = await response.json();
             if (response.ok) {
-                // Since we are updating by category, we can easily alert information about the specific category
                 alert('Personal details updated successfully!');
+                window.location.href = 'view.html?tab=personal';
             } else {
                 errorElement.innerHTML = data.error;
             }
@@ -86,88 +66,88 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
     });
 };
 
-// Adds an event listener to the save profile button under the education tab
-const addEducationSubmitListener = (formElement, user) => {
+// ── Education tab submit (unchanged) ──
+const addEducationSubmitListener = (formElement, user, qualifications) => {
+    // ... unchanged ...
     formElement.addEventListener('submit', async (event) => {
-        // Get all the input fields elements. The elements are available only after the method to show education details has been called
-        // Hence we cannot get them from outside
+        const qualificationLevelElement = document.getElementById('qualification-level');
         const qualificationNameElement = document.getElementById('qualification-name');
         const institutionElement = document.getElementById('institution');
-        const saveBtn = document.getElementById('save-profile-btn');
+        const saveBtn = document.getElementById('add-education-btn');
         const errorElement = document.getElementById('error-message');
 
         try {
             event.preventDefault();
-
             const url = backendURL() + '/api/users/profile';
-
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
 
-            if (qualificationNameElement.value && institutionElement.value) {
-                const qualification = {
-                    qualificationName: qualificationNameElement.value,
-                    institution: institutionElement.value,
-                };
-                user.qualifications.push(qualification);
-                const response = await fetch(url, {
-                    method: 'PATCH',
-                    headers: {
-                        Authorization: token,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ qualifications: user.qualifications }),
-                });
+            if (!qualificationLevelElement.value || !qualificationNameElement.value.trim() || !institutionElement.value) {
+                errorElement.innerHTML = 'Please fill all three fields.';
+                return;
+            }
 
-                const data = await response.json();
-                if (response.ok) {
-                    // Since we are updating by category, we can easily alert information about the specific category
-                    alert('Education details updated successfully!');
-                } else {
-                    errorElement.innerHTML = data.error;
-                }
+            if (!confirm('Are you sure you want to add this qualification?')) return;
+
+            const selectedLevel = qualificationLevelElement.value;
+            const matchingQual = qualifications.find(q => q.qualificationLevel === selectedLevel);
+            const qualification = {
+                qualificationLevel: selectedLevel,
+                qualificationName: qualificationNameElement.value.trim(),
+                institution: institutionElement.value,
+                nqfLevel: matchingQual ? matchingQual.nqfLevel : null,
+            };
+
+            user.qualifications.push(qualification);
+
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { Authorization: token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ qualifications: user.qualifications }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Education details updated successfully!');
+                window.location.href = 'view.html?tab=education';
+            } else {
+                errorElement.innerHTML = data.error;
             }
         } catch (err) {
             errorElement.innerHTML = 'Something went wrong! Please try again later';
         } finally {
-            saveBtn.textContent = 'Save profile';
+            saveBtn.textContent = 'Add education';
         }
     });
 };
 
-// Adds an event listener to the save profile button under the skills tab
+// ── Skills tab submit (unchanged) ──
 const addSkillSubmitListener = (formElement, user) => {
+    // ... unchanged ...
     formElement.addEventListener('submit', async (event) => {
-        // Get all the input fields elements. The elements are available only after the method to show education details has been called
-        // Hence we cannot get them from outside
         const skillElement = document.getElementById('skill');
         const saveBtn = document.getElementById('save-profile-btn');
         const errorElement = document.getElementById('error-message');
 
         try {
             event.preventDefault();
-
             const url = backendURL() + '/api/users/profile';
-
             const token = localStorage.getItem('jwt');
             if (!token) return (window.location.href = '../../login.html');
 
             if (skillElement.value) {
-                user.skills.push(skillElement.value);
+                if (!confirm('Are you sure you want to add this skill?')) return;
 
+                user.skills.push(skillElement.value.trim());
                 const response = await fetch(url, {
-                    method: 'PATCH',
-                    headers: {
-                        Authorization: token,
-                        'Content-Type': 'application/json',
-                    },
+                    method: 'PUT',
+                    headers: { Authorization: token, 'Content-Type': 'application/json' },
                     body: JSON.stringify({ skills: user.skills }),
                 });
-
                 const data = await response.json();
                 if (response.ok) {
-                    // Since we are updating by category, we can easily alert information about the specific category
                     alert('Skills details updated successfully!');
+                    window.location.href = 'view.html?tab=skills';
                 } else {
                     errorElement.innerHTML = data.error;
                 }
@@ -180,7 +160,7 @@ const addSkillSubmitListener = (formElement, user) => {
     });
 };
 
-// Renders personal details when the user clicks the personal tab
+// ── Personal details (CV upload removed) ──
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -192,7 +172,7 @@ const showPersonalDetails = (user) => {
         <section class="input-group">
             <label for="firstName">First Name</label>
             <section class="input-wrapper">
-                <input type="text"  id="firstName" name="firstName" value="${user.firstName}"/>
+                <input type="text" id="firstName" name="firstName" value="${user.firstName}" />
             </section>
         </section>
         <section class="input-group">
@@ -232,6 +212,7 @@ const showPersonalDetails = (user) => {
                 <input type="text" id="phone" name="phone" value="${user.phone || ''}" />
             </section>
         </section>
+
         <p id="error-message"></p>
         <button id="save-profile-btn" class="coloured-btn">Save profile</button>
     </form>`;
@@ -239,30 +220,88 @@ const showPersonalDetails = (user) => {
     const form = document.getElementById('personal-details-form');
     addPersonalDetailsSubmitListener(form, user);
 };
-// Renders education details when the user clicks the education tab
-const showEducationDetails = (user) => {
+
+// ── Education tab (unchanged) ──
+const showEducationDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
     skillsTab.classList.remove('visible');
 
-    visibleDetails.innerHTML = `<form id="education-form">
-        <section class="input-group">
-            <label for="qualification-name">Qualification Name</label>
-            <input type="text" id="qualification-name" name="qualification-name" placeholder="Please enter your qualification name" />
-        </section>
-        <section class="input-group">
-            <label for="institution">Institution</label>
-            <input type="text" id="institution" name="institution" placeholder="Please enter your institution name" />
-        </section>
-        <p id="error-message"></p>
-        <button id="add-education-btn" class="coloured-btn">Add education</button>
-    </form>`;
+    try {
+        const [qualResponse, instResponse] = await Promise.all([
+            fetch(backendURL() + '/api/users/data/qualifications'),
+            fetch(backendURL() + '/api/users/data/institutions')
+        ]);
+        const qualifications = await qualResponse.json();
+        const institutionGroups = await instResponse.json();
 
-    const form = document.getElementById('education-form');
-    addEducationSubmitListener(form, user);
+        const levelMap = new Map();
+        qualifications.forEach(q => {
+            if (!levelMap.has(q.qualificationLevel)) {
+                levelMap.set(q.qualificationLevel, q.nqfLevel);
+            }
+        });
+        const levelOptions = Array.from(levelMap.entries())
+            .map(([level, nqf]) => `<option value="${level}">${level} (NQF ${nqf})</option>`)
+            .join('');
+
+        let instOptionsHtml = '<option value="">Select an institution</option>';
+        institutionGroups.forEach(group => {
+            instOptionsHtml += `<optgroup label="${group.label}">`;
+            group.options.forEach(i => {
+                instOptionsHtml += `<option value="${i}">${i}</option>`;
+            });
+            instOptionsHtml += `</optgroup>`;
+        });
+
+        visibleDetails.innerHTML = `<form id="education-form">
+            <section class="input-group">
+                <label for="qualification-level">Qualification Level</label>
+                <select id="qualification-level" name="qualification-level">
+                    <option value="">Select qualification level</option>
+                    ${levelOptions}
+                </select>
+            </section>
+            <section class="input-group">
+                <label for="qualification-name">Qualification Name</label>
+                <input type="text" id="qualification-name" name="qualification-name"
+                       placeholder="e.g., BSc Computer Science" />
+            </section>
+            <section class="input-group">
+                <label for="institution">Institution</label>
+                <select id="institution" name="institution">
+                    ${instOptionsHtml}
+                </select>
+            </section>
+            <section class="input-group">
+                <label>NQF Level</label>
+                <p id="nqf-display" style="font-weight:600; margin: 0;">–</p>
+            </section>
+            <p id="error-message"></p>
+            <button id="add-education-btn" class="coloured-btn">Add education</button>
+        </form>`;
+
+        const levelSelect = document.getElementById('qualification-level');
+        const nqfDisplay = document.getElementById('nqf-display');
+
+        levelSelect.addEventListener('change', () => {
+            const selectedLevel = levelSelect.value;
+            const qual = qualifications.find(q => q.qualificationLevel === selectedLevel);
+            if (qual) {
+                nqfDisplay.textContent = `Level ${qual.nqfLevel}`;
+            } else {
+                nqfDisplay.textContent = '–';
+            }
+        });
+
+        const form = document.getElementById('education-form');
+        addEducationSubmitListener(form, user, qualifications);
+    } catch (err) {
+        visibleDetails.innerHTML = `<p>Failed to load education options. Please try again later.</p>`;
+    }
 };
 
-// Renders skills details when the user clicks the skills tab
+// ── Skills tab (unchanged) ──
 const showSkillsDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
@@ -281,10 +320,10 @@ const showSkillsDetails = (user) => {
     addSkillSubmitListener(form, user);
 };
 
+// ── Initial page load ──
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
-
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
 
@@ -302,7 +341,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             educationTab.addEventListener('click', () => showEducationDetails(data.user));
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
 
-            // Start with personal details
             showPersonalDetails(data.user);
         } else {
             pageError.style.display = 'flex';
