@@ -1,5 +1,6 @@
 const Application = require('./Applications.js');
 const Opportunity = require('../opportunities/Opportunity.js');
+const { sendNotification } = require('../notifications/controller.js');
 
 exports.submitApplication = async (req, res) => {
     try {
@@ -41,6 +42,10 @@ exports.submitApplication = async (req, res) => {
             applicant: applicantId,
             opportunity: opportunityId,
         });
+
+        const title = `Application Received - Thank You ${req.user.firstName}`;
+        const message = `We're pleased to confirm the receipt of your application for the ${opportunity.title} opportunity.`;
+        sendNotification(req.user._id, title, message);
 
         res.status(201).json({
             id: application._id,

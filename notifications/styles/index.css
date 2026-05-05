@@ -1,3 +1,31 @@
+#page-container {
+    width: 800px;
+}
+
+#page-title {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 30px;
+    font-size: 38px;
+    max-width: 800px;
+    line-height: 30px;
+}
+
+#page-state,
+#page-error {
+    width: 100%;
+    max-width: 800px;
+    margin: 100px 0px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#page-state p,
+#page-error p {
+    font-size: 16px;
+}
+
 /* Highlight the right border of the analytics sidebar tab */
 aside #settings-nav-options #notifications-nav-tab {
     border-left-color: #1562f2;
@@ -22,4 +50,66 @@ aside #settings-nav-options {
     max-width: 800px;
     margin-bottom: 20px;
     font-size: 16px;
+}
+
+#notifications-tab {
+    margin-top: 40px;
+    display: flex;
+    list-style: none;
+    border-bottom: 1.5px solid #dfdfdf;
+}
+
+#notifications-tab li {
+    margin-right: 40px;
+    margin-bottom: -1.5px;
+    line-height: 50px;
+}
+
+#notifications-tab li p {
+    font-size: 16px;
+}
+
+#notifications-tab li p:hover {
+    cursor: pointer;
+}
+
+#notifications-tab .visible {
+    border-bottom: 1.5px solid #1562f2;
+}
+
+#notifications-list {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 30px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+}
+
+#notifications-list li {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    border: 2px solid #dfdfdf;
+    border-radius: 10px;
+}
+
+#notifications-list li h3 {
+    font-size: 24px;
+}
+
+#notifications-list li p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#notifications-list li p b {
+    font-size: 16px;
+}
+
+.notification-details {
+    display: flex;
+    justify-content: space-between;
 }

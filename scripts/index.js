@@ -16,6 +16,8 @@ const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
 const applyBtn = document.getElementById('apply-btn');
+const notificationsElement = document.getElementById('notifications');
+const notificationCountElements = document.getElementsByClassName('notifications-count');
 
 // optionsElement -> The element that has the list of all the options
 // imageElement -> The element used to change the toggle image
@@ -75,12 +77,39 @@ const getApplicationsOptions = (role) => {
     else return '';
 };
 
+// This is placed here to reduce the clutter in the document event listener
+// Putting this here also allows us to set the notification count asynchronously
+const showNotificationsCount = async () => {
+    try {
+        const url = backendURL() + '/notifications/mine';
+
+        // By the time this method is called we can be sure that the existence of the jwt has been confirmed and the jwt does exist
+        const token = localStorage.getItem('jwt');
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { Authorization: token },
+        });
+
+        const data = await response.json();
+
+        for (let i = 0; i < notificationCountElements.length; i++) {
+            notificationCountElements[i].innerHTML = data.count;
+        }
+    } catch (error) {
+        // TODO: Do something with this error here
+    }
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
 
         const token = localStorage.getItem('jwt');
         if (!token) return (window.location.href = '/login.html');
+
+        // The sooner we show them the better, since this will happen asynchronously
+        showNotificationsCount();
 
         profileElement.innerHTML = `<section id="profile-state">
             <p>Loading...</p>
@@ -153,6 +182,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 appName.addEventListener('click', () => {
     window.location.href = '/home.html';
+});
+
+notificationsElement.addEventListener('click', () => {
+    window.location.href = '/notifications/index.html';
 });
 
 applyBtn.addEventListener('click', () => {

@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
             attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
+            // TODO: Set a tab query param so that we start with the tab provided provided
             // Start with personal details
             showPersonalDetails(data.user);
         } else {

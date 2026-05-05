@@ -13,7 +13,7 @@
             <ul>
                 <li id="notifications">
                     <img src="../assets/notifications.png" />
-                    <p id="count">2</p>
+                    <p class="notifications-count">2</p>
                 </li>
                 <li id="profile-details"></li>
             </ul>
@@ -48,7 +48,7 @@
                                 </li>
                                 <li id="notifications-nav-tab">
                                     <a href="/notifications/index.html">Notifications</a>
-                                    <section>2</section>
+                                    <p class="notifications-count">2</p>
                                 </li>
                             </ul>
                         </section>
@@ -59,12 +59,20 @@
                 <section id="page-container">
                     <h1 id="page-title">Notifications</h1>
                     <p id="page-description">
-                        This is where all in app notifications that you receive will be visible. Maybe in another world
-                        we would have this ready by now
+                        This is where you can find all your notifications. It is important that you visit this often as
+                        we currently do not send you emails about your notifications
                     </p>
+                    <ul id="notifications-tab">
+                        <li id="all-notifications-tab" class="visible"><p>All</p></li>
+                        <li id="unread-notifications-tab"><p>Unread</p></li>
+                        <li id="read-notifications-tab"><p>Read</p></li>
+                    </ul>
+                    <ul id="notifications-list"></ul>
+                    <section id="page-state"></section>
+                    <section id="page-error"></section>
                 </section>
                 <script type="module" src="../scripts/index.js"></script>
-                <script type="module" src="../scripts/index.js"></script>
+                <script type="module" src="./scripts/index.js"></script>
             </section>
         </main>
     </body>
