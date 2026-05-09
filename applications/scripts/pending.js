@@ -15,17 +15,35 @@ const getUserRole = async () => {
     return data.user.role;
 };
 
-const getApplicationElement = (opportunity, dateSubmitted) => {
-    let location = opportunity.location;
+
+const getApplicationElement = (application, dateSubmitted, role) => {
+    let location = application.opportunity.location;
     if (!location) location = 'Not provided';
+    let buttons = '';
+    if (role === 'provider'){
+        buttons = `
+            <section class = "application-actions">
+                <button class = "shortlist-btn coloured-btn"
+                    data-id = "${application._id}">
+                    Shortlist
+                </button>
+
+                <button class="reject-btn transparent-btn"
+                    data-id="${application._id}">
+                    Reject
+                </button>
+            </section>
+        `;
+    }
 
     return `<li>
-        <h3>${opportunity.title}</h3>
+        <h3>${application.opportunity.title}</h3>
         <section class="application-details">
             <section>
                 <p><b>Location:</b> ${location}</p>
                 <p><b>Date submitted:</b> ${dateSubmitted.slice(0, 10)}</p>
             </section>
+            ${buttons}
         </section>
     </li>`;
 };
@@ -34,9 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
-
         const role = await getUserRole();
-
         const url =
             role === 'provider'
                 ? backendURL() + '/applications?status=Pending'
@@ -63,8 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!application.opportunity) return;
 
                 applications.innerHTML += getApplicationElement(
-                    application.opportunity,
-                    application.createdAt
+                    application,
+                    application.createdAt,
+                    role
                 );
             });
         } else {
@@ -78,5 +95,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
+    }
+});
+
+
+applications.addEventListener('click', async (event)=> {
+    if (event.target.classList.contains('shortlist-btn')){
+        const applicationId = event.target.getAttribute('data-id');
+
+        const response = await fetch(backendURL() + `/applications/${applicationId}/shortlist`,{
+                method: 'PATCH',
+                credentials: 'include',
+            }
+        );
+
+        const data = await response.json();
+        if (response.ok){
+            alert(data.message);
+            window.location.reload();
+        }else{
+            pageError.style.display = 'flex';
+            pageError.innerHTML = `<p>${data.error}</p>`;
+        }
     }
 });
