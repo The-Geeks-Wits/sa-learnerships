@@ -31,8 +31,8 @@ app.locals.institutions = institutions;
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
-app.use(passport.initialize());
 app.use(cookieParser());
+app.use(passport.initialize());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/profile', express.static(path.join(__dirname, 'profile')));
 

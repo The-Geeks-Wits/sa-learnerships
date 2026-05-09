@@ -180,15 +180,14 @@ const showAttachments = (user) => {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
+        
 
         pageState.style.display = 'flex';
         pageState.innerHTML = 'Loading...';
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials:'include'
         });
 
         const data = await response.json();

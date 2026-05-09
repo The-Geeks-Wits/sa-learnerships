@@ -24,8 +24,6 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
         try {
             event.preventDefault();
             const url = backendURL() + '/api/users/profile';
-            const token = localStorage.getItem('jwt');
-            if (!token) return (window.location.href = '../../login.html');
 
             if (!confirm('Are you sure you want to update your personal details?')) return;
 
@@ -44,7 +42,8 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
             saveBtn.textContent = 'Loading...';
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { Authorization: token, 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody),
             });
 
@@ -75,8 +74,6 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
         try {
             event.preventDefault();
             const url = backendURL() + '/api/users/profile';
-            const token = localStorage.getItem('jwt');
-            if (!token) return (window.location.href = '../../login.html');
 
             if (
                 !qualificationLevelElement.value ||
@@ -102,7 +99,8 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
 
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { Authorization: token, 'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json' },
                 body: JSON.stringify({ qualifications: user.qualifications }),
             });
 
@@ -131,8 +129,6 @@ const addSkillSubmitListener = (formElement, user) => {
         try {
             event.preventDefault();
             const url = backendURL() + '/api/users/profile';
-            const token = localStorage.getItem('jwt');
-            if (!token) return (window.location.href = '../../login.html');
 
             if (skillElement.value) {
                 if (!confirm('Are you sure you want to add this skill?')) return;
@@ -140,7 +136,8 @@ const addSkillSubmitListener = (formElement, user) => {
                 user.skills.push(skillElement.value.trim());
                 const response = await fetch(url, {
                     method: 'PUT',
-                    headers: { Authorization: token, 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json' },
                     body: JSON.stringify({ skills: user.skills }),
                 });
                 const data = await response.json();
@@ -338,15 +335,13 @@ const showAttachments = (user) => {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
 
         pageState.style.display = 'flex';
         pageState.innerHTML = 'Loading...';
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         const data = await response.json();

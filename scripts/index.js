@@ -84,11 +84,10 @@ const showNotificationsCount = async () => {
         const url = backendURL() + '/notifications/mine';
 
         // By the time this method is called we can be sure that the existence of the jwt has been confirmed and the jwt does exist
-        const token = localStorage.getItem('jwt');
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         const data = await response.json();
@@ -105,8 +104,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
 
         // The sooner we show them the better, since this will happen asynchronously
         showNotificationsCount();
@@ -117,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include'
         });
 
         let userRole = 'applicant';
