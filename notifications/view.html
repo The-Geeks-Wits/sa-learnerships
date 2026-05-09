@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Notifications</title>
         <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/index.css" />
+        <link rel="stylesheet" href="./styles/view.css" />
     </head>
     <body>
         <nav>
@@ -56,14 +56,20 @@
                 </ul>
             </aside>
             <section id="main-details">
+                <section id="page-state"></section>
+                <section id="page-error"></section>
                 <section id="page-container">
-                    <h1 id="page-title">View Notification</h1>
-                    <p id="page-description">
-                        This is where you can view full details about a notification. Maybe in another world we would
-                        have implemented this by now
-                    </p>
+                    <h1 id="page-title"></h1>
+                    <p id="notification-message"></p>
+                    <section id="notification-actions">
+                        <section id="notification-date">
+                            <h4>Sent:</h4>
+                        </section>
+                        <button id="read-toggle-btn" class="coloured-btn">Mark as unread</button>
+                    </section>
                 </section>
                 <script type="module" src="../scripts/index.js"></script>
+                <script type="module" src="./scripts/view.js"></script>
             </section>
         </main>
     </body>
