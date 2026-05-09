@@ -111,14 +111,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const id = params.get('id');
 
         let url = backendURL() + `/opportunities/${id}`;
-        const response = await fetch(url, {
+        const res = await fetch(url, {
             method: 'GET',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
         });
 
-        const data = await response.json();
+        const data = await res.json();
 
-        if (response.ok) {
+        if (res.ok) {
             detailsContainer.style.display = 'block';
 
             browserTitle.innerHTML = 'Opportunity | ' + data.title;

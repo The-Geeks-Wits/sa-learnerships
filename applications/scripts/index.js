@@ -25,8 +25,6 @@ const getApplicationElement = (opportunity, application) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
 
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
@@ -35,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         const data = await response.json();
