@@ -128,18 +128,73 @@ exports.getAllApplications = async (req, res) => {
         const applications = [];
         for (let i = 0; i < opportunities.length; i++) {
             const opportunity = opportunities[i].toObject();
-            const opportunityApplications = await Application.find({ opportunity: opportunity._id });
+            const queryOptions = { opportunity: opportunity._id };
+
+            if (req.query && req.query.status) {
+                queryOptions.status = req.query.status;
+            }
+
+        const opportunityApplications = await Application.find(queryOptions);
 
             for (let i = 0; i < opportunityApplications.length; i++) {
                 const application = opportunityApplications[i].toObject();
                 opportunityApplications[i] = { ...application, opportunity: opportunity };
             }
 
-            applications.push(opportunityApplications);
+            applications.push(...opportunityApplications);
         }
 
         res.status(200).json({ applications });
     } catch {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+    }
+};
+
+
+//shortlisting an application
+
+exports.shortlistApplication = async (req, res) => {
+    try {
+        const applicationId = req.params.id;
+
+        if (!req.user) {
+            return res.status(401).json({
+                error: 'You are not logged in! Please log in to continue',
+            });
+        }
+
+        const userId = req.user._id || req.user.userId || req.user.id;
+
+        const application = await Application.findById(applicationId).populate('opportunity');
+
+        if (!application) {
+            return res.status(404).json({
+                error: 'Application not found',
+            });
+        }
+
+        if (application.opportunity.creator.toString() !== userId.toString()) {
+            return res.status(403).json({
+                error: 'You can only shortlist applications for your own opportunities',
+            });
+        }
+
+        application.status = 'Shortlisted';
+        await application.save();
+
+        const title = `Application Shortlisted - ${application.opportunity.title}`;
+        const message = `Congratulations! Your application for ${application.opportunity.title} has been shortlisted.`;
+
+        await sendNotification(application.applicant, title, message);
+
+        res.status(200).json({
+            message: 'Application shortlisted successfully',
+            application,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
+        });
     }
 };
