@@ -15,9 +15,9 @@ const rejectApplication = applicationsController.rejectApplication;
 router.post('/', isAuthenticated, submitApplication);
 router.get('/', isAuthenticated, getAllApplications);
 router.get('/mine', isAuthenticated, getMyApplications);
-router.get('/:id', isAuthenticated, getApplication);
 router.get('/provider/all', isAuthenticated, isProvider, getProviderApplications);
-router.patch('/:id/reject', isAuthenticated, isProvider, rejectApplication);
 router.get('/provider/rejected', isAuthenticated, isProvider, getRejectedApplications);
+router.patch('/:id/reject', isAuthenticated, isProvider, rejectApplication);
+router.get('/:id', isAuthenticated, getApplication);  // ← moved to bottom
 
 module.exports = router;
