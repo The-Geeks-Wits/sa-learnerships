@@ -15,4 +15,8 @@ router.get('/institutions', (req, res) => {
     res.json(groups);
 });
 
+router.get('/skills', (req, res) => {
+    res.json(req.app.locals.skills);
+});
+
 module.exports = router;
