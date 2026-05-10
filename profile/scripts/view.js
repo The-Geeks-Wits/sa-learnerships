@@ -77,14 +77,14 @@ const showEducationDetails = (user) => {
         contentHtml = `<p style="color:#666; font-size:0.95rem;">No qualifications added yet. Click “Edit profile” to add your qualifications.</p>`;
     } else {
         // Welcome header
-        contentHtml = `<div style="margin-bottom: 16px;">
+        contentHtml = `<header style="margin-bottom: 16px;">
             <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
                 Your Qualifications
             </h3>
             <p style="margin:0; font-size:0.9rem; color:#666;">
                 These are your registered qualifications aligned with the South African NQF framework.
             </p>
-        </div>`;
+        </header>`;
 
         let cardsHtml = '';
         for (let i = 0; i < qualifications.length; i++) {
@@ -99,37 +99,37 @@ const showEducationDetails = (user) => {
                 box-shadow: 0 2px 6px rgba(0,0,0,0.06);
                 font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
             ">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <header style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
                     <h4 style="margin:0; font-size:1.1rem; font-weight:600; color:#1a202c;">
                         ${q.qualificationName || 'N/A'}
                     </h4>
-                    <span style="
+                    <small style="
                         background: #ebf4ff;
                         color: #2b6cb0;
                         padding: 4px 10px;
                         border-radius: 20px;
                         font-size: 0.8rem;
                         font-weight: 600;
-                    ">NQF ${q.nqfLevel ?? 'N/A'}</span>
-                </div>
-                <div style="color: #4a5568; font-size: 0.92rem; line-height: 1.5;">
+                    ">NQF ${q.nqfLevel ?? 'N/A'}</small>
+                </header>
+                <section style="color: #4a5568; font-size: 0.92rem; line-height: 1.5;">
                     <p style="margin: 0 0 4px 0;">
-                        <span style="font-weight:500;">Qualification Level:</span> ${q.qualificationLevel || 'N/A'}
+                        <strong>Qualification Level:</strong> ${q.qualificationLevel || 'N/A'}
                     </p>
                     <p style="margin: 0;">
-                        <span style="font-weight:500;">Institution:</span> ${q.institution || 'N/A'}
+                        <strong>Institution:</strong> ${q.institution || 'N/A'}
                     </p>
-                </div>
+                </section>
             </li>`;
         }
         contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
     }
 
-    visibleDetails.innerHTML = `<div>${contentHtml}</div>`;
+    visibleDetails.innerHTML = `${contentHtml}`;
 };
 
-// Renders skills details
-const showSkillsDetails = (user) => {
+
+const showSkillsDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
@@ -138,20 +138,68 @@ const showSkillsDetails = (user) => {
     const skills = user.skills || [];
 
     if (skills.length === 0) {
-        visibleDetails.innerHTML = `<ul class="visible-details">
-            <li><p>No skills added yet.</p></li>
-        </ul>`;
+        visibleDetails.innerHTML = `<p style="color:#666; font-size:0.95rem;">No skills added yet. Click “Edit profile” to add your skills.</p>`;
         return;
     }
 
-    let skillsElement = '';
-    for (let i = 0; i < skills.length; i++) {
-        skillsElement += `<li><p>${skills[i]}</p></li>`;
-    }
+    try {
+        const response = await fetch(backendURL() + '/api/users/data/skills');
+        const skillCategories = await response.json();
 
-    visibleDetails.innerHTML = `<ul class="visible-details">
-        ${skillsElement}
-    </ul>`;
+        const skillCategoryMap = {};
+        for (const [category, skillList] of Object.entries(skillCategories)) {
+            skillList.forEach(skill => {
+                skillCategoryMap[skill.toLowerCase().trim()] = category;
+            });
+        }
+
+        let contentHtml = `<header style="margin-bottom: 16px;">
+            <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
+                Your Skills
+            </h3>
+            <p style="margin:0; font-size:0.9rem; color:#666;">
+                These are your standardised skills recognised across South African industries.
+            </p>
+        </header>`;
+
+        let cardsHtml = '';
+        for (let i = 0; i < skills.length; i++) {
+            const skill = skills[i].trim();
+            const skillLower = skill.toLowerCase();
+            const category = skillCategoryMap[skillLower] || 'General';
+
+            cardsHtml += `
+            <li style="
+                list-style: none;
+                background: #ffffff;
+                border-radius: 8px;
+                padding: 16px 20px;
+                margin-bottom: 12px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            ">
+                <section>
+                    <h4 style="margin:0 0 4px 0; font-size:1.1rem; font-weight:600; color:#1a202c;">
+                        ${skill}
+                    </h4>
+                    <p style="margin:0; font-size:0.92rem; color:#4a5568;">
+                        <strong>Category:</strong> ${category}
+                    </p>
+                </section>
+            </li>`;
+        }
+        contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
+        visibleDetails.innerHTML = `${contentHtml}`;   // no wrapping div
+    } catch (err) {
+        let skillsElement = '';
+        for (let i = 0; i < skills.length; i++) {
+            skillsElement += `<li>${skills[i]}</li>`;
+        }
+        visibleDetails.innerHTML = `<ul class="visible-details">${skillsElement}</ul>`;
+    }
 };
 
 // Renders attachments when the user clicks the attachments tab
@@ -200,7 +248,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
             attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
-            // TODO: Set a tab query param so that we start with the tab provided provided
             // Start with personal details
             showPersonalDetails(data.user);
         } else {
