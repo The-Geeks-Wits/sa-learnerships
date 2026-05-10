@@ -80,7 +80,7 @@ exports.login = async (req, res) => {
         }
 
         const rememberMe = req.body.rememberMe;
-        const token = utils.generateAccessToken(email, user._id);
+        const token = utils.generateAccessToken(email, user._id, user.role);
 
         res.status(200).json({
             token,
