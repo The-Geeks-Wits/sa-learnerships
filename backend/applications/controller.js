@@ -90,7 +90,7 @@ exports.getMyApplications = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({
-                error: 'Creator required! Please provide the creator of opportunities',
+                error: 'User not found! Please log in to continue',
             });
         }
 
