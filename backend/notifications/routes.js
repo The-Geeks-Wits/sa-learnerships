@@ -5,12 +5,11 @@ const { isAuthenticated } = require('../middlewares/auth.js');
 const router = express.Router();
 
 const getMyNotifications = notificationsController.getMyNotifications;
-const getNotificationById = notificationsController.getNotificationById;
+const getNotification = notificationsController.getNotification;
 const updateNotification = notificationsController.updateNotification;
 
 router.get('/mine', isAuthenticated, getMyNotifications);
-router.get('/', isAuthenticated, getMyNotifications);
-router.get('/:id', isAuthenticated, getNotificationById);
+router.get('/:id', isAuthenticated, getNotification);
 router.patch('/:id', isAuthenticated, updateNotification);
 
 module.exports = router;
