@@ -33,12 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const url = backendURL() + '/opportunities/mine';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
-
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         if (response.ok) {
