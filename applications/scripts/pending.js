@@ -16,25 +16,18 @@ const getUserRole = async () => {
 };
 
 
-const getApplicationElement = (application, dateSubmitted, role) => {
+const getApplicationElement = (application, dateSubmitted) => {
     let location = application.opportunity.location;
     if (!location) location = 'Not provided';
-    let buttons = '';
-    if (role === 'provider'){
-        buttons = `
-            <section class = "application-actions">
-                <button class = "shortlist-btn coloured-btn"
-                    data-id = "${application._id}">
-                    Shortlist
-                </button>
+    let buttons = `
+        <section class = "application-actions">
+            <button class = "view-btn coloured-btn"
+                data-id = "${application._id}">
+                View Full Details
+            </button>
+        </section>
+    `;
 
-                <button class="reject-btn transparent-btn"
-                    data-id="${application._id}">
-                    Reject
-                </button>
-            </section>
-        `;
-    }
 
     return `<li>
         <h3>${application.opportunity.title}</h3>
@@ -80,8 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 applications.innerHTML += getApplicationElement(
                     application,
-                    application.createdAt,
-                    role
+                    application.createdAt
                 );
             });
         } else {
@@ -100,22 +92,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 applications.addEventListener('click', async (event)=> {
-    if (event.target.classList.contains('shortlist-btn')){
+
+    if (event.target.classList.contains('view-btn')){
         const applicationId = event.target.getAttribute('data-id');
-
-        const response = await fetch(backendURL() + `/applications/${applicationId}/shortlist`,{
-                method: 'PATCH',
-                credentials: 'include',
-            }
-        );
-
-        const data = await response.json();
-        if (response.ok){
-            alert(data.message);
-            window.location.reload();
-        }else{
-            pageError.style.display = 'flex';
-            pageError.innerHTML = `<p>${data.error}</p>`;
-        }
+        window.location.href = `/applications/view.html?id=${applicationId}`;
     }
 });
