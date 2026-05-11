@@ -163,7 +163,7 @@ exports.shortlistApplication = async (req, res) => {
             });
         }
 
-        const userId = req.user._id || req.user.userId || req.user.id;
+        const userId = req.user._id;
 
         const application = await Application.findById(applicationId).populate('opportunity');
 
@@ -198,3 +198,47 @@ exports.shortlistApplication = async (req, res) => {
         });
     }
 };
+
+exports.getApplicationDetails = async (req,res) =>{
+    try{
+        if (!req.user){
+            return res.status(401).json({
+                error: 'You are not logged in! Please log in to continue',
+            });
+        }
+
+        const applicationId = req.params.id;
+        const application = await Application.findById(applicationId);
+
+        if (!application){
+            return res.status(404).json({
+                error : "Application not found"
+            });
+        }
+
+        const opportunity = await Opportunity.findById(application.opportunity);
+
+        const isApplicant = (application.applicant.toString() === req.user._id.toString());
+        const isProvider = (opportunity.creator.toString() == req.user._id.toString());
+        
+        if (!isApplicant && !isProvider){
+            return res.status(403).json({
+                error: 'Unauthorized'
+            });
+        }
+
+        const detailedApplication = await Application.findById(applicationId).populate('applicant').populate({
+            path: 'opportunity',
+            populate:{
+                path: 'creator',
+                select: 'firstName lastName'
+            }
+        });
+
+        res.status(200).json({detailedApplication});
+
+    
+    }catch{
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+    }
+}
