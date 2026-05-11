@@ -4,6 +4,7 @@ const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const applications = document.getElementById('applications');
+const pageDescription = document.getElementById('page-description');
 
 const getUserRole = async () => {
     const response = await fetch(backendURL() + '/api/users/profile', {
@@ -47,6 +48,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.innerHTML = '<p>Loading...</p>';
 
         const role = await getUserRole();
+
+        if (role === 'provider'){
+            pageDescription.innerHTML = 'This is where you can view applications that you have shortlisted for all opportunities that you created. You can open each application to review the candidate details again.';
+
+        }else{
+            pageDescription.innerHTML = 'This is a list of your shortlisted applications. You can open each application to review the opportunity details and track any further updates.';
+        }
 
         const url =
             role === 'provider'

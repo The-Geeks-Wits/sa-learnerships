@@ -4,6 +4,7 @@ const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const applications = document.getElementById('applications');
+const pageDescription = document.getElementById('page-description');
 
 const getUserRole = async () => {
     const response = await fetch(backendURL() + '/api/users/profile', {
@@ -19,6 +20,15 @@ const getApplicationElement = (opportunity, application) => {
     let location = opportunity.location;
     if (!location) location = 'Not provided';
 
+     let buttons = `
+        <section class="application-actions">
+            <button class="view-btn coloured-btn"
+                data-id="${application._id}">
+                View Full Details
+            </button>
+        </section>
+    `;
+
     return `<li>
         <section class="application-heading">
             <h3>${opportunity.title}</h3>
@@ -29,6 +39,7 @@ const getApplicationElement = (opportunity, application) => {
                 <p><b>Location:</b> ${location}</p>
                 <p><b>Date submitted:</b> ${application.createdAt.slice(0, 10)}</p>
             </section>
+            ${buttons}
         </section>
     </li>`;
 };
@@ -39,6 +50,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.innerHTML = '<p>Loading...</p>';
 
         const role = await getUserRole();
+
+        if (role === 'provider'){
+            pageDescription.innerHTML = 'This is where you can view applications for all opportunities you created. You can review candidate applications and view their full details.'
+        }else{
+            pageDescription.innerHTML = 'This is where you can view all applications that you have submitted. You can open each application to review its full details and current status.'
+        }
 
         const url =
             role === 'provider'
@@ -81,5 +98,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
+    }
+});
+
+applications.addEventListener('click', (event) => {
+    if (event.target.classList.contains('view-btn')) {
+        const applicationId = event.target.getAttribute('data-id');
+        window.location.href = `/applications/view.html?id=${applicationId}`;
     }
 });

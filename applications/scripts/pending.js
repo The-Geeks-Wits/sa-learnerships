@@ -4,6 +4,7 @@ const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
 const pageContainer = document.getElementById('page-container');
 const applications = document.getElementById('applications');
+const pageDescription = document.getElementById('page-description');
 
 const getUserRole = async () => {
     const response = await fetch(backendURL() + '/api/users/profile', {
@@ -46,6 +47,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
         const role = await getUserRole();
+
+        if (role === 'provider'){
+            pageDescription.innerHTML = 'This is a list of pending applications for the opportunities that you have created. You can open each application to review applicant details before making a decision.';
+        }else{
+            pageDescription.innerHTML = 'This is a list of applications that you have submitted and are still under review. We will send you a notification whenever there are any changes to your application';
+        }
+
         const url =
             role === 'provider'
                 ? backendURL() + '/applications?status=Pending'

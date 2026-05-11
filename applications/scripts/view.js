@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async ()=> {
                 <p><b>Date Posted:</b> ${opportunity.createdAt.slice(0,10)}</p>
             `;
 
-            if (role === 'provider'){
+            if (role === 'provider' && application.status == 'Pendiing'){
                 actions.innerHTML = `
                     <button id="shortlist-btn" class="coloured-btn">
                         Shortlist
