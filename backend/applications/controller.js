@@ -55,9 +55,7 @@ exports.submitApplication = async (req, res) => {
             createdAt: application.createdAt,
         });
     } catch (error) {
-        res.status(500).json({
-            error: 'Something went wrong! Please try again later',
-        });
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
 };
@@ -79,9 +77,7 @@ exports.getApplication = async (req, res) => {
 
         res.status(200).json({ applications });
     } catch (error) {
-        res.status(500).json({
-            error: 'Something went wrong! Please try again later',
-        });
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
 };
@@ -110,8 +106,9 @@ exports.getMyApplications = async (req, res) => {
         }
 
         res.status(200).json({ applications });
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -139,7 +136,8 @@ exports.getAllApplications = async (req, res) => {
         }
 
         res.status(200).json({ applications });
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
