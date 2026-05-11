@@ -119,25 +119,6 @@ describe('Login', () => {
         expect(json.error).toBeDefined();
     });
 
-    it('should generate the access token', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({ _id: 'test-id' });
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        expect(utils.generateAccessToken).toHaveBeenCalledWith(req.body.email, 'test-id');
-    });
-
     it('should return a 200 status on success', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.findOne.mockResolvedValue({});

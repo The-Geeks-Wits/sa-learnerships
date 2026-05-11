@@ -1,5 +1,5 @@
 const Opportunity = require('./Opportunity.js');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 exports.createOpportunity = async (req, res) => {
     try {
@@ -120,10 +120,7 @@ exports.getOpportunity = async (req, res) => {
                 error: 'Opportunity id required! Please provide a valid opportunity id',
             });
         }
-        const id = req.params.id;
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(404).json({ error: 'Invalid opportunity ID format' });
-        }
+
         // TODO: Catch the mongoose cast / invalid id exception
         const opportunity = await Opportunity.findById(req.params.id);
 
