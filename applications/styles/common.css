@@ -59,15 +59,22 @@ aside #applications-nav-options {
 
 #applications li h3 {
     font-size: 24px;
+    line-height: 22px;
 }
 
-#applications li p {
+#applications .application-details p {
     margin-top: 10px;
     font-size: 14px;
 }
 
-#applications li p b {
+#applications .application-details p b {
     font-size: 16px;
+}
+
+.application-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .application-details {
