@@ -170,7 +170,7 @@ actions.addEventListener('click', async(event)=>{
 
                 if (response.ok){
                     alert(data.message);
-                    window.location.reload();
+                    window.location.href = '/applications/shortlisted.html';
                 }else{
                     pageError.style.display = 'flex';
                     pageError.innerHTML = `<p>${data.error}</p>`;
