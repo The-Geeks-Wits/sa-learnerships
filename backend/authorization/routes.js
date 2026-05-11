@@ -63,7 +63,7 @@ router.get('/:id', controller.getUserById);
 router.put('/:id', isAuthenticated, isAdmin, controller.updateUser);
 router.delete('/:id', isAuthenticated, isAdmin, controller.deleteUser);
 
-// ── CV upload route – fixed to accept Authorization header ──
+// CV upload route – fixed to accept Authorization header 
 const cvAuth = (req, res, next) => {
     const token = req.headers.authorization || req.cookies?.jwt;
     if (!token) return res.status(401).json({ message: 'No Token Provided' });
