@@ -61,6 +61,7 @@ const getApplicationsOptions = (role) => {
     const applicantOptions = `<ul>
         <li id="all-applications-nav-tab"><a href="/applications/index.html">All Applications</a></li>
         <li id="pending-nav-tab"><a href="/applications/pending.html">Pending</a></li>
+        <li id="shortlisted-nav-tab"><a href="/applications/shortlisted.html">Shortlisted</a></li>
         <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
     </ul>`;
 
@@ -84,11 +85,10 @@ const showNotificationsCount = async () => {
         const url = backendURL() + '/notifications/mine';
 
         // By the time this method is called we can be sure that the existence of the jwt has been confirmed and the jwt does exist
-        const token = localStorage.getItem('jwt');
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         const data = await response.json();
@@ -105,8 +105,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/api/users/profile';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
 
         // The sooner we show them the better, since this will happen asynchronously
         showNotificationsCount();
@@ -117,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include'
         });
 
         let userRole = 'applicant';

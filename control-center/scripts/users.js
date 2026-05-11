@@ -13,7 +13,10 @@ async function loadUsers() {
         tableState.innerHTML = '<p>Loading...</p>';
 
         const url = backendURL() + '/api/users';
-        const res = await fetch(url);
+        const res = await fetch(url,{
+            method: 'GET',
+            credentials: 'include',
+        });
         const users = await res.json();
 
         renderUsers(users);

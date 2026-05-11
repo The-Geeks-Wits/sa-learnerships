@@ -43,6 +43,12 @@ exports.register = async (req, res) => {
         });
 
         const token = utils.generateAccessToken(email, user._id);
+        res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax',
+        maxAge: 3600000,
+        });
 
         res.status(201).json({
             token,

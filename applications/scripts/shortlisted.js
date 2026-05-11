@@ -16,19 +16,19 @@ const getUserRole = async () => {
     return data.user.role;
 };
 
-
 const getApplicationElement = (application, dateSubmitted) => {
     let location = application.opportunity.location;
+
     if (!location) location = 'Not provided';
+
     let buttons = `
-        <section class = "application-actions">
-            <button class = "view-btn coloured-btn"
-                data-id = "${application._id}">
+        <section class="application-actions">
+            <button class="view-btn coloured-btn"
+                data-id="${application._id}">
                 View Full Details
             </button>
         </section>
     `;
-
 
     return `<li>
         <h3>${application.opportunity.title}</h3>
@@ -46,18 +46,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>Loading...</p>';
+
         const role = await getUserRole();
 
         if (role === 'provider'){
-            pageDescription.innerHTML = 'This is a list of pending applications for the opportunities that you have created. You can open each application to review applicant details before making a decision.';
+            pageDescription.innerHTML = 'This is where you can view applications that you have shortlisted for all opportunities that you created. You can open each application to review the candidate details again.';
+
         }else{
-            pageDescription.innerHTML = 'This is a list of applications that you have submitted and are still under review. We will send you a notification whenever there are any changes to your application';
+            pageDescription.innerHTML = 'This is a list of your shortlisted applications. You can open each application to review the opportunity details and track any further updates.';
         }
 
         const url =
             role === 'provider'
-                ? backendURL() + '/applications?status=Pending'
-                : backendURL() + '/applications/mine?status=Pending';
+                ? backendURL() + '/applications?status=Shortlisted'
+                : backendURL() + '/applications/mine?status=Shortlisted';
 
         const response = await fetch(url, {
             method: 'GET',
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageContainer.style.display = 'block';
 
             if (!data.applications || data.applications.length === 0) {
-                applications.innerHTML = '<p class="no-data">No pending applications found</p>';
+                applications.innerHTML = '<p class="no-data">No shortlisted applications found</p>';
                 return;
             }
 
@@ -90,6 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (err) {
         console.log(err);
+
         pageError.style.display = 'flex';
         pageError.innerHTML = '<p>An error occurred! Please try again later</p>';
     } finally {
@@ -98,10 +101,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-
-applications.addEventListener('click', async (event)=> {
-
-    if (event.target.classList.contains('view-btn')){
+applications.addEventListener('click', (event) => {
+    if (event.target.classList.contains('view-btn')) {
         const applicationId = event.target.getAttribute('data-id');
         window.location.href = `/applications/view.html?id=${applicationId}`;
     }

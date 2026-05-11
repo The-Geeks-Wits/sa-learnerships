@@ -25,14 +25,11 @@ const submitApplication = async (opportunityId) => {
     try {
         const url = backendURL() + '/applications';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
-
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: token,
             },
             body: JSON.stringify({ opportunityId }),
         });

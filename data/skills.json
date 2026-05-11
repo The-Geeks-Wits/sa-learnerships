@@ -1,0 +1,122 @@
+{
+  "Technical & Engineering Skills": [
+    "AutoCAD",
+    "Circuit Design",
+    "CNC Machining",
+    "Finite Element Analysis",
+    "HVAC Systems",
+    "Hydraulics",
+    "MATLAB",
+    "Process Control",
+    "Quality Assurance (QA)",
+    "Technical Drawing"
+  ],
+  "Information Technology & Digital Skills": [
+    "Agile Methodologies",
+    "AWS / Cloud Infrastructure",
+    "Cybersecurity Fundamentals",
+    "Data Visualisation (Power BI/Tableau)",
+    "Database Design (SQL)",
+    "DevOps Practices",
+    "Machine Learning",
+    "Network Configuration",
+    "Python Programming",
+    "Web Development (HTML/CSS/JS)"
+  ],
+  "Business & Management Skills": [
+    "Budgeting & Forecasting",
+    "Change Management",
+    "Contract Negotiation",
+    "Lean Six Sigma",
+    "Performance Management",
+    "Project Management (PMBOK/PRINCE2)",
+    "Risk Assessment",
+    "Stakeholder Communication",
+    "Strategic Planning",
+    "Supply Chain Coordination"
+  ],
+  "Finance & Analytical Skills": [
+    "Accounting Software (Sage/Pastel)",
+    "Auditing",
+    "Cost-Benefit Analysis",
+    "Data Analysis (Excel/Google Sheets)",
+    "Financial Modelling",
+    "Financial Reporting (IFRS)",
+    "Payroll Administration",
+    "Quantitative Analysis",
+    "Tax Compliance (SARS)",
+    "Variance Analysis"
+  ],
+  "Communication & Language Skills": [
+    "Academic Writing",
+    "Copywriting",
+    "Interpretation Services",
+    "Presenting / Public Speaking",
+    "Proofreading",
+    "Report Writing",
+    "Social Media Content Creation",
+    "Technical Writing",
+    "Translation",
+    "Verbal Communication"
+  ],
+  "Creative & Design Skills": [
+    "Adobe Illustrator",
+    "Adobe Photoshop",
+    "Branding & Identity Design",
+    "Motion Graphics",
+    "Photography",
+    "Print Layout & Typesetting",
+    "UI/UX Design",
+    "Video Editing (Premiere Pro/DaVinci)",
+    "Visual Storytelling",
+    "Web Design Principles"
+  ],
+  "Healthcare & Wellness Skills": [
+    "Clinical Assessment",
+    "First Aid / CPR",
+    "Health & Safety Compliance",
+    "Infection Control",
+    "Medication Administration",
+    "Mental Health First Aid",
+    "Patient Counselling",
+    "Pharmacology Basics",
+    "Rehabilitation Techniques",
+    "Vital Signs Monitoring"
+  ],
+  "Education & Training Skills": [
+    "Classroom Management",
+    "Curriculum Development",
+    "E-Learning Authoring (Articulate/Captivate)",
+    "Facilitation Skills",
+    "Lesson Planning",
+    "Mentoring & Coaching",
+    "Online Teaching Platforms (Moodle/Google Classroom)",
+    "Special Needs Education",
+    "Student Assessment",
+    "Subject Matter Expertise"
+  ],
+  "Sales & Marketing Skills": [
+    "Brand Management",
+    "Content Marketing Strategy",
+    "CRM Software (Salesforce/HubSpot)",
+    "Customer Relationship Building",
+    "Lead Generation",
+    "Marketing Analytics",
+    "Negotiation Techniques",
+    "Proposal Writing",
+    "Search Engine Optimisation (SEO)",
+    "Social Media Advertising"
+  ],
+  "Administrative & Organisational Skills": [
+    "Calendar & Email Management",
+    "Data Entry (Accuracy & Speed)",
+    "Document Control",
+    "Event Coordination",
+    "Inventory Management",
+    "Minute Taking",
+    "Office Software (MS Office/Google Workspace)",
+    "Records Management",
+    "Scheduling & Planning",
+    "Travel Coordination"
+  ]
+}
