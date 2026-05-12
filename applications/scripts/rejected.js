@@ -15,18 +15,28 @@ const getUserRole = async () => {
     return data.user.role;
 };
 
-const getApplicationElement = (opportunity, dateSubmitted) => {
-    let location = opportunity.location;
+const getApplicationElement = (application, dateSubmitted) => {
+    let location = application.opportunity.location;
 
     if (!location) location = 'Not provided';
 
+    let buttons = `
+        <section class="application-actions">
+            <button class="view-btn coloured-btn"
+                data-id="${application._id}">
+                View Full Details
+            </button>
+        </section>
+    `;
+
     return `<li>
-        <h3>${opportunity.title}</h3>
+        <h3>${application.opportunity.title}</h3>
         <section class="application-details">
             <section>
                 <p><b>Location:</b> ${location}</p>
                 <p><b>Date submitted:</b> ${dateSubmitted.slice(0, 10)}</p>
             </section>
+            ${buttons}
         </section>
     </li>`;
 };
@@ -64,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!application.opportunity) return;
 
                 applications.innerHTML += getApplicationElement(
-                    application.opportunity,
+                    application,
                     application.createdAt
                 );
             });
@@ -80,5 +90,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
+    }
+});
+
+applications.addEventListener('click', (event) => {
+    if (event.target.classList.contains('view-btn')) {
+        const applicationId = event.target.getAttribute('data-id');
+        window.location.href = `/applications/view.html?id=${applicationId}`;
     }
 });
