@@ -181,7 +181,7 @@ exports.rejectApplication = async (req, res) => {
         try {
            
             const title = `Application Update - ${application.opportunity.title}`;
-            const message = `Your application for ${application.opportunity.title} has been reviewed carefully. Unfortunately, it was not selected at this time.`;
+            const message = `After careful consideration, we regret to inform you that your application for the ${application.opportunity.title} opportunity was not successful at this time.`;
             await sendNotification(application.applicant, title, message);
         } catch (notifError) {
             console.log('Notification error (non-critical):', notifError.message);
@@ -201,6 +201,52 @@ exports.rejectApplication = async (req, res) => {
         res.status(500).json({ 
             error: 'Something went wrong! Please try again later',
             details: error.message 
+        });
+    }
+};
+
+exports.shortlistApplication = async (req, res) => {
+    try {
+        const applicationId = req.params.id;
+
+        if (!req.user) {
+            return res.status(401).json({
+                error: 'You are not logged in! Please log in to continue',
+            });
+        }
+
+        const userId = req.user._id;
+
+        const application = await Application.findById(applicationId).populate('opportunity');
+
+        if (!application) {
+            return res.status(404).json({
+                error: 'Application not found',
+            });
+        }
+
+        if (application.opportunity.creator.toString() !== userId.toString()) {
+            return res.status(403).json({
+                error: 'You can only shortlist applications for your own opportunities',
+            });
+        }
+
+        application.status = 'Shortlisted';
+        await application.save();
+
+        const title = `Application Update - ${application.opportunity.title}`;
+        const message = `After careful consideration, we are pleased to inform you that your application for the ${application.opportunity.title} opportunity has been shortlisted.`;
+
+        await sendNotification(application.applicant, title, message);
+
+        res.status(200).json({
+            message: 'Application shortlisted successfully',
+            application,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
         });
     }
 };

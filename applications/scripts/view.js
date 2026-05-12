@@ -182,3 +182,38 @@ actions.addEventListener('click', async(event)=>{
     }
 
 });
+
+actions.addEventListener('click', async(event)=>{
+    
+    try{
+            if (event.target.id === "reject-btn"){
+
+                const confirmed = confirm(
+                    'Are you sure you want to reject this application?'
+                );
+
+                if (!confirmed){
+                    return;
+                }
+                const response = await fetch(backendURL() + `/applications/${applicationId}/reject`,{
+                    method: 'PATCH',
+                    credentials: 'include',
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok){
+                    alert(data.message);
+                    window.location.href = '/applications/rejected.html';
+                }else{
+                    pageError.style.display = 'flex';
+                    pageError.innerHTML = `<p>${data.error}</p>`;
+                }
+            }
+    }catch(err){
+        pageError.style.display = 'flex';
+        pageError.innerHTML = '<p>An error has occurred! Please try again later</p>';
+    }
+
+});
