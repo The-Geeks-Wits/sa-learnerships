@@ -14,7 +14,7 @@ const getNotificationElement = (id, title, createdAt) => {
             <section>
                 <p><b>Sent:</b> ${createdAt.slice(0, 10)}</p>   
             </section>
-            <secttion>
+            <section>
                 <button class="transparent-btn full-details-btn" data-id="${id}">Full Details</button>
             </section>
         </section>
