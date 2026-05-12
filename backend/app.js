@@ -85,7 +85,7 @@ app.use('/api/users/data', dataRoutes);
 app.use('/health', (req, res) => {
     res.status(200).json({ status: 'healthy' });
 });
-
+app.use(express.static(path.join(__dirname, '../')));
 // Error handling middleware
 app.use((req, res) => {
     res.status(404).json({ error: `${req.method} ${req.url} not found` });

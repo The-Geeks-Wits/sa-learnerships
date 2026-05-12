@@ -149,52 +149,58 @@ exports.getAllApplications = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
     }
 };
-
-
-//shortlisting an application
-
-exports.shortlistApplication = async (req, res) => {
+exports.rejectApplication = async (req, res) => {
     try {
         const applicationId = req.params.id;
 
         if (!req.user) {
-            return res.status(401).json({
-                error: 'You are not logged in! Please log in to continue',
-            });
+            return res.status(401).json({ error: 'Not authenticated' });
         }
-
-        const userId = req.user._id;
 
         const application = await Application.findById(applicationId).populate('opportunity');
-
+        
         if (!application) {
-            return res.status(404).json({
-                error: 'Application not found',
+            return res.status(404).json({ error: 'Application not found' });
+        }
+
+        if (application.opportunity.creator.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ 
+                error: 'You can only reject applications for your own opportunities' 
             });
         }
 
-        if (application.opportunity.creator.toString() !== userId.toString()) {
-            return res.status(403).json({
-                error: 'You can only shortlist applications for your own opportunities',
+        if (application.status !== 'Pending') {
+            return res.status(400).json({ 
+                error: `This application has already been ${application.status.toLowerCase()}` 
             });
         }
 
-        application.status = 'Shortlisted';
+        application.status = 'Rejected';
         await application.save();
 
-        const title = `Application Shortlisted - ${application.opportunity.title}`;
-        const message = `Congratulations! Your application for ${application.opportunity.title} has been shortlisted.`;
-
-        await sendNotification(application.applicant, title, message);
-
+        try {
+           
+            const title = `Application Update - ${application.opportunity.title}`;
+            const message = `Your application for ${application.opportunity.title} has been reviewed carefully. Unfortunately, it was not selected at this time.`;
+            await sendNotification(application.applicant, title, message);
+        } catch (notifError) {
+            console.log('Notification error (non-critical):', notifError.message);
+        }
+        
         res.status(200).json({
-            message: 'Application shortlisted successfully',
-            application,
+            success: true,
+            message: 'Application rejected successfully',
+            application: {
+                id: application._id,
+                status: application.status,
+                opportunity: application.opportunity.title
+            }
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+        console.error('Reject application error:', error);
+        res.status(500).json({ 
             error: 'Something went wrong! Please try again later',
+            details: error.message 
         });
     }
 };

@@ -88,8 +88,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageError.style.display = 'flex';
         pageError.innerHTML = '<p>An error occurred! Please try again later</p>';
     } finally {
+        console.error('Error loading rejected applications:', err);
+        pageError.style.display = 'flex';
+        pageError.innerHTML = `<p>An error occurred while loading your applications. Please try again later.</p>`;
         pageState.style.display = 'none';
-        pageState.innerHTML = '';
     }
 });
 

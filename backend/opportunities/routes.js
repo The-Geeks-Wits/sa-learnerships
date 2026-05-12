@@ -12,13 +12,14 @@ const getAllOpportunities = opportunitiesController.getAllOpportunities;
 const getMyOpportunities = opportunitiesController.getMyOpportunities;
 const resubmitOpportunity = opportunitiesController.resubmitOpportunity;
 
-router.post('/', isAuthenticated, isProvider, createOpportunity);
 router.get('/mine', isAuthenticated, isProvider, getMyOpportunities);
 router.get('/', getAllOpportunities);
-router.get('/:id', getOpportunity);
+router.post('/', isAuthenticated, isProvider, createOpportunity);
 
 router.post('/:id/approve', isAuthenticated, isAdmin, approveOpportunity);
 router.post('/:id/reject', isAuthenticated, isAdmin, rejectOpportunity);
 router.post('/:id/resubmit', isAuthenticated, isProvider, resubmitOpportunity);
+
+router.get('/:id', getOpportunity);
 
 module.exports = router;
