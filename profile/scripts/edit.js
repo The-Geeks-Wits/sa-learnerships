@@ -119,44 +119,52 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
     });
 };
 
-//skills submission with confirmation
+//skills management with confirmation (uses only the selected skill, backend handles duplicates)
 const addSkillSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
-        const skillElement = document.getElementById('skill');
-        const saveBtn = document.getElementById('save-profile-btn');
+        const skillSelect = document.getElementById('skill-name');   //only the selected skill here
+        const saveBtn = document.getElementById('add-skill-btn');
         const errorElement = document.getElementById('error-message');
 
         try {
             event.preventDefault();
             const url = backendURL() + '/api/users/profile';
+            const token = localStorage.getItem('jwt');
+            if (!token) return (window.location.href = '../../login.html');
 
-            if (skillElement.value) {
-                if (!confirm('Are you sure you want to add this skill?')) return;
+            const selectedSkill = skillSelect.value;
+            if (!selectedSkill) {
+                errorElement.innerHTML = 'Please select a skill.';
+                return;
+            }
 
-                user.skills.push(skillElement.value.trim());
-                const response = await fetch(url, {
-                    method: 'PUT',
-                    credentials: 'include',
-                    headers: {'Content-Type': 'application/json' },
-                    body: JSON.stringify({ skills: user.skills }),
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    alert('Skills details updated successfully!');
-                    window.location.href = 'view.html?tab=skills';
-                } else {
-                    errorElement.innerHTML = data.error;
-                }
+            if (!confirm('Are you sure you want to add this skill?')) return;
+
+//adding new skill to array
+            user.skills.push(selectedSkill.trim());
+
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { Authorization: token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ skills: user.skills }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Skill added successfully!');
+                window.location.href = 'view.html?tab=skills';
+            } else {
+                errorElement.innerHTML = data.error;
             }
         } catch (err) {
             errorElement.innerHTML = 'Something went wrong! Please try again later';
         } finally {
-            saveBtn.textContent = 'Save profile';
+            saveBtn.textContent = 'Add skill';
         }
     });
 };
 
-//these are user personal details
+//these are user personal details 
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -164,7 +172,8 @@ const showPersonalDetails = (user) => {
     attachmentsTab.classList.remove('visible');
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
-
+//i used inner html here
+//to decouple the form structure from the main html and make it easier to manage the dynamic data 
     visibleDetails.innerHTML = `<form id="personal-details-form">
         <section class="input-group">
             <label for="firstName">First Name</label>
@@ -218,9 +227,7 @@ const showPersonalDetails = (user) => {
     addPersonalDetailsSubmitListener(form, user);
 };
 
-//education info tab
-//i used inner html so that i decouple the html of the full profile from the education one
-//more testable and maintainable this way
+//education info tab 
 const showEducationDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
@@ -300,27 +307,72 @@ const showEducationDetails = async (user) => {
         visibleDetails.innerHTML = `<p>Failed to load education options. Please try again later.</p>`;
     }
 };
-//showing verified skills in the profile page
-const showSkillsDetails = (user) => {
+
+//skills tab with dropdown categories and confirmation
+const showSkillsDetails = async (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.add('visible');
     attachmentsTab.classList.remove('visible');
 
-    visibleDetails.innerHTML = `<form id="skill-form">
-        <section class="input-group">
-            <label for="skill">Skill</label>
-            <input type="text" id="skill" name="skill" placeholder="Please enter your skill name" />
-        </section>
-        <p id="error-message"></p>
-        <button id="add-skill-btn" class="coloured-btn">Add skill</button>
-    </form>`;
+    try {
+        //Fetching the standardised skills data
+        const response = await fetch(backendURL() + '/api/users/data/skills');
+        const skillCategories = await response.json();   // { "Engineering": [...], "ICT": [...], ... }
 
-    const form = document.getElementById('skill-form');
-    addSkillSubmitListener(form, user);
+        //Building category dropdown
+        const categoryOptions = Object.keys(skillCategories)
+            .map(cat => `<option value="${cat}">${cat}</option>`)
+            .join('');
+
+        visibleDetails.innerHTML = `<form id="skill-form">
+            <section class="input-group">
+                <label for="skill-category">Skill Category</label>
+                <select id="skill-category" name="skill-category">
+                    <option value="">Select a category</option>
+                    ${categoryOptions}
+                </select>
+            </section>
+            <section class="input-group">
+                <label for="skill-name">Skill</label>
+                <select id="skill-name" name="skill-name" disabled>
+                    <option value="">Select a category first</option>
+                </select>
+            </section>
+            <p id="error-message"></p>
+            <button id="add-skill-btn" class="coloured-btn">Add skill</button>
+        </form>`;
+
+        //Handling category change – populate skill dropdown
+        const categorySelect = document.getElementById('skill-category');
+        const skillSelect = document.getElementById('skill-name');
+
+        categorySelect.addEventListener('change', () => {
+            const selectedCategory = categorySelect.value;
+            skillSelect.innerHTML = '<option value="">Select a skill</option>';
+
+            if (selectedCategory && skillCategories[selectedCategory]) {
+                skillSelect.disabled = false;
+                skillCategories[selectedCategory].forEach(skill => {
+                    const option = document.createElement('option');
+                    option.value = skill;
+                    option.textContent = skill;
+                    skillSelect.appendChild(option);
+                });
+            } else {
+                skillSelect.disabled = true;
+                skillSelect.innerHTML = '<option value="">Select a category first</option>';
+            }
+        });
+
+        const form = document.getElementById('skill-form');
+        addSkillSubmitListener(form, user);
+    } catch (err) {
+        visibleDetails.innerHTML = `<p>Failed to load skills. Please try again later.</p>`;
+    }
 };
 
-// Renders attachments when the user clicks the attachments tab
+//Renders attachments when the user clicks the attachments tab 
 const showAttachments = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
