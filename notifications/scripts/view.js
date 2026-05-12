@@ -45,6 +45,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const data = await response.json();
         if (response.ok) {
             await markNotification(data._id, true); // Mark notification as read
+
+            const notificationCounts = document.querySelectorAll('.notifications-count');
+
+            notificationCounts.forEach((count) => {
+                const currentCount = Number(count.textContent);
+
+                if (currentCount > 0) {
+                    count.textContent = currentCount - 1;
+                }
+            });
+
+
             pageContainer.style.display = 'block';
             pageTitle.innerHTML = data.title;
             notificationMessage.innerHTML = data.message;
