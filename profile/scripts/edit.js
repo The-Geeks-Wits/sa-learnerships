@@ -156,8 +156,8 @@ const addSkillSubmitListener = (formElement, user) => {
 
             const response = await fetch(url, {
                 method: 'PUT',
-                credentials: 'include',                         
-                headers: {'Content-Type': 'application/json' },
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ skills: user.skills }),
             });
 
