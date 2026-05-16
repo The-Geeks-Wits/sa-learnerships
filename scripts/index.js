@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <section id="reports-nav-options" class="sidebar-nav-options">
                         <ul>
                             <li id="custom-report-tab"><a href="/opportunities/custom.html">Custom View</a></li>
-                            <li id="applications-volume-tab"><a href="/opportunities/volume.html">Application Volume</a></li>
+                            <li id="applications-volume-tab"><a href="/opportunities/application-volume.html">Application Volume</a></li>
                             <li id="placement-rate-tab"><a href="/opportunities/placement.html">Placement Success</a></li>
                         </ul>
                     </section>

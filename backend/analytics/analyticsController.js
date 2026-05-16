@@ -1,5 +1,5 @@
 const Application = require('../applications/Applications.js');   // adjust path if needed
-const Opportunity = require('../opportunities/Opportunity.js')
+const Opportunity = require('../opportunities/Opportunity.js');
 const User = require('../authorization/User.js');                // adjust path if needed
 const mongoose = require('mongoose');
 
@@ -120,7 +120,7 @@ exports.getApplicationVolume = async (req,res) => {
             applications = await Application.find().populate('opportunity');
         }
 
-        else if (user.role == 'provider'){
+        else if (user.role === 'provider'){
             const opportunities = await Opportunity.find({creator : user._id});
             const opportunityIds = opportunities.map((opportunity) => {
                 return opportunity._id;
@@ -144,15 +144,15 @@ exports.getApplicationVolume = async (req,res) => {
             const title = application.opportunity.title;
 
             if (!applicationVolume[title]){
-                volume[title] = {
+                applicationVolume[title] = {
                     opportunityTitle : title,
                     totalApplications: 0
                 };
             }
-            volume[title].totalApplications++;
+            applicationVolume[title].totalApplications++;
            
         }
-         const results = Object.values(volume);
+         const results = Object.values(applicationVolume);
 
         return res.status(200).json({
             success: true,
