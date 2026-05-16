@@ -1,4 +1,5 @@
 const Application = require('../applications/Applications.js');   // adjust path if needed
+const Opportunity = require('../opportunities/Opportunity.js')
 const User = require('../authorization/User.js');                // adjust path if needed
 const mongoose = require('mongoose');
 
@@ -109,3 +110,59 @@ exports.getCustomReport = async (req, res) => {
         return res.status(500).json({ error: 'Failed to generate custom report.' });
     }
 };
+
+exports.getApplicationVolume = async (req,res) => {
+    try{
+        let applications;
+        let user = req.user;
+
+        if (user.role === 'admin'){
+            applications = await Application.find().populate('opportunity');
+        }
+
+        else if (user.role == 'provider'){
+            const opportunities = await Opportunity.find({creator : user._id});
+            const opportunityIds = opportunities.map((opportunity) => {
+                return opportunity._id;
+            })
+            applications = await Application.find({
+                opportunity: { $in: opportunityIds}
+            }).populate('opportunity');
+        }
+        else{
+            return res.status(403).json({
+                error: 'Access denied'
+            });
+        }
+
+        const applicationVolume = {};
+        for (let i = 0; i < applications.length; i++){
+            const application = applications[i];
+            if (!application.opportunity){
+                continue;
+            }
+            const title = application.opportunity.title;
+
+            if (!applicationVolume[title]){
+                volume[title] = {
+                    opportunityTitle : title,
+                    totalApplications: 0
+                };
+            }
+            volume[title].totalApplications++;
+           
+        }
+         const results = Object.values(volume);
+
+        return res.status(200).json({
+            success: true,
+            data: results
+        });
+    }catch(err){
+        console.error('Application volume error:',err)
+        return res.status(500).json({
+            error : 'Failed to load application volume report'
+        });
+    }
+
+}
