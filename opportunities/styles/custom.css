@@ -1,9 +1,5 @@
-/* -----------------------------------------------
-   Custom View Analytics – custom.css
-   Uses flexbox for better layout & alignment
------------------------------------------------ */
 
-/* Main content width limit */
+
 #main-details {
     max-width: 950px;
 }
@@ -21,7 +17,6 @@
     font-size: 16px;
 }
 
-/* Form sections */
 #custom-report-form fieldset {
     border: 1px solid #e2e8f0;
     border-radius: 8px;
@@ -37,18 +32,17 @@
     padding: 0 8px;
 }
 
-/* ===== DIMENSIONS & METRICS – flex row with wrap ===== */
 #dimension-options,
 #metric-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 24px;           /* row-gap, column-gap */
+    gap: 12px 24px;           
     margin-top: 4px;
 }
 
 #dimension-options label,
 #metric-options label {
-    display: flex;            /* align checkbox/radio with text */
+    display: flex;            
     align-items: center;
     gap: 6px;
     font-size: 0.95rem;
@@ -64,7 +58,6 @@
     margin: 0;
 }
 
-/* ===== FILTERS – flex row with wrap and aligned items ===== */
 #filter-options {
     display: flex;
     flex-wrap: wrap;
@@ -90,14 +83,12 @@
     min-width: 140px;
 }
 
-/* Generate button */
 #custom-report-form button[type="submit"] {
     margin-top: 12px;
     background-color: #1562f2;
     border: 1px solid #1562f2;
 }
 
-/* Results container – initially hidden */
 #report-results {
     margin-top: 30px;
 }
@@ -109,13 +100,11 @@
     margin-bottom: 16px;
 }
 
-/* Chart area */
 #chart-container {
     max-width: 800px;
     margin-bottom: 30px;
 }
 
-/* Table styling */
 #results-table {
     width: 100%;
     border-collapse: collapse;
@@ -140,19 +129,16 @@
     background-color: #f9fafb;
 }
 
-/* Export button */
 #export-csv {
     background-color: #1562f2;
     border: 1px solid #1562f2;
     margin-right: 10px;
 }
 
-/* Utility */
 .hidden {
     display: none;
 }
 
-/* ========= RESPONSIVE TWEAK ========= */
 @media (max-width: 600px) {
     #dimension-options,
     #metric-options,
