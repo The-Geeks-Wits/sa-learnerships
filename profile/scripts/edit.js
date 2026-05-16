@@ -1,5 +1,18 @@
 import { backendURL } from '../../env.config.js';
 
+//locations dropdown data
+const LOCATIONS = {
+  "Eastern Cape": ["East London", "Gqeberha (Port Elizabeth)", "Grahamstown", "King William's Town", "Mthatha", "Queenstown"],
+  "Free State": ["Bethlehem", "Bloemfontein", "Kroonstad", "Phuthaditjhaba", "Sasolburg", "Welkom"],
+  "Gauteng": ["Alberton", "Benoni", "Boksburg", "Germiston", "Johannesburg", "Kempton Park", "Midrand", "Pretoria", "Randburg", "Roodepoort", "Sandton", "Soweto", "Springs", "Tembisa"],
+  "KwaZulu-Natal": ["Durban", "Empangeni", "Ladysmith", "Newcastle", "Pietermaritzburg", "Pinetown", "Richards Bay", "Umlazi"],
+  "Limpopo": ["Giyani", "Lebowakgomo", "Makhado", "Modimolle", "Mokopane", "Phalaborwa", "Polokwane", "Thohoyandou"],
+  "Mpumalanga": ["Emalahleni (Witbank)", "Ermelo", "Mbombela (Nelspruit)", "Middelburg", "Piet Retief", "Sabie", "Secunda", "Standerton"],
+  "Northern Cape": ["De Aar", "Kimberley", "Kuruman", "Postmasburg", "Springbok", "Upington"],
+  "North West": ["Brits", "Klerksdorp", "Lichtenburg", "Mahikeng", "Potchefstroom", "Rustenburg", "Vryburg"],
+  "Western Cape": ["Bellville", "Cape Town", "George", "Hermanus", "Knysna", "Mossel Bay", "Paarl", "Stellenbosch", "Worcester"]
+};
+
 const visibleDetails = document.getElementById('visible-profile-details');
 const personalTab = document.getElementById('personal-tab');
 const educationTab = document.getElementById('education-tab');
@@ -119,7 +132,7 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
     });
 };
 
-//skills management with confirmation (uses only the selected skill, backend handles duplicates)
+//skills management with confirmation (now uses cookie instead of localStorage)
 const addSkillSubmitListener = (formElement, user) => {
     formElement.addEventListener('submit', async (event) => {
         const skillSelect = document.getElementById('skill-name');   //only the selected skill here
@@ -129,8 +142,6 @@ const addSkillSubmitListener = (formElement, user) => {
         try {
             event.preventDefault();
             const url = backendURL() + '/api/users/profile';
-            const token = localStorage.getItem('jwt');
-            if (!token) return (window.location.href = '../../login.html');
 
             const selectedSkill = skillSelect.value;
             if (!selectedSkill) {
@@ -145,7 +156,8 @@ const addSkillSubmitListener = (formElement, user) => {
 
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { Authorization: token, 'Content-Type': 'application/json' },
+                credentials: 'include',                         
+                headers: {'Content-Type': 'application/json' },
                 body: JSON.stringify({ skills: user.skills }),
             });
 
@@ -172,8 +184,9 @@ const showPersonalDetails = (user) => {
     attachmentsTab.classList.remove('visible');
 
     if (user.dateOfBirth) user.dateOfBirth = user.dateOfBirth.slice(0, 10);
-//i used inner html here
-//to decouple the form structure from the main html and make it easier to manage the dynamic data 
+
+    //Replacing the location text input with province/city dropdowns
+    //  + hidden location input
     visibleDetails.innerHTML = `<form id="personal-details-form">
         <section class="input-group">
             <label for="firstName">First Name</label>
@@ -207,10 +220,17 @@ const showPersonalDetails = (user) => {
             <input type="date" id="dob" name="dob" value="${user.dateOfBirth || ''}" />
         </section>
         <section class="input-group">
-            <label for="location">Location</label>
-            <section class="input-wrapper">
-                <input type="text" id="location" name="location" value="${user.location || ''}" />
-            </section>
+            <label for="province">Province</label>
+            <select id="province" name="province">
+                <option value="">Select province</option>
+            </select>
+        </section>
+        <section class="input-group">
+            <label for="city">City / Town</label>
+            <select id="city" name="city" disabled>
+                <option value="">Select a province first</option>
+            </select>
+            <input type="hidden" id="location" name="location" value="${user.location || ''}" />
         </section>
         <section class="input-group">
             <label for="phone">Phone</label>
@@ -222,6 +242,62 @@ const showPersonalDetails = (user) => {
         <p id="error-message"></p>
         <button id="save-profile-btn" class="coloured-btn">Save profile</button>
     </form>`;
+
+    //populating location dropdowns
+    const provinceSelect = document.getElementById('province');
+    const citySelect = document.getElementById('city');
+    const locationInput = document.getElementById('location');
+
+    // Build province options
+    for (const province of Object.keys(LOCATIONS)) {
+        const option = document.createElement('option');
+        option.value = province;
+        option.textContent = province;
+        provinceSelect.appendChild(option);
+    }
+
+    // Handle province change
+    provinceSelect.addEventListener('change', () => {
+        const selectedProvince = provinceSelect.value;
+        citySelect.innerHTML = '<option value="">Select city</option>';
+        if (selectedProvince && Array.isArray(LOCATIONS[selectedProvince])) {
+            citySelect.disabled = false;
+            LOCATIONS[selectedProvince].forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                citySelect.appendChild(opt);
+            });
+        } else {
+            citySelect.disabled = true;
+        }
+        locationInput.value = '';
+    });
+
+    // When a city is selected show hidden input
+    citySelect.addEventListener('change', () => {
+        const province = provinceSelect.value;
+        const city = citySelect.value;
+        if (province && city) {
+            locationInput.value = `${city}, ${province}`;
+        }
+    });
+
+    // Pre‑select if user already has a location
+    if (user.location) {
+        const parts = user.location.split(',').map(s => s.trim());
+        if (parts.length === 2) {
+            const [city, province] = parts;
+            if (LOCATIONS[province] && Array.isArray(LOCATIONS[province]) && LOCATIONS[province].includes(city)) {
+                provinceSelect.value = province;
+                provinceSelect.dispatchEvent(new Event('change'));
+                setTimeout(() => {
+                    citySelect.value = city;
+                    locationInput.value = user.location;
+                }, 50);
+            }
+        }
+    }
 
     const form = document.getElementById('personal-details-form');
     addPersonalDetailsSubmitListener(form, user);
@@ -318,7 +394,7 @@ const showSkillsDetails = async (user) => {
     try {
         //Fetching the standardised skills data
         const response = await fetch(backendURL() + '/api/users/data/skills');
-        const skillCategories = await response.json();   // { "Engineering": [...], "ICT": [...], ... }
+        const skillCategories = await response.json();   
 
         //Building category dropdown
         const categoryOptions = Object.keys(skillCategories)

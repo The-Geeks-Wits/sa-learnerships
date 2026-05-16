@@ -20,6 +20,10 @@ const dataRoutes = require('./authorization/dataRoutes.js');
 const qualifications = require('../data/qualifications.json');
 const institutions = require('../data/institutions.json');
 const skills = require('../data/skills.json');
+const locations = require('../data/locations.json');
+
+//ANALYTICS ROUTES
+const analyticsRoutes = require('./analytics/analyticsRoutes.js');
 
 dotenv.config();
 
@@ -28,7 +32,8 @@ const app = express();
 //making data available to routes using app
 app.locals.qualifications = qualifications;
 app.locals.institutions = institutions;
-app.locals.skills = skills;                         
+app.locals.skills = skills;
+app.locals.locations = locations;
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -73,13 +78,17 @@ passport.use(
 );
 
 
+//
+app.use('/api/users/data', dataRoutes);
+
 // routes
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
 app.use('/applications', applicationsRouter);
 app.use('/notifications', notificationsRouter);
-app.use('/api/users/data', dataRoutes);
 
+//ANALYTICS ROUTES
+app.use('/api/analytics', analyticsRoutes);
 
 // Health status check route (For confirming that the app is up and running when deployed)
 app.use('/health', (req, res) => {
