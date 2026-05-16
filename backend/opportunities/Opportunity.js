@@ -4,15 +4,14 @@ const model = mongoose.model;
 
 // The creator attribute should be a mongoose User _id
 const opportunitySchema = new Schema({
-    creator: {
-        type: String,
-        required: [true, 'Creatore required! Please provide the creator of the opportunities'],
-        trim: true,
-    },
     title: {
         type: String,
         required: [true, 'Title required! Please provide the title of the opportunity'],
         trim: true,
+    },
+    creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
     requirements: { type: [String], required: [true, 'Atleast one requirement is required'] },
     description: { type: String, trim: true },
@@ -25,6 +24,11 @@ const opportunitySchema = new Schema({
     duration: { type: Number, min: 0 },
     status: { type: String, default: 'Pending' },
     createdAt: { type: Date, default: Date.now },
+    sector: {
+        type: String,
+        required: [true, 'Sector required! Please provide the sector of the opportunity'],
+        enum: ['Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Construction', 'Education', 'Hospitality', 'Marketing', 'Business']},
+    
 });
 
 const Opportunity = model('Opportunity', opportunitySchema);

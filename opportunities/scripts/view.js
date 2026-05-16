@@ -1,3 +1,5 @@
+import { backendURL } from '../../env.config.js';
+
 const pageState = document.getElementById('page-state');
 const detailsContainer = document.getElementById('details-container');
 const browserTitle = document.getElementById('browser-title');
@@ -10,7 +12,93 @@ const stipend = document.getElementById('stipend');
 const duration = document.getElementById('duration');
 const locationElement = document.getElementById('location');
 const closingDate = document.getElementById('closing-date');
-const approveButton = document.getElementById('approve-btn');
+const actionsElement = document.getElementById('actions');
+
+const addAdminButtonsListeners = (approveButton, rejectButton) => {
+    approveButton.addEventListener('click', async () => {
+        try {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const url = backendURL() + `/opportunities/${id}/approve`;
+
+
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                approveButton.disabled = true;
+                approveButton.style.cursor = 'not-allowed';
+                alert('Opportunity approved successfully!');
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Something went wrong! Please try again later');
+        }
+    });
+
+    rejectButton.addEventListener('click', async () => {
+        try {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const url = backendURL() + `/opportunities/${id}/reject`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                rejectButton.disabled = true;
+                rejectButton.style.cursor = 'not-allowed';
+                alert('Opportunity rejected successfully!');
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Something went wrong! Please try again later');
+        }
+    });
+};
+
+const addOwnerButtonsListeners = (resubmitButton) => {
+    resubmitButton.addEventListener('click', async () => {
+        try {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const url = backendURL() + `/opportunities/${id}/resubmit`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                resubmitButton.disabled = true;
+                resubmitButton.style.cursor = 'not-allowed';
+                alert('Opportunity resubmitted successfully!');
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            alert('Something went wrong! Please try again later');
+        }
+    });
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -22,14 +110,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const params = new URLSearchParams(queryString);
         const id = params.get('id');
 
-        const response = await fetch(`http://localhost:3000/opportunities/${id}`, {
+        let url = backendURL() + `/opportunities/${id}`;
+        const res = await fetch(url, {
             method: 'GET',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
         });
 
-        const data = await response.json();
+        const data = await res.json();
 
-        if (response.ok) {
+        if (res.ok) {
             detailsContainer.style.display = 'block';
 
             browserTitle.innerHTML = 'Opportunity | ' + data.title;
@@ -58,6 +148,46 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageState.style.display = 'flex';
             pageState.innerHTML = data.error;
         }
+
+        // Show approve and reject buttons if the user is an admin
+        url = backendURL() + '/api/users/profile';
+
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        if (response.ok) {
+            const data2 = await response.json();
+
+            if (data2.user && data2.user.role === 'admin') {
+                // show buttons
+                actionsElement.innerHTML = `<hr />
+                <section>
+                    <button id="approve-btn" class="coloured-btn">Approve</button>
+                    <button id="reject-btn" class="transparent-btn">Reject</button>
+                </section>`;
+
+                const approveButton = document.getElementById('approve-btn');
+                const rejectButton = document.getElementById('reject-btn');
+                addAdminButtonsListeners(approveButton, rejectButton);
+            }
+
+            if (data2.user && data2.user.role === 'provider') {
+                if (data.creator === data2.user._id && data.status === 'Rejected') {
+                    // show buttons
+                    actionsElement.innerHTML = `<hr />
+                    <section>
+                        <button id="resubmit-btn" class="coloured-btn">Re-submit</button>
+                        <button id="delete-btn" class="transparent-btn">Delete</button>
+                    </section>`;
+                    const resubmitButton = document.getElementById('resubmit-btn');
+                    addOwnerButtonsListeners(resubmitButton);
+                }
+            }
+        }
+        
     } catch (error) {
         pageState.style.display = 'flex';
         pageState.innerHTML = '<p>An error occurred! Please try again later</p>';
@@ -65,29 +195,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';
-    }
-});
-
-approveButton.addEventListener('click', async () => {
-    const id = new URLSearchParams(window.location.search).get('id');
-
-    try {
-        const response = await fetch('http://localhost:3000/opportunities/' + id + '/approve', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            approveButton.disabled = true;
-            approveButton.textContent = 'Approved';
-            approveButton.style.cursor = 'not-allowed';
-            alert('Opportunity approved successfully!');
-        } else {
-            alert(data.error);
-        }
-    } catch (error) {
-        alert('Something went wrong! Please try again later');
     }
 });

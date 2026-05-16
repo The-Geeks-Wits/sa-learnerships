@@ -1,0 +1,16 @@
+#page-container {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 50px;
+    display: none;
+}
+
+/* Highlight the right border of the rejected opportunities sidebar tab */
+aside #opportunities-nav-options #rejected-opportunities-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
+#opportunities li .approve-btn {
+    margin-right: 10px;
+}

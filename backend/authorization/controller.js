@@ -1,20 +1,5 @@
 const User = require('./User.js');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-const { isStrong } = require('../../scripts/common_functions.js');
-
-function generateAccessToken(email, id) {
-    const secret = process.env.JWT_SECRET || 'your_secret_key_here';
-    return jwt.sign({ email, id }, secret, { expiresIn: '24h' });
-}
-
-async function hashPassword(password) {
-    const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(password, salt);
-
-    return hashedPassword;
-}
+const utils = require('../utils.js');
 
 exports.register = async (req, res) => {
     try {
@@ -24,16 +9,16 @@ exports.register = async (req, res) => {
         const email = req.body.email;
         const confirmPassword = req.body.confirmPassword;
 
+        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
+            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
+        }
+
         const userExists = await User.findOne({ email: req.body.email });
         if (userExists) {
             return res.status(409).json({ error: 'User Already Exists!' });
         }
 
-        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
-            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
-        }
-
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             return res.status(400).json({ error: 'Passwords do not match' });
         }
 
@@ -41,13 +26,13 @@ exports.register = async (req, res) => {
             return res.status(400).json({ error: 'Password length must be at least 8 characters long' });
         }
 
-        if (!isStrong(password)) {
+        if (!utils.isStrong(password)) {
             return res.status(400).json({
                 error: 'Password is too weak. It must include at least one uppercase letter, one lowercase letter, one digit and one special symbol',
             });
         }
 
-        const hashedPassword = await hashPassword(password);
+        const hashedPassword = await utils.hashPassword(password);
 
         const user = await User.create({
             firstName,
@@ -56,17 +41,23 @@ exports.register = async (req, res) => {
             password: hashedPassword,
             signupMethod: 'manual',
         });
-        const token = generateAccessToken(email, user._id);
 
+        const token = utils.generateAccessToken(email, user._id);
         res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
-            maxAge: 3600000,
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax',
+        maxAge: 3600000
         });
 
         res.status(201).json({
-            success: true,
-            user: { id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email },
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+            },
         });
     } catch (err) {
         res.status(500).json({
@@ -81,40 +72,40 @@ exports.login = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
 
-        const userExists = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
-        if (!userExists) {
+        if (!user) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
-        const isPasswordValid = await bcryptjs.compare(password, userExists.password);
+        if (user.signupMethod === 'google' || !user.password) {
+            return res.status(400).json({
+                error: 'This account was created using Google. Please sign in with Google.',
+            });
+        }
+
+        const isPasswordValid = await utils.comparePasswords(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
+
         const rememberMe = req.body.rememberMe;
-        const token = generateAccessToken(email, userExists._id);
-
-        let maxAge;
-        if (rememberMe) {
-            maxAge = 604800000;
-        } else {
-            maxAge = 3600000;
-        }
-
+        const token = utils.generateAccessToken(email, user._id);
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change to true after production/deployment
-            maxAge: maxAge,
+            secure: false,
+            sameSite: 'Lax',
+            maxAge: rememberMe ? 604800000 : 3600000,    
         });
 
-        res.status(201).json({
-            success: true,
+        res.status(200).json({
             user: {
-                id: userExists._id,
-                firstName: userExists.firstName,
-                lastName: userExists.lastName,
-                email: userExists.email,
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
             },
         });
     } catch (err) {
@@ -130,19 +121,24 @@ exports.deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const user = await User.findByIdAndUpdate(
-            id,
-            {
-                status: 'disabled',
-            },
-            { new: true },
-        );
+        const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
         } else {
-            res.json({ message: 'User disabled', user: user });
+            res.json({
+                message: 'User disabled',
+                user: {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                },
+            });
         }
+
+        res.json({ message: 'User disabled', user: user });
     } catch (e) {
         res.status(500).json({ message: e.message });
     }
@@ -152,7 +148,7 @@ exports.deleteUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const { role, status } = req.body;
-         //arrays of roles and statuses
+
         const allowedRoles = ['applicant', 'provider', 'admin'];
         const allowedStatus = ['active', 'inactive', 'blocked'];
 
@@ -185,19 +181,25 @@ exports.updateUser = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
             new: true,
             runValidators: true,
-        }).select('-password');
+        });
 
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json(updatedUser);
+        res.json({
+            _id: updatedUser._id,
+            firstName: updatedUser.firstName,
+            lastName: updatedUser.lastName,
+            email: updatedUser.email,
+            role: updatedUser.role,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-//get all users also with  search and filter
+//get all users also with search and filter
 exports.getUsers = async (req, res) => {
     try {
         const { search, role } = req.query;
@@ -212,7 +214,11 @@ exports.getUsers = async (req, res) => {
             query.$or = [{ username: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }];
         }
 
-        const users = await User.find(query).select('-password');
+        const users = await User.find(query);
+
+        for (let i = 0; i < users.length; i++) {
+            delete users[i].password;
+        }
 
         res.json(users);
     } catch (error) {
@@ -220,17 +226,104 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-//get  user by id
+//get user by id
 exports.getUserById = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).select('-password');
+        const user = await User.findById(req.params.id);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json(user);
+        res.json({
+            _id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getProfile = async (req, res) => {
+    if (req.user) return res.status(200).json({ user: req.user });
+    return res.status(400).json({ error: 'User not found! Please check your token and try again later' });
+};
+
+exports.editProfile = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(400).json({ error: 'User required! Please provide the user of the profile' });
+        }
+
+        if (!req.body) {
+            return res.status(400).json({ error: 'Update fields required! Please provide some fields to update' });
+        }
+
+        // Build the update options and add personal details
+        const updateOptions = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            gender: req.body.gender,
+            dateOfBirth: new Date(req.body.dateOfBirth || req.user.dateOfBirth),
+            location: req.body.location,
+            phone: req.body.phone,
+            qualifications: req.body.qualifications,
+            skills: req.body.skills,
+        };
+
+        // Fields that are undefined will get ignored
+        const user = await User.findByIdAndUpdate(req.user._id, updateOptions);
+
+        // Remove the password from the user details
+        const userObj = user.toObject();
+        delete userObj.password;
+
+        return res.status(200).json({ user: userObj });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+///upload cv and save the file path to the backend.
+exports.uploadCV = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Safely delete old CV (if any) – won't crash on error
+        if (user.cv) {
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const oldFilePath = path.join(process.cwd(), user.cv);
+                if (fs.existsSync(oldFilePath)) {
+                    fs.unlinkSync(oldFilePath);
+                }
+            } catch (err) {
+                console.warn('Could not delete old CV file:', err.message);
+            }
+        }
+
+        const filePath = `/uploads/${req.file.filename}`;
+        user.cv = filePath;
+        await user.save();
+
+        return res.json({
+            success: true,
+            cv: filePath,
+        });
+    } catch (err) {
+        console.error('❌ Error in uploadCV:', err);
+        return res.status(500).json({ message: 'Upload failed' });
     }
 };

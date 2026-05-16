@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Matric (National Senior Certificate)",
+    "nqfLevel": 4,
+    "qualificationLevel": "National Senior Certificate"
+  },
+  {
+    "name": "Higher Certificate",
+    "nqfLevel": 5,
+    "qualificationLevel": "Higher Certificate"
+  },
+  {
+    "name": "Diploma",
+    "nqfLevel": 6,
+    "qualificationLevel": "Diploma"
+  },
+  {
+    "name": "Advanced Diploma",
+    "nqfLevel": 7,
+    "qualificationLevel": "Advanced Diploma"
+  },
+  {
+    "name": "Bachelor's Degree",
+    "nqfLevel": 7,
+    "qualificationLevel": "Bachelor's Degree"
+  },
+  {
+    "name": "Honours Degree",
+    "nqfLevel": 8,
+    "qualificationLevel": "Honours Degree"
+  },
+  {
+    "name": "Master's Degree",
+    "nqfLevel": 9,
+    "qualificationLevel": "Master's Degree"
+  },
+  {
+    "name": "Doctoral Degree",
+    "nqfLevel": 10,
+    "qualificationLevel": "Doctoral Degree"
+  }
+]

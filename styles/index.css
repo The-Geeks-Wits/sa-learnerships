@@ -93,10 +93,14 @@ nav #profile-details p {
 }
 
 nav #notifications {
-    width: 50px;
+    width: 40px;
     margin-right: 30px;
     border-right: 1.5px solid #dfdfdf;
     position: relative;
+}
+
+nav #notifications:hover {
+    cursor: pointer;
 }
 
 nav #notifications img {
@@ -108,20 +112,28 @@ nav #notifications img {
     transform: translate(0%, -50%);
 }
 
-nav #notifications #count {
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    border: none;
-    border-radius: 50%;
-    background-color: #1562f2;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+nav #notifications .notifications-count {
     position: absolute;
     left: 18%;
     top: 5%;
+}
+
+nav #app-name:hover {
+    cursor: pointer;
+}
+
+nav #profile-letter {
+    transition: opacity 0.2s ease;
+}
+
+nav #profile-letter:hover {
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+nav #profile-error,
+nav #profile-state {
+    margin: 10px 0px;
 }
 
 /* Main styles */
@@ -181,29 +193,39 @@ aside ul li .heading img {
 }
 
 aside #opportunities-nav-options,
-aside #control-center-nav-options {
+aside #control-center-nav-options,
+aside #settings-nav-options,
+aside #applications-nav-options {
     display: none;
 }
 
 aside #opportunities-nav-options ul,
-aside #control-center-nav-options ul {
+aside #control-center-nav-options ul,
+aside #settings-nav-options ul,
+aside #applications-nav-options ul {
     margin-top: 10px;
-    padding-left: 40px;
+    padding-left: 30px;
     list-style: none;
     display: flex;
     flex-direction: column;
 }
 
 aside #opportunities-nav-options ul li,
-aside #control-center-nav-options ul li {
+aside #control-center-nav-options ul li,
+aside #settings-nav-options ul li,
+aside #applications-nav-options ul li {
     height: 40px;
     margin: 0px;
+    padding-left: 10px;
     display: flex;
     justify-content: center;
+    border-left: 2.5px solid #dfdfdf;
 }
 
 aside #opportunities-nav-options ul li a,
-aside #control-center-nav-options ul li a {
+aside #control-center-nav-options ul li a,
+aside #settings-nav-options ul li a,
+aside #applications-nav-options ul li a {
     font-size: 16px;
     color: #505050;
     text-decoration: none;
@@ -212,6 +234,17 @@ aside #control-center-nav-options ul li a {
 aside #apply-btn {
     width: calc(100% - 40px);
     margin: 30px 20px;
+}
+
+aside #settings-nav-options ul #notifications-nav-tab {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+aside #settings-nav-options ul #notifications-nav-tab a {
+    flex: 1;
 }
 
 /* Class styles goes here i.e. Every style that is applied using the element class selector should put here */
@@ -231,4 +264,17 @@ aside #apply-btn {
     background-color: transparent;
     border: 1.5px solid #dfdfdf;
     border-radius: 6px;
+}
+
+.notifications-count {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1562f2;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

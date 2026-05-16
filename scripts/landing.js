@@ -5,12 +5,12 @@ const loginBtns = document.getElementsByClassName('login-btn');
 
 for (let i = 0; i < registerBtns.length; i++) {
     registerBtns[i].addEventListener('click', () => {
-        window.location.href = 'register.html';
+        window.location.href = '/register.html';
     });
 }
 
 for (let i = 0; i < loginBtns.length; i++) {
     loginBtns[i].addEventListener('click', () => {
-        window.location.href = 'login.html';
+        window.location.href = '/login.html';
     });
 }

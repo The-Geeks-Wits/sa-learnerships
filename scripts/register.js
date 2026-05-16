@@ -1,3 +1,6 @@
+import { backendURL } from '../env.config.js';
+import { isStrong } from './common_functions.js';
+
 const errorMessage = document.getElementById('error-message');
 const form = document.getElementById('registration-form');
 const firstName = document.getElementById('firstName');
@@ -5,33 +8,14 @@ const lastName = document.getElementById('lastName');
 const email = document.getElementById('email');
 const password = document.getElementById('newPassword');
 const confirmPassword = document.getElementById('confirmPassword');
-
+const loadingSpinner = document.getElementById('loading-spinner');
+const registerBtn = document.getElementById('registerBtn');
 const googleBtn = document.getElementById('google-btn');
+const appName = document.getElementById('app-name');
+
 googleBtn.addEventListener('click', () => {
     window.location.href = 'http://localhost:3000/api/users/google';
 });
-
-function isStrong(password) {
-    let hasLowercase = false;
-    let hasUppercase = false;
-    let hasDigit = false;
-    let SpecialSymbols = ['!', '@', '#', '$', '%', '&', '*'];
-    let HasSpecialSymbols = false;
-
-    for (let x of password) {
-        if (x >= 'A' && x <= 'Z') {
-            hasUppercase = true;
-        } else if (x >= 'a' && x <= 'z') {
-            hasLowercase = true;
-        } else if (x >= '0' && x <= '9') {
-            hasDigit = true;
-        } else if (SpecialSymbols.includes(x)) {
-            HasSpecialSymbols = true;
-        }
-    }
-
-    return hasLowercase && hasUppercase && hasDigit && HasSpecialSymbols;
-}
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -50,6 +34,7 @@ form.addEventListener('submit', async (event) => {
         errorMessage.textContent = 'Password must be at least 8 characters long!';
         return;
     }
+
     if (!isStrong(p)) {
         errorMessage.style.display = 'block';
         errorMessage.textContent =
@@ -57,8 +42,12 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Registering';
+
     try {
-        const response = await fetch('http://localhost:3000/api/users/register', {
+        const url = backendURL() + '/api/users/register';
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -74,17 +63,22 @@ form.addEventListener('submit', async (event) => {
         });
 
         if (response.status === 201) {
+            window.location.href = '/home.html';
+        
+        } else {
             const data = await response.json();
-            if (data) {
-                // The token needs to come from the server as an http only cookie
-                window.location.href = 'home.html';
-            } else {
-                errorMessage.style.display = 'block';
-                errorMessage.innerHTML = 'Something went wrong! Please try again later';
-            }
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = data.error || data.message || 'Registration failed';
         }
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = err.message;
+    } finally {
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Register';
     }
+});
+
+appName.addEventListener('click', () => {
+    window.location.href = '/index.html';
 });

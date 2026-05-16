@@ -1,12 +1,11 @@
-name: Main Branch Code Coverage
+name: Azure App Service Deployment
 on:
   push:
     branches: [main]
 
 jobs:
-  test-coverage:
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4 # Clone the repo using the checkout GitHub action
@@ -14,7 +13,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4 # Install Node.js
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm' # Cacheing npm dependencies results in faster subsequent runs
           cache-dependency-path: backend/package-lock.json
 
@@ -32,3 +31,18 @@ jobs:
           name: coverage-report
           path: backend/coverage
           retention-days: 2
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4 # Clone the repo using the checkout GitHub action
+
+      - name: Azure app service deployment
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: salearnerships
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend
+

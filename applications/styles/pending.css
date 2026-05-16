@@ -1,0 +1,9 @@
+button {
+    margin-top: 24px;
+}
+
+/* Highlight the left border of the pending applications sidebar tab */
+aside #applications-nav-options #pending-nav-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
