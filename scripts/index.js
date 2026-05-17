@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <li id="custom-report-tab"><a href="/opportunities/custom.html">Custom View</a></li>
                             <li id="applications-volume-tab"><a href="/opportunities/volume.html">Application Volume</a></li>
                             <li id="placement-rate-tab"><a href="/opportunities/placement_form.html">Placement Success</a></li>
-                            <li id="applications-volume-tab"><a href="/opportunities/application-volume.html">Application Volume</a></li>
+                            
                             
                         </ul>
                     </section>
