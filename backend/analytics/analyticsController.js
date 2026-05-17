@@ -219,12 +219,99 @@ exports.getPlacementSuccessReport = async (req, res) => {
 };
 exports.exportPlacementReport = async (req, res) => {
     try {
-        const { headers, rows, format } = req.body;
-        
+        const { sectors, dateFrom, dateTo, format } = req.body;
+        const pipeline = [];
+
+        const match = {};
+        if (sectors && sectors.length > 0) {
+            match.sector = { $in: sectors };
+        }
+        if (dateFrom || dateTo) {
+            match.createdAt = {};
+            if (dateFrom) match.createdAt.$gte = new Date(dateFrom);
+            if (dateTo) match.createdAt.$lte = new Date(dateTo);
+        }
+        if (Object.keys(match).length > 0) {
+            pipeline.push({ $match: match });
+        }
+
+        pipeline.push({
+            $lookup: {
+                from: 'applications', 
+                localField: '_id',
+                foreignField: 'opportunity',
+                as: 'applicationData'
+            }
+        });
+
+        pipeline.push({
+            $group: {
+                _id: { sector: '$sector' },
+                totalOpportunities: { $sum: 1 },
+                totalApplications: { $sum: { $size: '$applicationData' } },
+                successfulApplications: {
+                    $sum: {
+                        $size: {
+                            $filter: {
+                                input: '$applicationData',
+                                as: 'app',
+                                cond: { $in: ['$$app.status', ['Shortlisted', 'Accepted', 'Approved']] }
+                            }
+                        }
+                    }
+                },
+                unsuccessfulApplications: {
+                    $sum: {
+                        $size: {
+                            $filter: {
+                                input: '$applicationData',
+                                as: 'app',
+                                cond: { $eq: ['$$app.status', 'Rejected'] }
+                            }
+                        }
+                    }
+                },
+                ongoingApplications: {
+                    $sum: {
+                        $size: {
+                            $filter: {
+                                input: '$applicationData',
+                                as: 'app',
+                                cond: { $eq: ['$$app.status', 'Pending'] }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        pipeline.push({
+            $project: {
+                sector: '$_id.sector',
+                totalOpportunities: 1,
+                totalApplications: 1,
+                successfulApplications: 1,
+                unsuccessfulApplications: 1,
+                ongoingApplications: 1,
+                placementSuccessRate: {
+                    $cond: [
+                        { $eq: ['$totalApplications', 0] },
+                        0,
+                        { $multiply: [{ $divide: ['$successfulApplications', '$totalApplications'] }, 100] }
+                    ]
+                }
+            }
+        });
+
+        pipeline.push({ $sort: { placementSuccessRate: -1 } });
+
+        const results = await Opportunity.aggregate(pipeline);
+
         if (format === 'csv') {
-            let csv = headers.join(',') + '\n';
-            rows.forEach(row => {
-                csv += row.join(',') + '\n';
+            let csv = 'Sector,Total Opportunities,Total Applications,Successful Applications,Unsuccessful Applications,Ongoing Applications,Placement Success Rate (%)\n';
+            
+            results.forEach(item => {
+                csv += `${item.sector},${item.totalOpportunities},${item.totalApplications},${item.successfulApplications},${item.unsuccessfulApplications},${item.ongoingApplications},${item.placementSuccessRate.toFixed(2)}\n`;
             });
 
             res.setHeader('Content-Type', 'text/csv');
@@ -247,15 +334,17 @@ exports.exportPlacementReport = async (req, res) => {
             
             let y = 150;
             doc.fontSize(10);
-            headers.forEach((header, index) => {
-                doc.text(header, 50 + (index * 100), y);
-            });
+            doc.text('Sector', 50, y);
+            doc.text('Total Opps', 180, y);
+            doc.text('Total Apps', 280, y);
+            doc.text('Success Rate', 380, y);
             
             y += 20;
-            rows.forEach(row => {
-                row.forEach((cell, index) => {
-                    doc.text(String(cell), 50 + (index * 100), y);
-                });
+            results.forEach(item => {
+                doc.text(item.sector, 50, y);
+                doc.text(item.totalOpportunities.toString(), 180, y);
+                doc.text(item.totalApplications.toString(), 280, y);
+                doc.text(`${item.placementSuccessRate.toFixed(2)}%`, 380, y);
                 y += 20;
                 
                 if (y > 700) {
