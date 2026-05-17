@@ -45,7 +45,7 @@ exports.submitApplication = async (req, res) => {
 
         const title = `Application Received - Thank You ${req.user.firstName}`;
         const message = `We're pleased to confirm the receipt of your application for the ${opportunity.title} opportunity.`;
-        sendNotification(req.user._id, title, message);
+        sendNotification(req.user, title, message);
 
         res.status(201).json({
             id: application._id,
