@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./analyticsController.js');
+const { isAuthenticated, isProvider } = require('../middlewares/auth.js');
 const jwt = require('jsonwebtoken');
 
 // Middleware that reads token from cookie (same as cvAuth) OR Authorization header
@@ -24,6 +25,7 @@ router.get('/placement-form', (req, res) => {
 router.post('/custom-report', verifyToken, controller.getCustomReport);
 router.post('/placement-success-report', verifyToken, controller.getPlacementSuccessReport);
 router.post('/export-placement-report', verifyToken, controller.exportPlacementReport);
+router.get('/application-volume',isAuthenticated, controller.getApplicationVolume);
 
 router.get('/available-options', (req, res) => {
     res.json({
