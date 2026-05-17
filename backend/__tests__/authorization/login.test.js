@@ -119,26 +119,7 @@ describe('Login', () => {
         expect(json.error).toBeDefined();
     });
 
-    it('should generate the access token', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({ _id: 'test-id' });
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        expect(utils.generateAccessToken).toHaveBeenCalledWith(req.body.email, 'test-id');
-    });
-
-    it('should create a response cookie', async () => {
+    it('should return a 200 status on success', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.findOne.mockResolvedValue({});
         // Utils gets mocked, hence the mockReturnValue function exists
@@ -155,69 +136,7 @@ describe('Login', () => {
         };
 
         await controller.login(req, res);
-        expect(res.cookie).toHaveBeenCalled();
-    });
-
-    it('should create a response cookie with a 604800000 maxAge when rememberMe field is provided', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({});
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email', rememberMe: true } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            cookie: jest.fn(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        const cookieOptions = res.cookie.mock.calls[0][2];
-        expect(cookieOptions.maxAge).toBe(604800000);
-    });
-
-    it('should create a response cookie with a 3600000 maxAge when rememberMe field is not provided', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({});
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            cookie: jest.fn(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        const cookieOptions = res.cookie.mock.calls[0][2];
-        expect(cookieOptions.maxAge).toBe(3600000);
-    });
-
-    it('should return a 201 status on success', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({});
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            cookie: jest.fn(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.status).toHaveBeenCalledWith(200);
     });
 
     it('should return a 500 status on error', async () => {

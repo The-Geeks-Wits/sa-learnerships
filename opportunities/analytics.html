@@ -15,21 +15,22 @@
             <ul>
                 <li id="notifications">
                     <img src="../assets/notifications.png" />
-                    <p id="count">2</p>
+                    <p class="notifications-count">2</p>
                 </li>
-                <li id="profile-details">
-                    <section>
-                        <h4>Dikeledi Moatle</h4>
-                        <p>Applicant</p>
-                    </section>
-                    <h3>D</h3>
-                </li>
+                <li id="profile-details"></li>
             </ul>
         </nav>
         <main>
             <aside>
                 <button id="apply-btn" class="coloured-btn">Apply</button>
                 <ul id="sidebar-options">
+                    <li>
+                        <section id="applications-nav" class="heading">
+                            <p>Applications</p>
+                            <img id="applications-nav-image" src="../assets/right-arrow.png" />
+                        </section>
+                        <section id="applications-nav-options" class="sidebar-nav-options"></section>
+                    </li>
                     <li>
                         <section id="opportunities-nav" class="heading">
                             <p>Opportunities</p>
@@ -38,15 +39,20 @@
                         <section id="opportunities-nav-options"></section>
                     </li>
                     <li>
-                        <section class="heading">
-                            <p>Your Account</p>
-                            <img src="../assets/right-arrow.png" />
-                        </section>
-                    </li>
-                    <li>
-                        <section class="heading">
+                        <section id="settings-nav" class="heading">
                             <p>Settings</p>
-                            <img src="../assets/right-arrow.png" />
+                            <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                        </section>
+                        <section id="settings-nav-options">
+                            <ul>
+                                <li id="profile-nav-tab">
+                                    <a href="/profile/view.html">Profile</a>
+                                </li>
+                                <li id="notifications-nav-tab">
+                                    <a href="/notifications/index.html">Notifications</a>
+                                    <p class="notifications-count">2</p>
+                                </li>
+                            </ul>
                         </section>
                     </li>
                 </ul>
@@ -54,7 +60,7 @@
             <section id="main-details">
                 <section id="page-container">
                     <h1 id="page-title">Analytics Of Opportunities</h1>
-                    <p>
+                    <p id="page-description">
                         This is where analytics of all opportunities will be accessed once this feature has been fully
                         implemented. Maybe in another world we would have this ready by now
                     </p>

@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const url = backendURL() + '/opportunities?status=Pending';
         const response = await fetch(url, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
         });
 
         if (response.ok) {
@@ -49,7 +48,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         pageError.style.display = 'flex';
         pageError.innerHTML = '<p>An error occurred! Please try again later</p>';
-        console.error('View opportunity error:', error);
     } finally {
         pageState.style.display = 'none';
         pageState.innerHTML = '';

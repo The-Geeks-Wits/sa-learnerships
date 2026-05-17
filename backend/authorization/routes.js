@@ -1,6 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const controller = require('./controller.js');
+const { isAuthenticated, isAdmin } = require('../middlewares/auth.js');
+const jwt = require('jsonwebtoken');  // added for CV upload token check
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const uniqueName = Date.now() + '-' + file.originalname;
         cb(null, uniqueName);
-    }
+    },
 });
 
 const upload = multer({ storage });
@@ -50,26 +52,34 @@ router.get(
     },
 );
 
-//router.post("/registerGoogle", controller.registerGoogle);
+// profile routes (keep original middleware)
+router.get('/profile', isAuthenticated, controller.getProfile);
+router.patch('/profile', isAuthenticated, controller.editProfile);
+router.put('/profile', isAuthenticated, controller.editProfile);
 
-const { verifyTokenCookie, verifyToken } = require('../middlewares/auth.js');
-
-// profile routes
-router.get('/profile', verifyTokenCookie, controller.getProfile);
-router.put('/profile', verifyTokenCookie, controller.saveProfile);
-
-// users
-router.get('/', controller.getUsers);
+// users (keep original middleware)
+router.get('/', isAuthenticated, isAdmin, controller.getUsers);
 router.get('/:id', controller.getUserById);
-router.put('/:id', controller.updateUser);
-router.delete('/:id', controller.deleteUser);
+router.put('/:id', isAuthenticated, isAdmin, controller.updateUser);
+router.delete('/:id', isAuthenticated, isAdmin, controller.deleteUser);
 
-// cv upload route
-router.post(
-    '/upload-cv',
-    verifyTokenCookie,
-    upload.single('cv'),
-    controller.uploadCV
-);
+// ── CV upload route – fixed to accept Authorization header ──
+const cvAuth = (req, res, next) => {
+    const token = req.headers.authorization || req.cookies?.jwt;
+    if (!token) return res.status(401).json({ message: 'No Token Provided' });
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = {
+            email: decoded.email,
+            userId: decoded.userId || decoded.id, // ensure userId exists
+            // any other fields if needed
+        };
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid Token' });
+    }
+};
+
+router.post('/upload-cv', cvAuth, upload.single('cv'), controller.uploadCV);
 
 module.exports = router;

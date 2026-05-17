@@ -9,3 +9,16 @@ aside #opportunities-nav-options #your-opportunities-tab {
     border-left-color: #1562f2;
     border-left-width: 2.5px;
 }
+
+.opportunity-heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.opportunity-heading p {
+    font-size: 18px;
+}
+
+.applications-btn {
+    margin-left: 10px;
+}

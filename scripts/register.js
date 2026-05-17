@@ -9,6 +9,7 @@ const email = document.getElementById('email');
 const password = document.getElementById('newPassword');
 const confirmPassword = document.getElementById('confirmPassword');
 const loadingSpinner = document.getElementById('loading-spinner');
+const registerBtn = document.getElementById('registerBtn');
 const googleBtn = document.getElementById('google-btn');
 const appName = document.getElementById('app-name');
 
@@ -41,6 +42,9 @@ form.addEventListener('submit', async (event) => {
         return;
     }
 
+    registerBtn.disabled = true;
+    registerBtn.textContent = 'Registering';
+
     try {
         const url = backendURL() + '/api/users/register';
         const response = await fetch(url, {
@@ -62,9 +66,8 @@ form.addEventListener('submit', async (event) => {
             const data = await response.json();
 
             if (data) {
-                // The token needs to come from the server as an http only cookie
+                localStorage.setItem('jwt', data.token);
                 window.location.href = '/home.html';
-                localStorage.setItem('userId', data.user.id);
             }
         } else {
             const data = await response.json();
@@ -74,6 +77,9 @@ form.addEventListener('submit', async (event) => {
     } catch (err) {
         errorMessage.style.display = 'block';
         errorMessage.textContent = err.message;
+    } finally {
+        registerBtn.disabled = false;
+        registerBtn.textContent = 'Register';
     }
 });
 

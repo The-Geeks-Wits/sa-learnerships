@@ -72,7 +72,7 @@ h4 {
 }
 
 label,
-h4 {
+.requirements-group h4 {
     display: block;
     font-family: 'Inter', sans-serif;
     font-size: 11px;

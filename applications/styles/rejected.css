@@ -1,0 +1,5 @@
+/* Highlight the left border of the rejected applications sidebar tab */
+aside #applications-nav-options #rejected-nav-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}

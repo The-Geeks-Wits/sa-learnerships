@@ -24,6 +24,12 @@ p {
     line-height: 22px;
 }
 
+/* Highlight the left border of the all opportunities sidebar tab */
+aside #opportunities-nav-options #all-opportunities-tab {
+    border-left-color: #1562f2;
+    border-left-width: 2.5px;
+}
+
 #description {
     margin-bottom: 30px;
 }
@@ -64,6 +70,13 @@ hr {
 }
 
 #actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#actions section {
+    width: 100%;
     display: flex;
 }
 
@@ -72,15 +85,19 @@ button {
 }
 
 #approve-btn,
-#reject-btn {
+#resubmit-btn,
+#reject-btn,
+#delete-btn {
     margin-top: 0px;
 }
 
-#approve-btn {
+#approve-btn,
+#resubmit-btn {
     margin-right: 15px;
 }
 
-#reject-btn {
+#reject-btn,
+#delete-btn {
     margin-left: 15px;
     border-color: #e63946;
     color: #e63946;

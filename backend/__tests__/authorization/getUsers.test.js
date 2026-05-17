@@ -71,7 +71,7 @@ describe('Get Users', () => {
         expect(res.status).toHaveBeenCalledWith(500);
     });
 
-    it('should return an object with a message property on error', async () => {
+    it('should return an object with an error property on error', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.find.mockRejectedValue(new Error('Test error'));
 
@@ -86,6 +86,6 @@ describe('Get Users', () => {
 
         await controller.getUsers(req, res);
         const json = res.json.mock.calls[0][0];
-        expect(json.message).toBeDefined();
+        expect(json.error).toBeDefined();
     });
 });

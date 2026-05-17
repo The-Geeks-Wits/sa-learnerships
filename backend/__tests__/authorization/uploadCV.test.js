@@ -165,7 +165,7 @@ describe('Upload CV', () => {
         expect(res.status).toHaveBeenCalledWith(500);
     });
 
-    it('should return an object with a message property on error', async () => {
+    it('should return an object with an error property on error', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.findById.mockRejectedValue(new Error('Test error'));
 
@@ -180,6 +180,6 @@ describe('Upload CV', () => {
 
         await controller.uploadCV(req, res);
         const json = res.json.mock.calls[0][0];
-        expect(json.message).toBeDefined();
+        expect(json.error).toBeDefined();
     });
 });

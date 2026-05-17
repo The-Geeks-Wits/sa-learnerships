@@ -1,9 +1,9 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.generateAccessToken = (email, userId) => {
+exports.generateAccessToken = (email, id, role) => {
     const secret = process.env.JWT_SECRET || 'your_secret_key_here';
-    return jwt.sign({ email, userId }, secret, { expiresIn: '24h' });
+    return jwt.sign({ email, id, role }, secret, { expiresIn: '24h' });
 };
 
 exports.hashPassword = async (password) => {

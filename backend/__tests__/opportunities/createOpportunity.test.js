@@ -95,7 +95,7 @@ describe('Create Opportunity', () => {
 
     it('should call the Opportunity.create method when all fields are provided', async () => {
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
@@ -112,7 +112,7 @@ describe('Create Opportunity', () => {
         Opportunity.create.mockResolvedValue(undefined);
 
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
@@ -129,7 +129,7 @@ describe('Create Opportunity', () => {
         Opportunity.create.mockResolvedValue(undefined);
 
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
@@ -147,7 +147,7 @@ describe('Create Opportunity', () => {
         Opportunity.create.mockResolvedValue({});
 
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
@@ -164,7 +164,7 @@ describe('Create Opportunity', () => {
         Opportunity.create.mockRejectedValue(new Error('Test error'));
 
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
@@ -181,7 +181,7 @@ describe('Create Opportunity', () => {
         Opportunity.create.mockRejectedValue(new Error('Test error'));
 
         // Mock request object
-        const req = { body: { title: 'test-title', closingDate: 'test-date' } };
+        const req = { user: { _id: 'test-id' }, body: { title: 'test-title', closingDate: 'test-date' } };
 
         // Mock response object
         const res = {
