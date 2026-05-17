@@ -1,14 +1,31 @@
 const Notification = require('./Notification.js');
+const nodemailer = require('nodemailer');
+
+const sendEmail = async (to, subject, text) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+        },
+    });
+
+    const mailOptions = { from: process.env.EMAIL_USER, to, subject, text };
+
+    await transporter.sendMail(mailOptions);
+};
 
 // This is a method to send all in-app notifications.
 // It is not used as a middleware so there is no need to wrap it inside a try and catch block
 // Infact all the errors that happen in this method should be handled by the middleware calling it
-exports.sendNotification = async (recipient, title, message) => {
-    if (!recipient || !title || !message) {
+exports.sendNotification = async (user, title, message) => {
+    if (!user || !title || !message) {
         throw new Error('All notification details are required');
     }
 
-    const notification = await Notification.create({ recipient, title, message });
+    const notification = await Notification.create({ recipient: user._id, title, message });
+
+    sendEmail(user.email, title, message);
 
     if (!notification) {
         throw new Error('All notification details are required');
