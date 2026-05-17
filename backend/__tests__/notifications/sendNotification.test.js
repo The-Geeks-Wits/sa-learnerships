@@ -5,9 +5,10 @@ jest.mock('../../notifications/Notification.js', () => ({
     create: jest.fn(),
 }));
 
-describe('sendNotification', () => {
+describe('Send Notification', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        console.log = jest.fn();
     });
 
     it('should create and return a notification successfully', async () => {

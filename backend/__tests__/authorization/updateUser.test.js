@@ -6,6 +6,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Update User', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status code when the body does not have role and status fields', async () => {
         // Mock request object
         const req = { body: {} };

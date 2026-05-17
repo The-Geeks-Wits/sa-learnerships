@@ -6,6 +6,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Delete User', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the params and params.id are not provided
     it('should search for the user by id and update the status field', async () => {
         // Mock request object

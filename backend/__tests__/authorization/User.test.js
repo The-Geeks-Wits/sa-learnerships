@@ -4,6 +4,10 @@ const User = require('../../authorization/User.js');
 jest.mock('mongoose', () => ({ Schema: jest.fn(() => ({})), model: jest.fn() }));
 
 describe('User Schema', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test line 12 on the User schema
     it('gets created', () => {
         const mockSchema = mongoose.Schema;

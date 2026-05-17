@@ -6,6 +6,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Get Users', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the search query params are not provided
     it('should get all users when the are no search query params', async () => {
         // Mock request object

@@ -6,6 +6,10 @@ jest.mock('../../opportunities/Opportunity.js', () => ({
 }));
 
 describe('Get My Opportunities', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status when no user is provided', async () => {
         // Mock request object
         const req = {};

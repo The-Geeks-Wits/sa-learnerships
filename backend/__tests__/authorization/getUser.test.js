@@ -6,6 +6,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Get User', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the params and params.id are not provided
     it('should get the user by the provided id', async () => {
         // Mock request object

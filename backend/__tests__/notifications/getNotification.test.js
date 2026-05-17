@@ -6,6 +6,10 @@ jest.mock('../../notifications/Notification.js', () => ({
 }));
 
 describe('Get Notification', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status when there are no params', async () => {
         // Mock request object
         const req = {};

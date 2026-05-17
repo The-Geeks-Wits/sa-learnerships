@@ -10,6 +10,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Upload CV', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status code when a file is not provided', async () => {
         // Mock request object
         const req = {};

@@ -12,6 +12,10 @@ jest.mock('../../utils.js', () => ({
 }));
 
 describe('Login', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the body is not provided
     it('should get the user by the provided email', async () => {
         // Mock request object
