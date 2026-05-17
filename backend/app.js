@@ -15,18 +15,25 @@ const opportunitiesRouter = require('./opportunities/routes.js');
 const userRoutes = require('./authorization/routes.js');
 const notificationsRouter = require('./notifications/routes.js');
 
-// --- ADDED: load reference data and data router ---
+//loading reference data and data router
 const dataRoutes = require('./authorization/dataRoutes.js');
 const qualifications = require('../data/qualifications.json');
 const institutions = require('../data/institutions.json');
+const skills = require('../data/skills.json');
+const locations = require('../data/locations.json');
+
+//ANALYTICS ROUTES
+const analyticsRoutes = require('./analytics/analyticsRoutes.js');
 
 dotenv.config();
 
 const app = express();
 
-// --- ADDED: make data available to all routes ---
+//making data available to routes using app
 app.locals.qualifications = qualifications;
 app.locals.institutions = institutions;
+app.locals.skills = skills;
+app.locals.locations = locations;
 
 // Middlewares
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -70,7 +77,8 @@ passport.use(
     ),
 );
 
-// --- ADDED: data routes (must be before /api/users to avoid /:id catch) ---
+
+//
 app.use('/api/users/data', dataRoutes);
 
 // routes
@@ -79,11 +87,14 @@ app.use('/opportunities', opportunitiesRouter);
 app.use('/applications', applicationsRouter);
 app.use('/notifications', notificationsRouter);
 
+//ANALYTICS ROUTES
+app.use('/api/analytics', analyticsRoutes);
+
 // Health status check route (For confirming that the app is up and running when deployed)
 app.use('/health', (req, res) => {
     res.status(200).json({ status: 'healthy' });
 });
-
+app.use(express.static(path.join(__dirname, '../')));
 // Error handling middleware
 app.use((req, res) => {
     res.status(404).json({ error: `${req.method} ${req.url} not found` });

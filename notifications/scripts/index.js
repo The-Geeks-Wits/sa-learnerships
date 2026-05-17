@@ -14,11 +14,66 @@ const getNotificationElement = (id, title, createdAt) => {
             <section>
                 <p><b>Sent:</b> ${createdAt.slice(0, 10)}</p>   
             </section>
-            <secttion>
+            <section>
                 <button class="transparent-btn full-details-btn" data-id="${id}">Full Details</button>
             </section>
         </section>
     </li>`;
+};
+
+const showAllNotifications = (allNotifications) => {
+    allNotificationsTab.classList.add('visible');
+    unreadNotificationsTab.classList.remove('visible');
+    readNotificationsTab.classList.remove('visible');
+
+    if (allNotifications.length === 0) {
+        notifications.innerHTML = '<li><p>No notifications yet</p></li>';
+        return;
+    }
+
+    notifications.innerHTML = '';
+
+    allNotifications.forEach(({ _id, title, createdAt }) => {
+        notifications.innerHTML += getNotificationElement(_id, title, createdAt);
+    });
+};
+
+const showUnreadNotifications = (allNotifications) => {
+    allNotificationsTab.classList.remove('visible');
+    unreadNotificationsTab.classList.add('visible');
+    readNotificationsTab.classList.remove('visible');
+
+    const filteredNotifications = allNotifications.filter(({ read }) => !read);
+
+    if (filteredNotifications.length === 0) {
+        notifications.innerHTML = '<h5>No unread notifications</h5>';
+        return;
+    }
+
+    notifications.innerHTML = '';
+
+    filteredNotifications.forEach(({ _id, title, createdAt }) => {
+        notifications.innerHTML += getNotificationElement(_id, title, createdAt);
+    });
+};
+
+const showReadNotifications = (allNotifications) => {
+    allNotificationsTab.classList.remove('visible');
+    unreadNotificationsTab.classList.remove('visible');
+    readNotificationsTab.classList.add('visible');
+
+    const filteredNotifications = allNotifications.filter(({ read }) => read);
+
+    if (filteredNotifications.length === 0) {
+        notifications.innerHTML = '<h5>No read notifications</h5>';
+        return;
+    }
+
+    notifications.innerHTML = '';
+
+    filteredNotifications.forEach(({ _id, title, createdAt }) => {
+        notifications.innerHTML += getNotificationElement(_id, title, createdAt);
+    });
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -41,9 +96,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 pageError.style.display = 'flex';
                 pageError.innerHTML = '<p>No notifications found</p>';
             } else {
-                data.notifications.forEach(({ _id, title, createdAt }) => {
-                    notifications.innerHTML += getNotificationElement(_id, title, createdAt);
-                });
+                allNotificationsTab.addEventListener('click', () => showAllNotifications(data.notifications));
+                unreadNotificationsTab.addEventListener('click', () => showUnreadNotifications(data.notifications));
+                readNotificationsTab.addEventListener('click', () => showReadNotifications(data.notifications));
+
+                // TODO: Set a tab query param so that we start with the tab provided
+                // Start with all notifications
+                showAllNotifications(data.notifications);
             }
         } else {
             pageError.style.display = 'flex';

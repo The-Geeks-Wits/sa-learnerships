@@ -1,4 +1,6 @@
 const Opportunity = require('./Opportunity.js');
+const mongoose = require('mongoose')
+const { sendNotification } = require('../notifications/controller.js');
 
 exports.createOpportunity = async (req, res) => {
     try {
@@ -53,6 +55,12 @@ exports.createOpportunity = async (req, res) => {
                 error: "Couldn't create opportunity! Please try again later",
             });
         }
+
+        const notificationTitle = `Opportunity Submitted - ${opportunity.title}`;
+
+        const message = `Your opportunity "${opportunity.title}" has been submitted successfully and is currently pending review.`;
+
+        await sendNotification(opportunity.creator, notificationTitle, message);
 
         res.status(201).json({
             id: opportunity._id,
@@ -118,7 +126,10 @@ exports.getOpportunity = async (req, res) => {
                 error: 'Opportunity id required! Please provide a valid opportunity id',
             });
         }
-
+        const id = req.params.id;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(404).json({ error: 'Invalid opportunity ID format' });
+        }
         // TODO: Catch the mongoose cast / invalid id exception
         const opportunity = await Opportunity.findById(req.params.id);
 
@@ -166,6 +177,12 @@ exports.resubmitOpportunity = async (req, res) => {
 
         opportunity.status = 'Pending';
         await opportunity.save();
+
+        const title = `Opportunity Update - ${opportunity.title}`;
+        const message = `Your opportunity "${opportunity.title}" has been re-submitted successfully and is currently under review.`;
+        await sendNotification(opportunity.creator,title,message);
+
+
         res.status(200).json({
             message: 'Opportunity re-submitted successfully!',
         });
@@ -194,6 +211,11 @@ exports.rejectOpportunity = async (req, res) => {
 
         opportunity.status = 'Rejected';
         await opportunity.save();
+
+        const title = `Opportunity Update - ${opportunity.title}`;
+        const message = `After careful review, we regret to inform you that your opportunity "${opportunity.title}" was not approved at this time.`;
+        await sendNotification(opportunity.creator,title,message);
+
         res.status(200).json({
             message: 'Opportunity rejected successfully!',
         });
@@ -222,6 +244,12 @@ exports.approveOpportunity = async (req, res) => {
 
         opportunity.status = 'Approved';
         await opportunity.save();
+
+        const title = `Opportunity Update - ${opportunity.title}`;
+        const message = `We are pleased to inform you that your opportunity "${opportunity.title}" has been approved and is now visible to applicants.`;
+
+        await sendNotification(opportunity.creator,title,message);
+
         res.status(200).json({
             message: 'Opportunity approved successfully!',
         });

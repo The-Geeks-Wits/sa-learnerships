@@ -1,0 +1,26 @@
+#results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+}
+
+#results-table th,
+#results-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#results-table th {
+    background-color: #f4f4f4;
+}
+
+#chart-container {
+    width: 100%;
+    max-width: 700px;
+    margin-top: 24px;
+}
+
+#export-section {
+    margin-top: 24px;
+}

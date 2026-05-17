@@ -141,6 +141,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
         applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
 
+        //added sidebar option for report
+        if (userRole === 'admin' || userRole === 'provider') {
+            sidebarOptions.insertAdjacentHTML(
+                'beforeend',
+                `<li>
+                    <section id="reports-nav" class="heading">
+                        <p>Reports</p>
+                        <img id="reports-nav-image" src="../assets/right-arrow.png" />
+                    </section>
+                    <section id="reports-nav-options" class="sidebar-nav-options">
+                        <ul>
+                            <li id="custom-report-tab"><a href="/opportunities/custom.html">Custom View</a></li>
+                            <li id="applications-volume-tab"><a href="/opportunities/application-volume.html">Application Volume</a></li>
+                            <li id="placement-rate-tab"><a href="/opportunities/placement.html">Placement Success</a></li>
+                        </ul>
+                    </section>
+                </li>`
+            );
+
+            const reportsNav = document.getElementById('reports-nav');
+            const reportsNavOptions = document.getElementById('reports-nav-options');
+            const reportsNavImage = document.getElementById('reports-nav-image');
+
+            reportsNav.addEventListener('click', () => {
+                toggleOptions(reportsNavOptions, reportsNavImage);
+            });
+
+            if (window.location.pathname.startsWith('/analytics/')) {
+                reportsNavImage.src = '../assets/down-arrow.png';
+                reportsNavOptions.style.display = 'block';
+            }
+        }
+
         if (userRole === 'admin') {
             // Add a control center navigation option on the sidebar
             sidebarOptions.insertAdjacentHTML(
