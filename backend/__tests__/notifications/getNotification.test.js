@@ -1,11 +1,11 @@
-const controller = require('../../opportunities/controller.js');
-const Opportunity = require('../../opportunities/Opportunity.js');
+const controller = require('../../notifications/controller.js');
+const Notification = require('../../notifications/Notification.js');
 
-jest.mock('../../opportunities/Opportunity.js', () => ({
+jest.mock('../../notifications/Notification.js', () => ({
     findById: jest.fn(),
 }));
 
-describe('Get Opportunity', () => {
+describe('Get Notification', () => {
     it('should return a 400 status when there are no params', async () => {
         // Mock request object
         const req = {};
