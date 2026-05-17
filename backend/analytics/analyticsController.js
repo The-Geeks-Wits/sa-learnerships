@@ -1,6 +1,6 @@
 const Application = require('../applications/Applications.js');   // adjust path if needed
-const Opportunity = require('../opportunities/Opportunity.js');
-const User = require('../authorization/User.js');                // adjust path if needed
+const User = require('../authorization/User.js');
+const Opportunity = require('../opportunities/Opportunity.js');                // adjust path if needed
 const mongoose = require('mongoose');
 
 exports.getCustomReport = async (req, res) => {
