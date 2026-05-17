@@ -23,8 +23,9 @@ exports.isAuthenticated = async (req, res, next) => {
         req.user = userObj;
 
         next();
-    } catch (err) {
-        return res.status(500).json({ error: 'Something went wrong! Please try again later' });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 

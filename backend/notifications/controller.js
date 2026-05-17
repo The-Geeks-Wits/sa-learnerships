@@ -28,8 +28,9 @@ exports.getMyNotifications = async (req, res) => {
         const notifications = await Notification.find({ recipient: req.user._id });
 
         res.status(200).json({ count: notifications.length, notifications });
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -62,8 +63,9 @@ exports.getNotification = async (req, res) => {
         }
 
         res.status(200).json(notification);
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -116,8 +118,9 @@ exports.updateNotification = async (req, res) => {
         }
 
         res.status(200).json(updatedNotification);
-    } catch {
+    } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 exports.getNotificationById = async (req, res) => {

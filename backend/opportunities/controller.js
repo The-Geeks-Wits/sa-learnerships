@@ -87,8 +87,9 @@ exports.getMyOpportunities = async (req, res) => {
         const opportunities = await Opportunity.find({ creator: req.user._id });
 
         res.status(200).json({ opportunities });
-    } catch {
-        res.status(500).json({ success: false, message: 'Something went wrong! Please try again later' });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
