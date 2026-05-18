@@ -11,8 +11,10 @@ const getOpportunity = opportunitiesController.getOpportunity;
 const getAllOpportunities = opportunitiesController.getAllOpportunities;
 const getMyOpportunities = opportunitiesController.getMyOpportunities;
 const resubmitOpportunity = opportunitiesController.resubmitOpportunity;
+const getMatchedOpportunities = opportunitiesController.getMatchedOpportunities;
 
 router.get('/mine', isAuthenticated, isProvider, getMyOpportunities);
+router.get('/matched', isAuthenticated, getMatchedOpportunities);
 router.get('/', getAllOpportunities);
 router.post('/', isAuthenticated, isProvider, createOpportunity);
 
