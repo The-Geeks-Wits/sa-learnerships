@@ -138,7 +138,7 @@ const exportCSV = () => {
         csv += headers[i].textContent.trim();
 
         if (i < headers.length - 1) {
-            csv += ',';
+            csv += ';';
         }
     }
 
@@ -152,7 +152,7 @@ const exportCSV = () => {
             csv += cells[j].textContent.trim();
 
             if (j < cells.length - 1) {
-                csv += ',';
+                csv += ';';
             }
         }
 
