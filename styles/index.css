@@ -195,14 +195,16 @@ aside ul li .heading img {
 aside #opportunities-nav-options,
 aside #control-center-nav-options,
 aside #settings-nav-options,
-aside #applications-nav-options {
+aside #applications-nav-options,
+aside #reports-nav-options {
     display: none;
 }
 
 aside #opportunities-nav-options ul,
 aside #control-center-nav-options ul,
 aside #settings-nav-options ul,
-aside #applications-nav-options ul {
+aside #applications-nav-options ul,
+aside #reports-nav-options ul {
     margin-top: 10px;
     padding-left: 30px;
     list-style: none;
@@ -213,7 +215,8 @@ aside #applications-nav-options ul {
 aside #opportunities-nav-options ul li,
 aside #control-center-nav-options ul li,
 aside #settings-nav-options ul li,
-aside #applications-nav-options ul li {
+aside #applications-nav-options ul li,
+aside #reports-nav-options ul li {
     height: 40px;
     margin: 0px;
     padding-left: 10px;
@@ -225,7 +228,8 @@ aside #applications-nav-options ul li {
 aside #opportunities-nav-options ul li a,
 aside #control-center-nav-options ul li a,
 aside #settings-nav-options ul li a,
-aside #applications-nav-options ul li a {
+aside #applications-nav-options ul li a,
+aside #reports-nav-options ul li a {
     font-size: 16px;
     color: #505050;
     text-decoration: none;

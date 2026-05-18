@@ -4,28 +4,26 @@ const jwt = require('jsonwebtoken');
 exports.isAuthenticated = async (req, res, next) => {
     try {
         // Request headers are always provided, so we can skip the check
-        const token = req.headers.authorization;
+        const token = req.cookies.jwt;
 
         if (!token) {
             return res.status(401).json({ error: 'Access denied! Missing verification token' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
+        const userId = decoded.userId || decoded.id;
+        const user = await User.findById(userId);
+        
 
         if (!user) {
             return res.status(401).json({ error: 'User not found! Please check your token and try again later' });
         }
-
-        const userObj = user.toObject();
-
-        delete userObj.password;
-        req.user = userObj;
+        req.user = user;
 
         next();
-    } catch (error) {
-        res.status(500).json({ error: 'Something went wrong! Please try again later' });
-        console.log(error);
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Something went wrong! Please try again later' });
     }
 };
 

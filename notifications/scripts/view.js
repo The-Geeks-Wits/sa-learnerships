@@ -13,15 +13,12 @@ const markNotification = async (id, read) => {
     try {
         const url = backendURL() + `/notifications/${id}`;
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
-
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: token,
             },
+            credentials: 'include',
             body: JSON.stringify({ read }),
         });
     } catch (error) {
@@ -37,20 +34,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const url = backendURL() + `/notifications/${id}`;
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
-
         pageState.style.display = 'flex';
         pageState.innerHTML = 'Loading...';
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include'
         });
 
         const data = await response.json();
         if (response.ok) {
-            markNotification(data._id, true); // Mark notification as read
+            await markNotification(data._id, true); // Mark notification as read
+
+            const notificationCounts = document.querySelectorAll('.notifications-count');
+
+            notificationCounts.forEach((count) => {
+                const currentCount = Number(count.textContent);
+
+                if (currentCount > 0) {
+                    count.textContent = currentCount - 1;
+                }
+            });
+
+
             pageContainer.style.display = 'block';
             pageTitle.innerHTML = data.title;
             notificationMessage.innerHTML = data.message;

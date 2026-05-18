@@ -9,16 +9,16 @@ exports.register = async (req, res) => {
         const email = req.body.email;
         const confirmPassword = req.body.confirmPassword;
 
+        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
+            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
+        }
+
         const userExists = await User.findOne({ email: req.body.email });
         if (userExists) {
             return res.status(409).json({ error: 'User Already Exists!' });
         }
 
-        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
-            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
-        }
-
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             return res.status(400).json({ error: 'Passwords do not match' });
         }
 
@@ -43,9 +43,14 @@ exports.register = async (req, res) => {
         });
 
         const token = utils.generateAccessToken(email, user._id);
+        res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax',
+        maxAge: 3600000
+        });
 
         res.status(201).json({
-            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,
@@ -71,6 +76,12 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
+        if (user.signupMethod === 'google' || !user.password) {
+            return res.status(400).json({
+                error: 'This account was created using Google. Please sign in with Google.',
+            });
+        }
+
         const isPasswordValid = await utils.comparePasswords(password, user.password);
 
         if (!isPasswordValid) {
@@ -78,10 +89,15 @@ exports.login = async (req, res) => {
         }
 
         const rememberMe = req.body.rememberMe;
-        const token = utils.generateAccessToken(email, user._id, user.role);
+        const token = utils.generateAccessToken(email, user._id);
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Lax',
+            maxAge: rememberMe ? 604800000 : 3600000,    
+        });
 
         res.status(200).json({
-            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,

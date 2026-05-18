@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Shortlisted Applicaitons</title>
+        <title>Application Details</title>
         <link rel="stylesheet" href="../styles/index.css" />
-        <link rel="stylesheet" href="./styles/shortlisted.css" />
+        <link rel="stylesheet" href="./styles/view.css" />
         <link rel="stylesheet" href="./styles/common.css" />
     </head>
     <body>
@@ -58,20 +58,24 @@
             </aside>
             <section id="main-details">
                 <section id="page-container">
-                    <h1 id="page-title">Shortlisted Applications</h1>
+                    <h1 id="page-title">View Application</h1>
                     <p id="page-description">
-                        This is where you can view applications that you have shortlisted for all the opportunities that
-                        you created. You can search for an opportunity and filter applications by it if you want to
-                        review and make changes to candidate applications
+                        Review the full details of this application before making a decision.
                     </p>
-                    <ul id="applications"></ul>
+                    
+                    <section id="applicant-details"></section>
+
+                    <section id ="opportunity-details"></section>
+
+                    <section id="actions"></section>
+
                 </section>
                 <section id="page-state"></section>
                 <section id="page-error"></section>
             </section>
         </main>
         <script type="module" src="../scripts/index.js"></script>
-        <script type="module" src="./scripts/shortlisted.js"></script>
+        <script type="module" src="./scripts/view.js"></script>
         
     </body>
 </html>

@@ -1,0 +1,66 @@
+#page-container{
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 50px;
+    display: none;
+}
+
+#page-title{
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+#page-description{
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+#applicant-details,
+#opportunity-details,
+#actions {
+    background-color: #ffffff;
+    border: 1px solid #dfdfdf;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: #0000000a ;
+}
+
+#applicant-details h2,
+#opportunity-details h2 {
+    margin-bottom: 25px;
+    font-size: 30px;
+}
+
+#applicant-details h3,
+#opportunity-details h3 {
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+#applicant-details p,
+#opportunity-details p {
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+#applicant-details ul,
+#opportunity-details ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+#applicant-details li,
+#opportunity-details li {
+    margin-bottom: 8px;
+}
+
+#actions {
+    display: flex;
+    gap: 15px;
+}
+
+#actions button {
+    min-width: 140px;
+}

@@ -27,8 +27,11 @@ exports.getMyNotifications = async (req, res) => {
 
         const notifications = await Notification.find({ recipient: req.user._id });
 
-        res.status(200).json({ count: notifications.length, notifications });
-    } catch (error) {
+        const unreadNotifications = notifications.filter((notification) => !notification.read);
+        const unreadCount = unreadNotifications.length;
+
+        res.status(200).json({ count: unreadCount, notifications });
+    } catch {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
@@ -100,7 +103,7 @@ exports.updateNotification = async (req, res) => {
 
         if (!notification.recipient.equals(req.user._id)) {
             return res.status(401).json({
-                error: 'Invalid receipt! You need to be the receipt of the notification',
+                error: 'Invalid receipient! You need to be the receipt of the notification',
             });
         }
 
