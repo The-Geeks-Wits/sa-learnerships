@@ -12,6 +12,7 @@ const closingDate = document.getElementById('closing-date');
 const errorMessage = document.getElementById('error-message');
 const submitBtn = document.getElementById('submit-btn');
 const addRequirementsBtn = document.getElementById('add-requirement-btn');
+const sector = document.getElementById('sector').value;
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();

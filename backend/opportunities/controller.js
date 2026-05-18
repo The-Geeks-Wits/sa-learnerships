@@ -24,6 +24,7 @@ exports.createOpportunity = async (req, res) => {
         const stipend = req.body.stipend;
         const duration = req.body.duration;
         const creator = req.user._id;
+        const sector = req.body.sector;
 
         if (!title) {
             return res.status(400).json({
@@ -48,6 +49,7 @@ exports.createOpportunity = async (req, res) => {
             closingDate,
             stipend,
             duration,
+            sector,
         });
 
         if (!opportunity) {

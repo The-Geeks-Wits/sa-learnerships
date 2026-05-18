@@ -153,8 +153,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <section id="reports-nav-options" class="sidebar-nav-options">
                         <ul>
                             <li id="custom-report-tab"><a href="/opportunities/custom.html">Custom View</a></li>
-                            <li id="applications-volume-tab"><a href="/opportunities/application-volume.html">Application Volume</a></li>
-                            <li id="placement-rate-tab"><a href="/opportunities/placement.html">Placement Success</a></li>
+                            <li id="applications-volume-tab"><a href="/opportunities/volume.html">Application Volume</a></li>
+                            <li id="placement-rate-tab"><a href="/opportunities/placement_form.html">Placement Success</a></li>
+                            
+                            
                         </ul>
                     </section>
                 </li>`
@@ -174,36 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        if (userRole === 'admin') {
-            // Add a control center navigation option on the sidebar
-            sidebarOptions.insertAdjacentHTML(
-                'beforeend',
-                `<li>
-                <section id="control-center-nav" class="heading">
-                    <p>Control Center</p>
-                    <img id="control-center-nav-image" src="../assets/right-arrow.png" />
-                </section>
-                <section id="control-center-nav-options">
-                    <ul>
-                        <li id="user-management-tab"><a href="/control-center/users.html">User Management</a></li>
-                    </ul>
-                </section>
-            </li>`,
-            );
-
-            // Add an event listeners of the control center items since they are added after the DOM content has been loaded
-            const controlCenterNav = document.getElementById('control-center-nav');
-            const controlCenterNavOptions = document.getElementById('control-center-nav-options');
-            const controlCenterNavImage = document.getElementById('control-center-nav-image');
-            controlCenterNav.addEventListener('click', () => {
-                toggleOptions(controlCenterNavOptions, controlCenterNavImage);
-            });
-
-            // Since we can't set this directly on the users.js file
-            if (window.location.pathname === '/control-center/users.html') {
-                controlCenterNavImage.src = '../assets/down-arrow.png';
-            }
-        }
+        
     } catch (error) {
         profileElement.innerHTML = `<section id="profile-error">
             <p>Couldn't load profile details</p>

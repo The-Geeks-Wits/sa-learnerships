@@ -19,8 +19,12 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ message: 'Invalid Token' });
     }
 };
-
+router.get('/placement-form', (req, res) => {
+    res.sendFile(path.join(__dirname, '../opportunities/placement_form.html'));
+});
 router.post('/custom-report', verifyToken, controller.getCustomReport);
+router.post('/placement-success-report', verifyToken, controller.getPlacementSuccessReport);
+router.post('/export-placement-report', verifyToken, controller.exportPlacementReport);
 router.get('/application-volume',isAuthenticated, controller.getApplicationVolume);
 
 router.get('/available-options', (req, res) => {
@@ -28,6 +32,11 @@ router.get('/available-options', (req, res) => {
         dimensions: ['location', 'nqfLevel'],
         metrics: ['shortlistRate', 'totalApplications'],
         filters: ['opportunity', 'status', 'dateFrom', 'dateTo']
+    });
+});
+router.get('/placement-options', (req, res) => {
+    res.json({
+        sectors: ['Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Construction', 'Education', 'Hospitality']
     });
 });
 

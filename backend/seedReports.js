@@ -1,7 +1,7 @@
 //this file is used to seed the database
-//  with sample data for testing and development purposes. 
+// with sample data for testing and development purposes. 
 // It creates sample users, opportunities, and applications to populate
-//  the database with realistic data for testing the application's functionality.
+// the database with realistic data for testing the application's functionality.
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -13,11 +13,17 @@ const Opportunity = require('./opportunities/Opportunity.js');
 const Application = require('./applications/Applications.js');
 
 const opportunitiesData = [
-  { title: 'Software Development Learnership', requirements: ['Matric'], location: 'Johannesburg, Gauteng', closingDate: new Date('2026-08-31'), stipend: 5000, duration: 12, status: 'Approved' },
-  { title: 'Electrical Engineering Apprenticeship', requirements: ['N3'], location: 'Durban, KwaZulu-Natal', closingDate: new Date('2026-09-15'), stipend: 6500, duration: 18, status: 'Approved' },
-  { title: 'Digital Marketing Internship', requirements: ['Matric'], location: 'Cape Town, Western Cape', closingDate: new Date('2026-07-31'), stipend: 4000, duration: 6, status: 'Approved' },
-  { title: 'Plumbing Apprenticeship', requirements: ['Grade 10'], location: 'Pretoria, Gauteng', closingDate: new Date('2026-10-01'), stipend: 3500, duration: 24, status: 'Approved' },
-  { title: 'Business Administration Learnership', requirements: ['Matric'], location: 'Polokwane, Limpopo', closingDate: new Date('2026-08-15'), stipend: 4500, duration: 12, status: 'Approved' }
+  { title: 'Software Development Learnership', sector: 'Technology', requirements: ['Matric'], location: 'Johannesburg, Gauteng', closingDate: new Date('2026-08-31'), stipend: 5000, duration: 12, status: 'Approved' },
+  { title: 'Electrical Engineering Apprenticeship', sector: 'Technology', requirements: ['N3'], location: 'Durban, KwaZulu-Natal', closingDate: new Date('2026-09-15'), stipend: 6500, duration: 18, status: 'Approved' },
+  { title: 'Digital Marketing Internship', sector: 'Marketing', requirements: ['Matric'], location: 'Cape Town, Western Cape', closingDate: new Date('2026-07-31'), stipend: 4000, duration: 6, status: 'Approved' },
+  { title: 'Plumbing Apprenticeship', sector: 'Construction', requirements: ['Grade 10'], location: 'Pretoria, Gauteng', closingDate: new Date('2026-10-01'), stipend: 3500, duration: 24, status: 'Approved' },
+  { title: 'Business Administration Learnership', sector: 'Business', requirements: ['Matric'], location: 'Polokwane, Limpopo', closingDate: new Date('2026-08-15'), stipend: 4500, duration: 12, status: 'Approved' },
+  { title: 'Nursing Learnership', sector: 'Healthcare', requirements: ['Matric', 'Biology'], location: 'Cape Town, Western Cape', closingDate: new Date('2026-09-30'), stipend: 5500, duration: 12, status: 'Approved' },
+  { title: 'Accounting Internship', sector: 'Finance', requirements: ['Matric', 'Accounting'], location: 'Johannesburg, Gauteng', closingDate: new Date('2026-08-15'), stipend: 6000, duration: 12, status: 'Approved' },
+  { title: 'Retail Management Learnership', sector: 'Retail', requirements: ['Matric'], location: 'Durban, KwaZulu-Natal', closingDate: new Date('2026-10-31'), stipend: 4000, duration: 12, status: 'Approved' },
+  { title: 'Teaching Assistant Programme', sector: 'Education', requirements: ['Matric'], location: 'Johannesburg, Gauteng', closingDate: new Date('2026-11-30'), stipend: 4000, duration: 12, status: 'Approved' },
+  { title: 'Hospitality Management Learnership', sector: 'Hospitality', requirements: ['Matric'], location: 'Cape Town, Western Cape', closingDate: new Date('2026-09-15'), stipend: 4500, duration: 12, status: 'Approved' },
+  { title: 'Manufacturing Technician', sector: 'Manufacturing', requirements: ['Grade 12', 'Mathematics'], location: 'Port Elizabeth, Eastern Cape', closingDate: new Date('2026-08-31'), stipend: 5000, duration: 18, status: 'Approved' }
 ];
 
 const applicantsData = [
@@ -68,8 +74,14 @@ async function seed() {
     const opportunities = await Opportunity.insertMany(opportunitiesData);
     console.log(`${opportunities.length} opportunities created`);
 
+    // Log sectors for verification
+    const sectorCounts = await Opportunity.aggregate([
+      { $group: { _id: "$sector", count: { $sum: 1 } } }
+    ]);
+    console.log('Opportunities by sector:', sectorCounts);
+
     const applications = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 50; i++) {
       const applicant = users[Math.floor(Math.random() * users.length)];
       const opportunity = opportunities[Math.floor(Math.random() * opportunities.length)];
       const status = statuses[Math.floor(Math.random() * statuses.length)];
