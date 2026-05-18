@@ -77,15 +77,13 @@ passport.use(
     ),
 );
 
-
-//
-app.use('/api/users/data', dataRoutes);
-
 // routes
 app.use('/api/users', userRoutes);
 app.use('/opportunities', opportunitiesRouter);
 app.use('/applications', applicationsRouter);
 app.use('/notifications', notificationsRouter);
+app.use('/api/users/data', dataRoutes);
+
 
 //ANALYTICS ROUTES
 app.use('/api/analytics', analyticsRoutes);

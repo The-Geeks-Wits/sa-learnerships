@@ -59,11 +59,9 @@ exports.register = async (req, res) => {
                 role: user.role,
             },
         });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            error: err.message,
-        });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -108,11 +106,9 @@ exports.login = async (req, res) => {
                 role: user.role,
             },
         });
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            error: err.message,
-        });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -139,8 +135,9 @@ exports.deleteUser = async (req, res) => {
         }
 
         res.json({ message: 'User disabled', user: user });
-    } catch (e) {
-        res.status(500).json({ message: e.message });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -195,7 +192,8 @@ exports.updateUser = async (req, res) => {
             role: updatedUser.role,
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -222,7 +220,8 @@ exports.getUsers = async (req, res) => {
 
         res.json(users);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -243,7 +242,8 @@ exports.getUserById = async (req, res) => {
             role: user.role,
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -283,8 +283,9 @@ exports.editProfile = async (req, res) => {
         delete userObj.password;
 
         return res.status(200).json({ user: userObj });
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
 
@@ -322,8 +323,8 @@ exports.uploadCV = async (req, res) => {
             success: true,
             cv: filePath,
         });
-    } catch (err) {
-        console.error('❌ Error in uploadCV:', err);
-        return res.status(500).json({ message: 'Upload failed' });
+    } catch (error) {
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        console.log(error);
     }
 };
