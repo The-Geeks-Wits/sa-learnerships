@@ -126,3 +126,20 @@ textarea:focus {
     color: #e63946;
     text-align: center;
 }
+select {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #ffffff;
+    border: 1.5px solid #dfdfdf;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: #1562f2;
+}

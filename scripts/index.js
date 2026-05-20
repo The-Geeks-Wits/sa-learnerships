@@ -141,36 +141,42 @@ document.addEventListener('DOMContentLoaded', async () => {
         opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
         applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
 
-        if (userRole === 'admin') {
-            // Add a control center navigation option on the sidebar
+        //added sidebar option for report
+        if (userRole === 'admin' || userRole === 'provider') {
             sidebarOptions.insertAdjacentHTML(
                 'beforeend',
                 `<li>
-                <section id="control-center-nav" class="heading">
-                    <p>Control Center</p>
-                    <img id="control-center-nav-image" src="../assets/right-arrow.png" />
-                </section>
-                <section id="control-center-nav-options">
-                    <ul>
-                        <li id="user-management-tab"><a href="/control-center/users.html">User Management</a></li>
-                    </ul>
-                </section>
-            </li>`,
+                    <section id="reports-nav" class="heading">
+                        <p>Reports</p>
+                        <img id="reports-nav-image" src="../assets/right-arrow.png" />
+                    </section>
+                    <section id="reports-nav-options" class="sidebar-nav-options">
+                        <ul>
+                            <li id="custom-report-tab"><a href="/opportunities/custom.html">Custom View</a></li>
+                            <li id="applications-volume-tab"><a href="/opportunities/application-volume.html">Application Volume</a></li>
+                            <li id="placement-rate-tab"><a href="/opportunities/placement_form.html">Placement Success</a></li>
+                            
+                            
+                        </ul>
+                    </section>
+                </li>`
             );
 
-            // Add an event listeners of the control center items since they are added after the DOM content has been loaded
-            const controlCenterNav = document.getElementById('control-center-nav');
-            const controlCenterNavOptions = document.getElementById('control-center-nav-options');
-            const controlCenterNavImage = document.getElementById('control-center-nav-image');
-            controlCenterNav.addEventListener('click', () => {
-                toggleOptions(controlCenterNavOptions, controlCenterNavImage);
+            const reportsNav = document.getElementById('reports-nav');
+            const reportsNavOptions = document.getElementById('reports-nav-options');
+            const reportsNavImage = document.getElementById('reports-nav-image');
+
+            reportsNav.addEventListener('click', () => {
+                toggleOptions(reportsNavOptions, reportsNavImage);
             });
 
-            // Since we can't set this directly on the users.js file
-            if (window.location.pathname === '/control-center/users.html') {
-                controlCenterNavImage.src = '../assets/down-arrow.png';
+            if (window.location.pathname.startsWith('/analytics/')) {
+                reportsNavImage.src = '../assets/down-arrow.png';
+                reportsNavOptions.style.display = 'block';
             }
         }
+
+        
     } catch (error) {
         profileElement.innerHTML = `<section id="profile-error">
             <p>Couldn't load profile details</p>
