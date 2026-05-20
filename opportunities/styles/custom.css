@@ -1,0 +1,157 @@
+#main-details {
+    max-width: 950px;
+}
+
+#main-details h2 {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+#main-details p {
+    margin-bottom: 20px;
+    color: #4a5568;
+    font-size: 16px;
+}
+
+#custom-report-form fieldset {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: #ffffff;
+}
+
+#custom-report-form legend {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1a202c;
+    padding: 0 8px;
+}
+
+#dimension-options,
+#metric-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;           
+    margin-top: 4px;
+}
+
+#dimension-options label,
+#metric-options label {
+    display: flex;            
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    color: #2d3748;
+    cursor: pointer;
+}
+
+#dimension-options input[type="checkbox"],
+#metric-options input[type="radio"] {
+    accent-color: #1562f2;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+#filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+#filter-options label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: #2d3748;
+    gap: 4px;
+}
+
+#filter-options select,
+#filter-options input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    width: auto;
+    min-width: 140px;
+}
+
+#custom-report-form button[type="submit"] {
+    margin-top: 12px;
+    background-color: #1562f2;
+    border: 1px solid #1562f2;
+}
+
+#report-results {
+    margin-top: 30px;
+}
+
+#report-results h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 16px;
+}
+
+#chart-container {
+    max-width: 800px;
+    margin-bottom: 30px;
+}
+
+#results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.92rem;
+}
+
+#results-table th,
+#results-table td {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#results-table th {
+    background-color: #f7fafc;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+#results-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+#results-table th:first-child,
+#results-table td:first-child {
+    min-width: 300px;
+    width: 40%;
+}
+
+#export-csv {
+    background-color: #1562f2;
+    border: 1px solid #1562f2;
+    margin-right: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    #dimension-options,
+    #metric-options,
+    #filter-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+    #filter-options select,
+    #filter-options input[type="date"] {
+        width: 100%;
+    }
+}
