@@ -123,21 +123,19 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
-        } else {
-            res.json({
-                message: 'User disabled',
-                user: {
-                    _id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role,
-                },
-            });
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        res.json({ message: 'User disabled', user: user });
+        return res.json({
+            message: 'User disabled',
+            user: {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+            },
+        });
     } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
@@ -319,8 +317,7 @@ exports.uploadCV = async (req, res) => {
         }
 
         const filePath = `/uploads/${req.file.filename}`;
-        user.cv = filePath;
-        await user.save();
+        await User.findByIdAndUpdate(req.user.userId, { cv: filePath });
 
         return res.json({
             success: true,
