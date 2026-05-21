@@ -14,6 +14,13 @@ const getUserId = () => {
 
 // update user role
 async function updateUser() {
+
+    const currentRole = document.getElementById('detailRole').dataset.originalRole;
+    if (currentRole === 'admin' && detailRole.value !== 'admin') {
+        alert('You cannot change the role of an admin.');
+        return;
+    }
+
     const id = getUserId();
     if (!id) {
         alert('No user ID found');
@@ -59,7 +66,7 @@ async function deleteUser() {
         if (res.ok) {
             const data = await res.json();
             alert(data.message || 'User deleted successfully');
-            window.location.href = 'index.html'; // redirect after delete
+            window.location.href = 'users.html'; // redirect after delete
         } else {
             alert('Failed to delete user');
         }
@@ -92,6 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             dateJoinedDetail.innerHTML = user.createdAt ? user.createdAt.slice(0, 10) : '';
             statusDetail.innerHTML = user.status || '';
             detailRole.value = user.role || '';
+            detailRole.dataset.originalRole = user.role || '';
         } else {
             alert('Could not load user details');
         }
@@ -100,3 +108,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Server error while fetching user details');
     }
 });
+
+document.getElementById('save-user-details').addEventListener('click', updateUser);
+document.getElementById('delete-user').addEventListener('click', deleteUser);

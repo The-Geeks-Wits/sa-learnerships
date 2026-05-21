@@ -43,39 +43,39 @@ app.use(passport.initialize());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/profile', express.static(path.join(__dirname, 'profile')));
 
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `${process.env.API_URL}/api/users/google/callback`,
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                let user = await User.findOne({ email: profile.emails[0].value });
+// passport.use(
+//     new GoogleStrategy(
+//         {
+//             clientID: process.env.GOOGLE_CLIENT_ID,
+//             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//             callbackURL: `${process.env.API_URL}/api/users/google/callback`,
+//         },
+//         async (accessToken, refreshToken, profile, done) => {
+//             try {
+//                 let user = await User.findOne({ email: profile.emails[0].value });
 
-                if (!user) {
-                    user = await User.create({
-                        firstName: profile.name.givenName || 'Google',
-                        lastName: profile.name.familyName || 'User',
-                        email: profile.emails[0].value,
-                        googleId: profile.id,
-                        signupMethod: 'google',
-                    });
-                }
+//                 if (!user) {
+//                     user = await User.create({
+//                         firstName: profile.name.givenName || 'Google',
+//                         lastName: profile.name.familyName || 'User',
+//                         email: profile.emails[0].value,
+//                         googleId: profile.id,
+//                         signupMethod: 'google',
+//                     });
+//                 }
 
-                const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET, {
-                    expiresIn: '24h',
-                });
+//                 const token = jwt.sign({ email: user.email, userId: user._id }, process.env.JWT_SECRET, {
+//                     expiresIn: '24h',
+//                 });
 
-                user.token = token;
-                return done(null, user);
-            } catch (err) {
-                return done(err, null);
-            }
-        },
-    ),
-);
+//                 user.token = token;
+//                 return done(null, user);
+//             } catch (err) {
+//                 return done(err, null);
+//             }
+//         },
+//     ),
+// );
 
 // routes
 app.use('/api/users', userRoutes);

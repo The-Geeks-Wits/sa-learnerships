@@ -18,6 +18,9 @@ exports.isAuthenticated = async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: 'User not found! Please check your token and try again later' });
         }
+        if (user.status === 'disabled') {
+            return res.status(401).json({ error: 'Your account has been disabled. Please contact an administrator.' });
+        }
         req.user = user;
 
         next();

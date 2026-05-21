@@ -87,6 +87,9 @@ exports.login = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
+        if (user.status === 'disabled') {
+            return res.status(401).json({ error: 'Your account has been disabled. Please contact an administrator.' });
+        }
 
         const rememberMe = req.body.rememberMe;
         const token = utils.generateAccessToken(email, user._id);
@@ -300,7 +303,7 @@ exports.uploadCV = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
+        
         // Safely delete old CV (if any) – won't crash on error
         if (user.cv) {
             try {
@@ -327,4 +330,14 @@ exports.uploadCV = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
+};
+
+//logout user by clearing the JWT cookie
+exports.logout = (req, res) => {
+    res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'Lax',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
 };

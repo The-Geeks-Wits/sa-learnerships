@@ -24,6 +24,7 @@ const upload = multer({ storage });
 // auth
 router.post('/register', controller.register);
 router.post('/login', controller.login);
+router.post('/logout', controller.logout);
 
 // google auth
 router.get(

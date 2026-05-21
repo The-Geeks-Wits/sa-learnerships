@@ -127,10 +127,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             profileElement.innerHTML = `<section>
                 <h4>${user.firstName} ${user.lastName}</h4>
                 <p>${user.role}</p>
-            </section><h3 id="profile-letter">${user.firstName[0].toUpperCase()}</h3>`;
+            </section>
+            <h3 id="profile-letter">${user.firstName[0].toUpperCase()}</h3>`;
 
             document.getElementById('profile-letter').addEventListener('click', () => {
-                window.location.href = '../profile/view.html';
+                window.location.href = '/profile/view.html';
             });
         } else {
             profileElement.innerHTML = `<section>
@@ -138,8 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </section>`;
         }
 
-        opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
-        applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
+        if (userRole !== 'applicant') applyBtn.style.display = 'none';
 
         //added sidebar option for report
         if (userRole === 'admin' || userRole === 'provider') {
@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </li>`
             );
 
+
             const reportsNav = document.getElementById('reports-nav');
             const reportsNavOptions = document.getElementById('reports-nav-options');
             const reportsNavImage = document.getElementById('reports-nav-image');
@@ -176,7 +177,46 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        
+        if (userRole === 'admin') {
+                sidebarOptions.insertAdjacentHTML(
+                    'beforeend',
+                    `<li>
+                        <section id="control-center-nav" class="heading">
+                            <p>Control Centre</p>
+                            <img id="control-center-nav-image" src="../assets/right-arrow.png" />
+                        </section>
+                        <section id="control-center-nav-options" class="sidebar-nav-options">
+                            <ul>
+                                <li><a href="/control-center/users.html">Manage Users</a></li>
+                            </ul>
+                        </section>
+                    </li>`
+                );
+
+                const controlCenterNav = document.getElementById('control-center-nav');
+                const controlCenterNavOptions = document.getElementById('control-center-nav-options');
+                const controlCenterNavImage = document.getElementById('control-center-nav-image');
+
+                controlCenterNav.addEventListener('click', () => {
+                    toggleOptions(controlCenterNavOptions, controlCenterNavImage);
+                });
+            }    
+
+        sidebarOptions.insertAdjacentHTML(
+            'beforeend',
+            `<li id="logout-nav">
+                <button id="logout-btn" class="transparent-btn">Logout</button>
+            </li>`
+        );
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await fetch(backendURL() + '/api/users/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+            window.location.href = '/login.html';
+        });
+
     } catch (error) {
         profileElement.innerHTML = `<section id="profile-error">
             <p>Couldn't load profile details</p>
