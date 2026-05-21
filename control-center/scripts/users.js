@@ -59,7 +59,7 @@ function renderUsers(users) {
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="3" style="text-align:center; padding: 20px;">
+                <td colspan="3" class="empty-results">
                     No results found
                 </td>
             </tr>

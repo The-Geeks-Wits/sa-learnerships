@@ -358,7 +358,7 @@ const showEducationDetails = async (user) => {
             </section>
             <section class="input-group">
                 <label>NQF Level</label>
-                <p id="nqf-display" style="font-weight:600; margin: 0;">–</p>
+                <p id="nqf-display">–</p>
             </section>
             <p id="error-message"></p>
             <button id="add-education-btn" class="coloured-btn">Add education</button>
