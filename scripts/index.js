@@ -15,7 +15,6 @@ const applicationsNavImage = document.getElementById('applications-nav-image');
 const sidebarOptions = document.getElementById('sidebar-options');
 const profileElement = document.getElementById('profile-details');
 const appName = document.getElementById('app-name');
-const applyBtn = document.getElementById('apply-btn');
 const notificationsElement = document.getElementById('notifications');
 const notificationCountElements = document.getElementsByClassName('notifications-count');
 
@@ -66,8 +65,8 @@ const getApplicationsOptions = (role) => {
     </ul>`;
 
     const providerOptions = `<ul>
-        <li id="all-applications-nav-tab"><a href="/applications/index.html">All Applications</a></li>
-        <li id="pending-nav-tab"><a href="/applications/pending.html">Pending</a></li>
+        <li id="all-applications-nav-tab"><a href="/applications/index.html">All Received</a></li>
+        <li id="pending-nav-tab"><a href="/applications/pending.html">Pending Review</a></li>
         <li id="shortlisted-nav-tab"><a href="/applications/shortlisted.html">Shortlisted</a></li>
         <li id="rejected-nav-tab"><a href="/applications/rejected.html">Rejected</a></li>
     </ul>`;
@@ -139,7 +138,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             </section>`;
         }
 
-        if (userRole !== 'applicant') applyBtn.style.display = 'none';
+        opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
+        applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
 
         //added sidebar option for report
         if (userRole === 'admin' || userRole === 'provider') {
@@ -232,9 +232,6 @@ notificationsElement.addEventListener('click', () => {
     window.location.href = '/notifications/index.html';
 });
 
-applyBtn.addEventListener('click', () => {
-    window.location.href = '/opportunities/index.html';
-});
 
 opportunitiesNav.addEventListener('click', () => {
     toggleOptions(opportunitiesNavOptions, opportunitiesNavImage);
@@ -247,5 +244,3 @@ settingsNav.addEventListener('click', () => {
 applicationsNav.addEventListener('click', () => {
     toggleOptions(applicationsNavOptions, applicationsNavImage);
 });
-
-applyBtn.addEventListener('click', () => {});
