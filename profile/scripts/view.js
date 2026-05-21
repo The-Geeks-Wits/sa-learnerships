@@ -28,13 +28,11 @@ const setPersonalDetails = (user) => {
         </section>
     </section>`;
 
-    const editProfileBtn = document.getElementById('edit-profile');
-    editProfileBtn.addEventListener('click', () => {
+    document.getElementById('edit-profile').addEventListener('click', () => {
         window.location.href = 'edit.html';
     });
 };
 
-// Renders personal details
 const showPersonalDetails = (user) => {
     personalTab.classList.add('visible');
     educationTab.classList.remove('visible');
@@ -63,7 +61,6 @@ const showPersonalDetails = (user) => {
     </ul>`;
 };
 
-// Clean, properly stacked education cards update for professionalism
 const showEducationDetails = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.add('visible');
@@ -72,62 +69,29 @@ const showEducationDetails = (user) => {
 
     const qualifications = user.qualifications || [];
 
-    let contentHtml = '';
     if (qualifications.length === 0) {
-        contentHtml = `<p style="color:#666; font-size:0.95rem;">No qualifications added yet. Click “Edit profile” to add your qualifications.</p>`;
-    } else {
-        // Welcome header
-        contentHtml = `<header style="margin-bottom: 16px;">
-            <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
-                Your Qualifications
-            </h3>
-            <p style="margin:0; font-size:0.9rem; color:#666;">
-                These are your registered qualifications aligned with the South African NQF framework.
-            </p>
-        </header>`;
-
-        let cardsHtml = '';
-        for (let i = 0; i < qualifications.length; i++) {
-            const q = qualifications[i];
-            cardsHtml += `
-            <li style="
-                list-style: none;
-                background: #ffffff;
-                border-radius: 8px;
-                padding: 16px 20px;
-                margin-bottom: 12px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-            ">
-                <header style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                    <h4 style="margin:0; font-size:1.1rem; font-weight:600; color:#1a202c;">
-                        ${q.qualificationName || 'N/A'}
-                    </h4>
-                    <small style="
-                        background: #ebf4ff;
-                        color: #2b6cb0;
-                        padding: 4px 10px;
-                        border-radius: 20px;
-                        font-size: 0.8rem;
-                        font-weight: 600;
-                    ">NQF ${q.nqfLevel ?? 'N/A'}</small>
-                </header>
-                <section style="color: #4a5568; font-size: 0.92rem; line-height: 1.5;">
-                    <p style="margin: 0 0 4px 0;">
-                        <strong>Qualification Level:</strong> ${q.qualificationLevel || 'N/A'}
-                    </p>
-                    <p style="margin: 0;">
-                        <strong>Institution:</strong> ${q.institution || 'N/A'}
-                    </p>
-                </section>
-            </li>`;
-        }
-        contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
+        visibleDetails.innerHTML = `<p>No qualifications added yet. Click "Edit profile" to add your qualifications.</p>`;
+        return;
     }
 
-    visibleDetails.innerHTML = `${contentHtml}`;
-};
+    let cardsHtml = '';
+    for (let i = 0; i < qualifications.length; i++) {
+        const q = qualifications[i];
+        cardsHtml += `
+        <li>
+            <section class="qualification-card">
+                <h4>${q.qualificationName || 'N/A'}</h4>
+                <ul class="qualification-fields">
+                    <li><p><strong>Level:</strong> ${q.qualificationLevel || 'N/A'}</p></li>
+                    <li><p><strong>NQF:</strong> ${q.nqfLevel ?? 'N/A'}</p></li>
+                    <li><p><strong>Institution:</strong> ${q.institution || 'N/A'}</p></li>
+                </ul>
+            </section>
+        </li>`;
+    }
 
+    visibleDetails.innerHTML = `<ul id="education-visible-details" class="visible-details">${cardsHtml}</ul>`;
+};
 
 const showSkillsDetails = async (user) => {
     personalTab.classList.remove('visible');
@@ -138,7 +102,7 @@ const showSkillsDetails = async (user) => {
     const skills = user.skills || [];
 
     if (skills.length === 0) {
-        visibleDetails.innerHTML = `<p style="color:#666; font-size:0.95rem;">No skills added yet. Click “Edit profile” to add your skills.</p>`;
+        visibleDetails.innerHTML = `<p>No skills added yet. Click "Edit profile" to add your skills.</p>`;
         return;
     }
 
@@ -153,52 +117,28 @@ const showSkillsDetails = async (user) => {
             });
         }
 
-        let contentHtml = `<header style="margin-bottom: 16px;">
-            <h3 style="margin:0 0 4px 0; font-size:1.15rem; font-weight:600; color:#1a202c;">
-                Your Skills
-            </h3>
-            <p style="margin:0; font-size:0.9rem; color:#666;">
-                These are your standardised skills recognised across South African industries.
-            </p>
-        </header>`;
-
         let cardsHtml = '';
         for (let i = 0; i < skills.length; i++) {
             const skill = skills[i].trim();
-            const skillLower = skill.toLowerCase();
-            const category = skillCategoryMap[skillLower] || 'General';
-
+            const category = skillCategoryMap[skill.toLowerCase()] || 'General';
             cardsHtml += `
-            <li style="
-                list-style: none;
-                background: #ffffff;
-                border-radius: 8px;
-                padding: 16px 20px;
-                margin-bottom: 12px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-                font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            ">
-                <section>
-                    <h4 style="margin:0 0 4px 0; font-size:1.1rem; font-weight:600; color:#1a202c;">
-                        ${skill}
-                    </h4>
-                    <p style="margin:0; font-size:0.92rem; color:#4a5568;">
-                        <strong>Category:</strong> ${category}
-                    </p>
+            <li>
+                <section class="qualification-card">
+                    <h4>${skill}</h4>
+                    <ul class="qualification-fields">
+                        <li><p><strong>Category:</strong> ${category}</p></li>
+                    </ul>
                 </section>
             </li>`;
         }
-        contentHtml += `<ul style="padding:0; margin:0;">${cardsHtml}</ul>`;
-        visibleDetails.innerHTML = `${contentHtml}`;   // no wrapping div
-    } catch (err) {
-        let skillsElement = '';
+
+        visibleDetails.innerHTML = `<ul id="education-visible-details" class="visible-details">${cardsHtml}</ul>`;
+    } catch {
+        let cardsHtml = '';
         for (let i = 0; i < skills.length; i++) {
-            skillsElement += `<li>${skills[i]}</li>`;
+            cardsHtml += `<li><p>${skills[i]}</p></li>`;
         }
-        visibleDetails.innerHTML = `<ul class="visible-details">${skillsElement}</ul>`;
+        visibleDetails.innerHTML = `<ul class="visible-details">${cardsHtml}</ul>`;
     }
 };
 
@@ -221,15 +161,12 @@ const showAttachments = (user) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const url = backendURL() + '/api/users/profile';
-        
-
         pageState.style.display = 'flex';
         pageState.innerHTML = 'Loading...';
 
-        const response = await fetch(url, {
+        const response = await fetch(backendURL() + '/api/users/profile', {
             method: 'GET',
-            credentials:'include'
+            credentials: 'include',
         });
 
         const data = await response.json();
@@ -241,13 +178,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             skillsTab.addEventListener('click', () => showSkillsDetails(data.user));
             attachmentsTab.addEventListener('click', () => showAttachments(data.user));
 
-            // Start with personal details
             showPersonalDetails(data.user);
         } else {
             pageError.style.display = 'flex';
             pageError.innerHTML = `<p>${data.error}</p>`;
         }
-    } catch (err) {
+    } catch {
         pageError.style.display = 'flex';
         pageError.innerHTML = 'Something went wrong! Please try again later';
     } finally {

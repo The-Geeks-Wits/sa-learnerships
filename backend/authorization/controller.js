@@ -123,7 +123,7 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         return res.json({
@@ -156,7 +156,7 @@ exports.updateUser = async (req, res) => {
             const normalizedRole = role.toLowerCase().trim();
 
             if (!allowedRoles.includes(normalizedRole)) {
-                return res.status(400).json({ message: 'Invalid role value' });
+                return res.status(400).json({ error: 'Invalid role value' });
             }
 
             updateData.role = normalizedRole;
@@ -166,14 +166,14 @@ exports.updateUser = async (req, res) => {
             const normalizedStatus = status.toLowerCase().trim();
 
             if (!allowedStatus.includes(normalizedStatus)) {
-                return res.status(400).json({ message: 'Invalid status value' });
+                return res.status(400).json({ error: 'Invalid status value' });
             }
 
             updateData.status = normalizedStatus;
         }
 
         if (Object.keys(updateData).length === 0) {
-            return res.status(400).json({ message: 'No valid fields provided' });
+            return res.status(400).json({ error: 'No valid fields provided' });
         }
 
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
@@ -182,7 +182,7 @@ exports.updateUser = async (req, res) => {
         });
 
         if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         res.json({
@@ -232,7 +232,7 @@ exports.getUserById = async (req, res) => {
         const user = await User.findById(req.params.id);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         res.json({
@@ -294,12 +294,12 @@ exports.editProfile = async (req, res) => {
 exports.uploadCV = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+            return res.status(400).json({ error: 'No file uploaded' });
         }
 
         const user = await User.findById(req.user.userId);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
         
         // Safely delete old CV (if any) – won't crash on error
