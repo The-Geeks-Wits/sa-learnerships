@@ -48,31 +48,41 @@ async function updateUser() {
     }
 }
 
-// delete user
-async function deleteUser() {
+async function toggleUserStatus() {
     const id = getUserId();
     if (!id) {
         alert('No user ID found');
         return;
     }
 
+    const btn = document.getElementById('toggle-status-btn');
+    const isDisabled = btn.textContent.trim() === 'Enable';
+    const newStatus = isDisabled ? 'active' : 'disabled';
+    const confirmMsg = isDisabled
+        ? 'Are you sure you want to enable this user?'
+        : 'Are you sure you want to disable this user?';
+
+    if (!confirm(confirmMsg)) return;
+
     try {
         const url = backendURL() + `/api/users/${id}`;
         const res = await fetch(url, {
-            method: 'DELETE',
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
+            body: JSON.stringify({ status: newStatus }),
         });
 
         if (res.ok) {
-            const data = await res.json();
-            alert(data.message || 'User deleted successfully');
-            window.location.href = 'users.html'; // redirect after delete
+            statusDetail.innerHTML = newStatus;
+            btn.textContent = isDisabled ? 'Disable' : 'Enable';
+            alert(`User ${isDisabled ? 'enabled' : 'disabled'} successfully`);
         } else {
-            alert('Failed to delete user');
+            alert('Failed to update user status');
         }
     } catch (err) {
         console.error(err);
-        alert('Server error while deleting user');
+        alert('Server error while updating user status');
     }
 }
 
@@ -100,6 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             statusDetail.innerHTML = user.status || '';
             detailRole.value = user.role || '';
             detailRole.dataset.originalRole = user.role || '';
+            document.getElementById('toggle-status-btn').textContent = user.status === 'disabled' ? 'Enable' : 'Disable';
         } else {
             alert('Could not load user details');
         }
@@ -110,4 +121,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 document.getElementById('save-user-details').addEventListener('click', updateUser);
-document.getElementById('delete-user').addEventListener('click', deleteUser);
+document.getElementById('toggle-status-btn').addEventListener('click', toggleUserStatus);

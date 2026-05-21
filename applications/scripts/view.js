@@ -122,13 +122,13 @@ document.addEventListener('DOMContentLoaded', async ()=> {
 
             if (role === 'provider' && application.status == 'Pending'){
                 actions.innerHTML = `
-                    <button id="shortlist-btn" class="coloured-btn">
-                        Shortlist
-                    </button>
-
-                    <button id="reject-btn" class="transparent-btn">
-                        Reject
-                    </button>
+                    <button id="shortlist-btn" class="coloured-btn">Shortlist</button>
+                    <button id="reject-btn" class="transparent-btn">Reject</button>
+                    <button class="transparent-btn" onclick="history.back()">Back</button>
+                `;
+            } else {
+                actions.innerHTML = `
+                    <button class="transparent-btn" onclick="history.back()">Back</button>
                 `;
             }
         }else{

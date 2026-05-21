@@ -31,8 +31,12 @@ aside #control-center-nav-options #user-management-tab {
     margin-right: 20px;
 }
 
+#user-actions #delete-user {
+    margin-right: 20px;
+}
+
 #user-actions button {
-    width: 50%;
+    width: 33%;
 }
 
 #user-role {
