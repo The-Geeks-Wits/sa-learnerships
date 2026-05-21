@@ -148,7 +148,7 @@ exports.updateUser = async (req, res) => {
         const { role, status } = req.body;
 
         const allowedRoles = ['applicant', 'provider', 'admin'];
-        const allowedStatus = ['active', 'inactive', 'blocked'];
+        const allowedStatus = ['active', 'disabled'];
 
         let updateData = {};
 
