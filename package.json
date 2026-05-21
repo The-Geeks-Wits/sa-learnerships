@@ -1,0 +1,11 @@
+{
+    "name": "sa-learnerships",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "cd backend && node app.js",
+        "build": "cd backend && npm install"
+    },
+    "engines": {
+        "node": "22.x"
+    }
+}
