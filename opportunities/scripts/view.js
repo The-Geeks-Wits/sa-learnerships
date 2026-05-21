@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             browserTitle.innerHTML = 'Opportunity | ' + data.title;
             pageTitle.innerHTML = data.title;
-            statusElement.innerHTML = data.status;
 
             if (data.description) description.innerHTML = data.description;
             else description.innerHTML = 'Not Provided';
@@ -161,6 +160,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (response.ok) {
             const data2 = await response.json();
 
+            if (data2.user && data2.user.role !== 'applicant') {
+                statusElement.innerHTML = data.status;
+            }
+
             if (data2.user && data2.user.role === 'admin') {
                 // show buttons
                 actionsElement.innerHTML = `<hr />
@@ -185,6 +188,40 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const resubmitButton = document.getElementById('resubmit-btn');
                     addOwnerButtonsListeners(resubmitButton);
                 }
+            }
+
+            if (data2.user && data2.user.role === 'applicant') {
+                actionsElement.innerHTML = `<hr />
+                <section>
+                    <button id="apply-opportunity-btn" class="coloured-btn">Apply</button>
+                    <button id="back-btn" class="transparent-btn" onclick="history.back()">Back</button>
+                </section>`;
+
+                document.getElementById('apply-opportunity-btn').addEventListener('click', async () => {
+                    try {
+                        if (!confirm('Are you sure you want to apply for this opportunity?')) return;
+
+                        const applyUrl = backendURL() + '/applications';
+                        const applyResponse = await fetch(applyUrl, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ opportunityId: id }),
+                        });
+
+                        const applyData = await applyResponse.json();
+
+                        if (applyResponse.ok) {
+                            document.getElementById('apply-opportunity-btn').disabled = true;
+                            document.getElementById('apply-opportunity-btn').style.cursor = 'not-allowed';
+                            alert('Application submitted successfully!');
+                        } else {
+                            alert(applyData.error || 'Failed to apply. Please try again.');
+                        }
+                    } catch (error) {
+                        alert('Something went wrong! Please try again later');
+                    }
+                });
             }
         }
         

@@ -92,7 +92,8 @@ button {
 }
 
 #approve-btn,
-#resubmit-btn {
+#resubmit-btn,
+#apply-opportunity-btn {
     margin-right: 15px;
 }
 
