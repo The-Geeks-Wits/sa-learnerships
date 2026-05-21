@@ -62,8 +62,8 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
 
             const data = await response.json();
             if (response.ok) {
-                alert('Personal details updated successfully!');
-                window.location.href = 'view.html?tab=personal';
+                    errorElement.style.color = 'green';
+                    errorElement.innerHTML = 'Personal details updated successfully!';
             } else {
                 errorElement.innerHTML = data.error;
             }
@@ -119,8 +119,8 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
 
             const data = await response.json();
             if (response.ok) {
-                alert('Education details updated successfully!');
-                window.location.href = 'view.html?tab=education';
+                errorElement.style.color = 'green';
+                errorElement.innerHTML = 'Education details updated successfully!';
             } else {
                 errorElement.innerHTML = data.error;
             }
@@ -163,8 +163,8 @@ const addSkillSubmitListener = (formElement, user) => {
 
             const data = await response.json();
             if (response.ok) {
-                alert('Skill added successfully!');
-                window.location.href = 'view.html?tab=skills';
+                errorElement.style.color = 'green';
+                errorElement.innerHTML = 'Skill added successfully!';
             } else {
                 errorElement.innerHTML = data.error;
             }
@@ -210,9 +210,9 @@ const showPersonalDetails = (user) => {
             <label for="gender">Gender</label>
             <select id="gender" name="gender">
                 <option value="">Select gender</option>
-                <option value="female" ${user.gender === 'female' ? 'selected' : ''}>Female</option>
-                <option value="male" ${user.gender === 'male' ? 'selected' : ''}>Male</option>
-                <option value="prefer not to say" ${user.gender === 'prefer not to say' ? 'selected' : ''}>Prefer not to say</option>
+                <option value="Female" ${user.gender === 'Female' ? 'selected' : ''}>Female</option>
+                <option value="Male" ${user.gender === 'Male' ? 'selected' : ''}>Male</option>
+                <option value="Prefer Not To Say" ${user.gender === 'Prefer Not To Say' ? 'selected' : ''}>Prefer not to say</option>
             </select>
         </section>
         <section class="input-group">
@@ -448,16 +448,64 @@ const showSkillsDetails = async (user) => {
     }
 };
 
-//Renders attachments when the user clicks the attachments tab 
+//attachments tab for CV upload with confirmation
 const showAttachments = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
     attachmentsTab.classList.add('visible');
 
-    visibleDetails.innerHTML = `<ul class="visible-details">
-        <li><p>Still yet to implement this</p></li>
-    </ul>`;
+    const cvUrl = user.cv ? backendURL() + user.cv : null;
+
+    visibleDetails.innerHTML = `<section id="cv-section">
+        <h3>Curriculum Vitae (CV)</h3>
+        ${cvUrl
+            ? `<p>CV uploaded. <a href="${cvUrl}" target="_blank">View current CV</a></p>`
+            : `<p>No CV uploaded yet.</p>`
+        }
+        <form id="cv-upload-form">
+            <label for="cv-file">Select a CV file (PDF, DOC, DOCX)</label>
+            <input type="file" id="cv-file" name="cv" accept=".pdf,.doc,.docx" />
+            <button type="submit" class="coloured-btn">Upload CV</button>
+        </form>
+        <p id="cv-message"></p>
+    </section>`;
+
+    document.getElementById('cv-upload-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const file = document.getElementById('cv-file').files[0];
+        const cvMessage = document.getElementById('cv-message');
+
+        if (!file) {
+            cvMessage.style.color = 'red';
+            cvMessage.textContent = 'Please select a file.';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('cv', file);
+
+        try {
+            const res = await fetch(backendURL() + '/api/users/upload-cv', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData,
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                cvMessage.style.color = 'green';
+                cvMessage.textContent = 'CV uploaded successfully!';
+                user.cv = data.cv;
+            } else {
+                cvMessage.style.color = 'red';
+                cvMessage.textContent = data.message || 'Upload failed.';
+            }
+        } catch {
+            cvMessage.style.color = 'red';
+            cvMessage.textContent = 'Something went wrong. Please try again.';
+        }
+    });
 };
 
 document.addEventListener('DOMContentLoaded', async () => {

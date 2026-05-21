@@ -202,27 +202,21 @@ const showSkillsDetails = async (user) => {
     }
 };
 
-// Renders attachments when the user clicks the attachments tab
 const showAttachments = (user) => {
     personalTab.classList.remove('visible');
     educationTab.classList.remove('visible');
     skillsTab.classList.remove('visible');
     attachmentsTab.classList.add('visible');
 
-    const attachments = user.attachments || [];
+    const cvUrl = user.cv ? backendURL() + user.cv : null;
 
-    let attachmentsElement = '';
-    if (attachments.length === 0) {
-        visibleDetails.innerHTML = `<ul class="visible-details">
-            <li><p>No attachments found</p></li>
-            <li><button class="coloured-btn">Add</button></li>
-        </ul>`;
-        return;
-    }
-
-    visibleDetails.innerHTML = `<ul class="visible-details">
-        ${attachmentsElement}
-    </ul>`;
+    visibleDetails.innerHTML = `<section id="cv-section">
+        <h3>Curriculum Vitae (CV)</h3>
+        ${cvUrl
+            ? `<p>CV uploaded. <a href="${cvUrl}" target="_blank">View CV</a></p>`
+            : `<p>No CV uploaded yet. Click "Edit profile" to upload your CV.</p>`
+        }
+    </section>`;
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
