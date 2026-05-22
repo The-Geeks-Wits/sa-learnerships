@@ -8,6 +8,7 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const connectDatabase = require('./database.js');
 const cookieParser = require('cookie-parser');
+const seedAdmin = require('./scripts/seedAdmin.js');
 
 // Routers imports
 const applicationsRouter = require('./applications/routes.js');
@@ -106,5 +107,6 @@ const PORT = process.env.SERVER_PORT || 3000;
 
 app.listen(PORT, () => {
     connectDatabase();
+    await seedAdmin();
     console.log(`Server running on port ${PORT}`);
 });
