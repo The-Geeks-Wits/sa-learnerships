@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const form = document.getElementById('create-opportunity-form');
 const title = document.getElementById('title');
@@ -51,7 +51,7 @@ form.addEventListener('submit', async (event) => {
     
         const response = await fetch(url, {
             method: 'POST',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             headers: {
                 'Content-Type': 'application/json',
             },

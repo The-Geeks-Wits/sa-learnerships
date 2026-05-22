@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 let chartInstance = null;
 
@@ -90,7 +90,7 @@ async function generateReport() {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({
                 sectors: selectedSectors,
                 ...filters
@@ -236,7 +236,7 @@ async function exportPDF() {
         const response = await fetch(`${backendURL()}/api/analytics/export-placement-report`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({
                 headers: headers,
                 rows: rows,

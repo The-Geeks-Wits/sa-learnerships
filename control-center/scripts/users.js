@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const tbody = document.getElementById('userTableBody');
 const searchInput = document.getElementById('searchInput');
@@ -15,7 +15,7 @@ async function loadUsers() {
         const url = backendURL() + '/api/users';
         const res = await fetch(url,{
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
         const users = await res.json();
 

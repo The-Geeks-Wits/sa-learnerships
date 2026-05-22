@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
@@ -9,7 +9,7 @@ const pageDescription = document.getElementById('page-description');
 const getUserRole = async () => {
     const response = await fetch(backendURL() + '/api/users/profile', {
         method: 'GET',
-        credentials: 'include',
+        headers: { 'Authorization': `Bearer ${getToken()}` },
     });
 
     const data = await response.json();
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         const data = await response.json();

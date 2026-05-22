@@ -1,4 +1,4 @@
-import { backendURL } from '../env.config.js';
+import { backendURL, getToken } from '../env.config.js';
 import { backendURL, saveToken } from '../env.config.js';
 import { isStrong } from './common_functions.js';
 
@@ -52,7 +52,7 @@ form.addEventListener('submit', async (event) => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
+            cheaders: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({
                 firstName: firstName.value,
                 lastName: lastName.value,

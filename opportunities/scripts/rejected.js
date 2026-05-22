@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');

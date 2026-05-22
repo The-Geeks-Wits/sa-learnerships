@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const detailsContainer = document.getElementById('details-container');
@@ -23,7 +23,7 @@ const addAdminButtonsListeners = (approveButton, rejectButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                credentials: 'include',
+                headers: { 'Authorization': `Bearer ${getToken()}` },
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -50,7 +50,7 @@ const addAdminButtonsListeners = (approveButton, rejectButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                credentials: 'include',
+                headers: { 'Authorization': `Bearer ${getToken()}` },
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -79,7 +79,7 @@ const addOwnerButtonsListeners = (resubmitButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                credentials: 'include',
+                headers: { 'Authorization': `Bearer ${getToken()}` },
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let url = backendURL() + `/opportunities/${id}`;
         const res = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             headers: { 'Content-Type': 'application/json' },
         });
 
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         if (response.ok) {
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const applyUrl = backendURL() + '/applications';
                         const applyResponse = await fetch(applyUrl, {
                             method: 'POST',
-                            credentials: 'include',
+                            headers: { 'Authorization': `Bearer ${getToken()}` },
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ opportunityId: id }),
                         });

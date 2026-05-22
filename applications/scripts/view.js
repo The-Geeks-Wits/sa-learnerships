@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
@@ -13,7 +13,7 @@ const applicationId = params.get('id');
 const getUserRole = async () => {
     const response = await fetch(backendURL() + '/api/users/profile', {
         method: 'GET',
-        credentials: 'include',
+        headers: { 'Authorization': `Bearer ${getToken()}` },
     });
 
     const data = await response.json();
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async ()=> {
 
         const response = await fetch(backendURL() + `/applications/details/${applicationId}`,{
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         })
 
         const applicationDetails = await response.json();
@@ -162,7 +162,7 @@ actions.addEventListener('click', async(event)=>{
                 }
                 const response = await fetch(backendURL() + `/applications/${applicationId}/shortlist`,{
                     method: 'PATCH',
-                    credentials: 'include',
+                    headers: { 'Authorization': `Bearer ${getToken()}` },
                     }
                 );
 
@@ -197,7 +197,7 @@ actions.addEventListener('click', async(event)=>{
                 }
                 const response = await fetch(backendURL() + `/applications/${applicationId}/reject`,{
                     method: 'PATCH',
-                    credentials: 'include',
+                    headers: { 'Authorization': `Bearer ${getToken()}` },
                     }
                 );
 

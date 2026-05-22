@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         if (response.ok) {
