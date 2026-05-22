@@ -31,11 +31,12 @@ async function updateUser() {
         const url = backendURL() + `/api/users/${id}`;
         const res = await fetch(url, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
             body: JSON.stringify({ role: detailRole.value }),
-            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
-
         if (res.ok) {
             const data = await res.json();
             alert(data.message || 'Role updated successfully');
@@ -68,8 +69,10 @@ async function toggleUserStatus() {
         const url = backendURL() + `/api/users/${id}`;
         const res = await fetch(url, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
             body: JSON.stringify({ status: newStatus }),
         });
 
@@ -98,8 +101,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const url = backendURL() + `/api/users/${id}`;
         const res = await fetch(url, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
         });
 
         if (res.ok) {
