@@ -26,7 +26,7 @@ exports.isAuthenticated = async (req, res, next) => {
         next();
     } catch (err) {
         console.log(err);
-        return res.status(500).json({ error: 'Something went wrong! Please try again later' });
+        return res.status(401).json({ error: 'Invalid or malformed token' });
     }
 };
 
