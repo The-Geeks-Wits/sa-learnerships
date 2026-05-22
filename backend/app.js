@@ -105,8 +105,8 @@ app.use((req, res) => {
 
 const PORT = process.env.SERVER_PORT || 3000;
 
-app.listen(PORT, () => {
-    connectDatabase();
+app.listen(PORT, async () => {
+    await connectDatabase();
     await seedAdmin();
     console.log(`Server running on port ${PORT}`);
 });
