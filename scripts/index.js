@@ -43,11 +43,9 @@ const getOpportunitiesOptions = (role) => {
     </ul>`;
 
     const adminOptions = `<ul>
-        <li id="your-opportunities-tab"><a href="/opportunities/mine.html">Your Opportunities</a></li>
-        <li id="all-opportunities-tab"><a href="/opportunities/index.html">All Opportunities</a></li>
         <li id="pending-opportunities-tab"><a href="/opportunities/pending.html">Pending</a></li>
+        <li id="approved-opportunities-tab"><a href="/opportunities/approved.html">Approved</a></li>
         <li id="rejected-opportunities-tab"><a href="/opportunities/rejected.html">Rejected</a></li>
-        <li id="create-opportunity-tab"><a href="/opportunities/create.html">Create</a></li>
     </ul>`;
 
     if (role === 'applicant') return applicantOptions;
@@ -140,6 +138,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         opportunitiesNavOptions.innerHTML = getOpportunitiesOptions(userRole);
         applicationsNavOptions.innerHTML = getApplicationsOptions(userRole);
+
+        if (userRole === 'admin') {
+            document.getElementById('applications-nav').closest('li').style.display = 'none';
+        }
 
         //added sidebar option for report
         if (userRole === 'admin' || userRole === 'provider') {

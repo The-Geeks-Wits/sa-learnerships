@@ -179,14 +179,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (data2.user && data2.user.role === 'provider') {
                 if (data.creator === data2.user._id && data.status === 'Rejected') {
-                    // show buttons
                     actionsElement.innerHTML = `<hr />
                     <section>
                         <button id="resubmit-btn" class="coloured-btn">Re-submit</button>
                         <button id="delete-btn" class="transparent-btn">Delete</button>
+                        <button class="transparent-btn" onclick="history.back()">Back</button>
                     </section>`;
                     const resubmitButton = document.getElementById('resubmit-btn');
                     addOwnerButtonsListeners(resubmitButton);
+                } else {
+                    actionsElement.innerHTML = `<hr />
+                    <section>
+                        <button class="coloured-btn" onclick="window.location.href='/opportunities/mine.html'">View My Opportunities</button>
+                        <button class="transparent-btn" onclick="history.back()">Back</button>
+                    </section>`;
                 }
             }
 

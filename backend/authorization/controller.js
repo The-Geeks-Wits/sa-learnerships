@@ -45,8 +45,8 @@ exports.register = async (req, res) => {
         const token = utils.generateAccessToken(email, user._id);
         res.cookie('jwt', token, {
         httpOnly: true,
-        secure: false,
-        sameSite: 'Lax',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         maxAge: 3600000
         });
 
@@ -95,8 +95,8 @@ exports.login = async (req, res) => {
         const token = utils.generateAccessToken(email, user._id);
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'Lax',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
             maxAge: rememberMe ? 604800000 : 3600000,    
         });
 
@@ -333,8 +333,8 @@ exports.uploadCV = async (req, res) => {
 exports.logout = (req, res) => {
     res.clearCookie('jwt', {
         httpOnly: true,
-        secure: false,
-        sameSite: 'Lax',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     });
     res.status(200).json({ message: 'Logged out successfully' });
 };

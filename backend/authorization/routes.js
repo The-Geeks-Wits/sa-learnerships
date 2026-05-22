@@ -44,8 +44,8 @@ router.get(
         const token = req.user.token;
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: false, //we have to change it to true in production
-            sameSite: 'Lax',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
             maxAge: 3600000,
         });
 
