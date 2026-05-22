@@ -36,7 +36,11 @@ app.locals.skills = skills;
 app.locals.locations = locations;
 
 // Middlewares
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ 
+    origin: process.env.CLIENT_URL, 
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
