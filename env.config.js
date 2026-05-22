@@ -1,5 +1,9 @@
-export const backendURL = () => {
-    const environment = 'prod'; // The environment the app is under
-    if (environment === 'dev') return 'http://localhost:3000';
-    else if (environment === 'prod') return 'https://sa-learnerships.onrender.com';
-};
+const isDev = window.location.hostname === 'localhost';
+
+export const backendURL = () => isDev
+    ? 'http://localhost:3000'
+    : 'https://sa-learnerships.onrender.com';
+
+export const getToken = () => localStorage.getItem('jwt');
+export const saveToken = (token) => localStorage.setItem('jwt', token);
+export const clearToken = () => localStorage.removeItem('jwt');

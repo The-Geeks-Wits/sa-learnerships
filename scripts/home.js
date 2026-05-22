@@ -1,10 +1,24 @@
-import { backendURL } from '../env.config.js';
+import { backendURL, getToken, saveToken } from '../env.config.js';
+
+// Catch token from Google OAuth redirect
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token');
+if (token) {
+    saveToken(token);
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const [opportunitiesRes, applicationsRes] = await Promise.all([
-            fetch(backendURL() + '/opportunities?status=Approved', { method: 'GET', credentials: 'include' }),
-            fetch(backendURL() + '/applications', { method: 'GET', credentials: 'include' }),
+            fetch(backendURL() + '/opportunities?status=Approved', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${getToken()}` }
+            }),
+            fetch(backendURL() + '/applications', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${getToken()}` }
+            }),
         ]);
 
         const opportunitiesData = await opportunitiesRes.json();
@@ -21,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector('#insights li:nth-child(1) h4').textContent = totalOpportunities;
         document.querySelector('#insights li:nth-child(2) h4').textContent = `${acceptanceRate}%`;
         document.querySelector('#insights li:nth-child(3) h4').textContent = totalApplications;
-
         document.querySelector('#insights li:nth-child(3) p').textContent = 'Total Applications';
 
     } catch (err) {

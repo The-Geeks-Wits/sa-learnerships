@@ -1,7 +1,6 @@
 // This file is for preparing and showing elements conditionally based on the users role
 // where all this is common such as in the side bar
-
-import { backendURL } from '../env.config.js';
+import { backendURL, getToken, clearToken } from '../env.config.js';
 
 const opportunitiesNav = document.getElementById('opportunities-nav');
 const opportunitiesNavOptions = document.getElementById('opportunities-nav-options');
@@ -83,9 +82,9 @@ const showNotificationsCount = async () => {
 
         // By the time this method is called we can be sure that the existence of the jwt has been confirmed and the jwt does exist
 
-        const response = await fetch(url, {
+        const response = await fetch(backendURL() + '/notifications/mine', {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` }
         });
 
         const data = await response.json();
@@ -110,9 +109,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p>Loading...</p>
         </section>`;
 
-        const response = await fetch(url, {
+        console.log('Token:', getToken());
+        console.log('Header:', `Bearer ${getToken()}`);
+
+        const response = await fetch(backendURL() + '/api/users/profile', {
             method: 'GET',
-            credentials: 'include'
+            headers: { 'Authorization': `Bearer ${getToken()}` }
         });
 
         let userRole = 'applicant';
@@ -214,8 +216,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('logout-btn').addEventListener('click', async () => {
             await fetch(backendURL() + '/api/users/logout', {
                 method: 'POST',
-                credentials: 'include',
+                headers: { 'Authorization': `Bearer ${getToken()}` }
             });
+            clearToken();
             window.location.href = '/login.html';
         });
 
