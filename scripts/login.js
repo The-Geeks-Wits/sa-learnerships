@@ -1,4 +1,4 @@
-import { backendURL } from '../env.config.js';
+import { backendURL, saveToken } from '../env.config.js';
 
 const errorMessage = document.getElementById('error-message');
 const form = document.getElementById('login-form');
@@ -43,6 +43,8 @@ form.addEventListener('submit', async function (event) {
         });
 
         if (response.ok) {
+            const data = await response.json();
+            saveToken(data.token);
             window.location.href = 'home.html';
         } else {
             const data = await response.json();

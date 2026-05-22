@@ -1,4 +1,5 @@
 import { backendURL } from '../env.config.js';
+import { backendURL, saveToken } from '../env.config.js';
 import { isStrong } from './common_functions.js';
 
 const errorMessage = document.getElementById('error-message');
@@ -62,8 +63,9 @@ form.addEventListener('submit', async (event) => {
         });
 
         if (response.status === 201) {
+            const data = await response.json();
+            saveToken(data.token);
             window.location.href = '/home.html';
-        
         } else {
             const data = await response.json();
             errorMessage.style.display = 'block';
