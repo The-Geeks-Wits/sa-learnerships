@@ -1,5 +1,4 @@
-import { backendURL, getToken } from '../env.config.js';
-import { backendURL, saveToken } from '../env.config.js';
+import { backendURL, getToken, saveToken } from '../env.config.js';
 import { isStrong } from './common_functions.js';
 
 const errorMessage = document.getElementById('error-message');
