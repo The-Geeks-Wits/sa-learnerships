@@ -1,6 +1,9 @@
 const controller = require('../../authorization/controller.js');
 
 describe('Get Profile', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
     it('should return a 400 status code when the request does not have a user object', async () => {
         // Mock request object
         const req = {};

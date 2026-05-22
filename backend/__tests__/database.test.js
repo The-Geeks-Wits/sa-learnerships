@@ -10,6 +10,11 @@ jest.spyOn(process, 'exit').mockImplementation((code) => {
 });
 
 describe('Database Connection', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+        console.error = jest.fn();
+    });
+
     process.env.DB_URI = 'test-uri';
     it('should connect to the database', async () => {
         await connectDatabase();

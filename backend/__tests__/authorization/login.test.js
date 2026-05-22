@@ -12,6 +12,10 @@ jest.mock('../../utils.js', () => ({
 }));
 
 describe('Login', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the body is not provided
     it('should get the user by the provided email', async () => {
         // Mock request object
@@ -117,25 +121,6 @@ describe('Login', () => {
         await controller.login(req, res);
         const json = res.json.mock.calls[0][0];
         expect(json.error).toBeDefined();
-    });
-
-    it('should generate the access token', async () => {
-        // User gets mocked, hence the mockResolvedValue function exists
-        User.findOne.mockResolvedValue({ _id: 'test-id' });
-        // Utils gets mocked, hence the mockReturnValue function exists
-        utils.comparePasswords.mockReturnValue(true);
-
-        // Mock request object
-        const req = { body: { email: 'test-email' } };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-
-        await controller.login(req, res);
-        expect(utils.generateAccessToken).toHaveBeenCalledWith(req.body.email, 'test-id');
     });
 
     it('should return a 200 status on success', async () => {

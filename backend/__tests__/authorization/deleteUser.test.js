@@ -6,6 +6,10 @@ jest.mock('../../authorization/User.js', () => ({
 }));
 
 describe('Delete User', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the params and params.id are not provided
     it('should search for the user by id and update the status field', async () => {
         // Mock request object
@@ -94,7 +98,7 @@ describe('Delete User', () => {
         expect(res.status).toHaveBeenCalledWith(500);
     });
 
-    it('should return an object with a message property on error', async () => {
+    it('should return an object with an error property on error', async () => {
         // User gets mocked, hence the mockResolvedValue function exists
         User.findByIdAndUpdate.mockRejectedValue(new Error('Test error'));
 
@@ -109,6 +113,6 @@ describe('Delete User', () => {
 
         await controller.deleteUser(req, res);
         const json = res.json.mock.calls[0][0];
-        expect(json.message).toBeDefined();
+        expect(json.error).toBeDefined();
     });
 });

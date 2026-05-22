@@ -14,6 +14,10 @@ jest.mock('../../utils.js', () => ({
 }));
 
 describe('Register', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // TODO: Test what happens when the body is not provided
     it('should check if a user with the provided email already exists', async () => {
         // Mock request object

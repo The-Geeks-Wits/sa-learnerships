@@ -31,6 +31,10 @@ jest.mock('../../authorization/controller.js', () => ({
 }));
 
 describe('Auth & User Routes', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('calls the express router function', () => {
         expect(express.Router).toHaveBeenCalled();
     });

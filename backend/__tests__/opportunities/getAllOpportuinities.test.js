@@ -6,6 +6,10 @@ jest.mock('../../opportunities/Opportunity.js', () => ({
 }));
 
 describe('Get All Opportunitites', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     // Opportunity gets mocked, hence the mockResolvedValue function exists
     Opportunity.find.mockResolvedValue([{ title: 'A buff opportunity' }]);
 
