@@ -15,10 +15,10 @@ const markNotification = async (id, read) => {
 
         const response = await fetch(url, {
             method: 'PATCH',
-            headers: {
+            headers: { 
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
             },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({ read }),
         });
     } catch (error) {

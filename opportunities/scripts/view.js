@@ -23,9 +23,9 @@ const addAdminButtonsListeners = (approveButton, rejectButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${getToken()}` },
-                headers: {
+                headers: { 
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
                 },
             });
 
@@ -50,9 +50,9 @@ const addAdminButtonsListeners = (approveButton, rejectButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${getToken()}` },
-                headers: {
+                headers: { 
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
                 },
             });
 
@@ -79,9 +79,9 @@ const addOwnerButtonsListeners = (resubmitButton) => {
 
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${getToken()}` },
-                headers: {
+                headers: { 
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
                 },
             });
 
@@ -113,8 +113,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         let url = backendURL() + `/opportunities/${id}`;
         const res = await fetch(url, {
             method: 'GET',
-            headers: { 'Authorization': `Bearer ${getToken()}` },
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
         });
 
         const data = await res.json();
@@ -210,8 +212,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const applyUrl = backendURL() + '/applications';
                         const applyResponse = await fetch(applyUrl, {
                             method: 'POST',
-                            headers: { 'Authorization': `Bearer ${getToken()}` },
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${getToken()}`
+                            },
                             body: JSON.stringify({ opportunityId: id }),
                         });
 
