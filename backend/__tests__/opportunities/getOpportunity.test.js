@@ -6,6 +6,10 @@ jest.mock('../../opportunities/Opportunity.js', () => ({
 }));
 
 describe('Get Opportunity', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status when there are no params', async () => {
         // Mock request object
         const req = {};
@@ -50,21 +54,6 @@ describe('Get Opportunity', () => {
     });
 
     it('should return an object with an error property when params do not have an id property', async () => {
-        // Mock request object
-        const req = { params: {} };
-
-        // Mock response object
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn(),
-        };
-
-        await controller.getOpportunity(req, res);
-        const json = res.json.mock.calls[0][0];
-        expect(json.error).toBeDefined();
-    });
-
-    it('should not return an object with an error property when params do not have an id property', async () => {
         // Mock request object
         const req = { params: {} };
 

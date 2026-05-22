@@ -13,6 +13,7 @@ jest.mock('../../authorization/User.js', () => ({
 describe('Auth - Is Authenticated', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        console.log = jest.fn();
     });
 
     // TODO: Test what happens when the cookies are not provided

@@ -6,6 +6,10 @@ jest.mock('../../opportunities/Opportunity.js', () => ({
 }));
 
 describe('Reject Opportunity', () => {
+    beforeEach(() => {
+        console.log = jest.fn();
+    });
+
     it('should return a 400 status when there are no params', async () => {
         // Mock request object
         const req = {};
