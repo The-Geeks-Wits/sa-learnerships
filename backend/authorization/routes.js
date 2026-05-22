@@ -56,14 +56,17 @@ router.delete('/:id', isAuthenticated, isAdmin, controller.deleteUser);
 
 // CV upload route – fixed to accept Authorization header 
 const cvAuth = (req, res, next) => {
-    const token = req.headers.authorization || req.cookies?.jwt;
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.startsWith('Bearer ')
+        ? authHeader.split(' ')[1]
+        : req.cookies?.jwt;
+    
     if (!token) return res.status(401).json({ error: 'No Token Provided' });
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = {
             email: decoded.email,
-            userId: decoded.userId || decoded.id, // ensure userId exists
-            // any other fields if needed
+            userId: decoded.id || decoded.userId,
         };
         next();
     } catch (err) {
