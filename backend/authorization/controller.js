@@ -43,11 +43,15 @@ exports.register = async (req, res) => {
         });
 
         const token = utils.generateAccessToken(email, user._id);
-        res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-        maxAge: 3600000
+        res.status(201).json({
+            token,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+            },
         });
 
         res.status(201).json({
@@ -93,11 +97,15 @@ exports.login = async (req, res) => {
 
         const rememberMe = req.body.rememberMe;
         const token = utils.generateAccessToken(email, user._id);
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-            maxAge: rememberMe ? 604800000 : 3600000,    
+        res.status(200).json({
+            token,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+            },
         });
 
         res.status(200).json({
@@ -331,10 +339,8 @@ exports.uploadCV = async (req, res) => {
 
 //logout user by clearing the JWT cookie
 exports.logout = (req, res) => {
-    res.clearCookie('jwt', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-    });
+    exports.logout = (req, res) => {
+        res.status(200).json({ message: 'Logged out successfully' });
+    };
     res.status(200).json({ message: 'Logged out successfully' });
 };
