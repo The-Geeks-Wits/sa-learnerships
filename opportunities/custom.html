@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom View – Analytics</title>
+    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="./styles/custom.css" />
+    <!-- Chart.js for the graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav>
+        <h1 id="app-name">SA - Learnerships</h1>
+        <ul>
+            <li id="notifications">
+                <img src="../assets/notifications.png" />
+                <p class="notifications-count">2</p>
+            </li>
+            <li id="profile-details"></li>
+        </ul>
+    </nav>
+    <main>
+        <aside>
+            <ul id="sidebar-options">
+                <li>
+                    <section id="applications-nav" class="heading">
+                        <p>Applications</p>
+                        <img id="applications-nav-image" src="../assets/right-arrow.png" />
+                    </section>
+                    <section id="applications-nav-options" class="sidebar-nav-options"></section>
+                </li>
+                <li>
+                    <section id="opportunities-nav" class="heading">
+                        <p>Opportunities</p>
+                        <img id="opportunities-nav-image" src="../assets/right-arrow.png" />
+                    </section>
+                    <section id="opportunities-nav-options"></section>
+                </li>
+                <li>
+                    <section id="settings-nav" class="heading">
+                        <p>Settings</p>
+                        <img id="settings-nav-image" src="../assets/right-arrow.png" />
+                    </section>
+                    <section id="settings-nav-options">
+                        <ul>
+                            <li id="profile-nav-tab"><a href="/profile/view.html">Profile</a></li>
+                            <li id="notifications-nav-tab">
+                                <a href="/notifications/index.html">Notifications</a>
+                                <p class="notifications-count">2</p>
+                            </li>
+                        </ul>
+                    </section>
+                </li>
+            </ul>
+        </aside>
+
+        <section id="main-details">
+            <h2>Custom View Report</h2>
+            <p>Select dimensions, a metric, and optional filters to generate your report.</p>
+
+            <form id="custom-report-form">
+                <fieldset>
+                    <legend>Dimensions (choose at least one)</legend>
+                    <section id="dimension-options"></section>
+                </fieldset>
+                <fieldset>
+                    <legend>Metric</legend>
+                    <section id="metric-options"></section>
+                </fieldset>
+                <fieldset>
+                    <legend>Filters (optional)</legend>
+                    <section id="filter-options"></section>
+                </fieldset>
+                <button type="submit" class="coloured-btn">Generate Report</button>
+            </form>
+
+            <section id="report-results" class="hidden">
+                <h3>Results</h3>
+                <section id="chart-container">
+                    <canvas id="report-chart"></canvas>
+                </section>
+                <table id="results-table">
+                    <thead id="results-header"></thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+                <section id="export-actions">
+                    <button id="export-csv" class="coloured-btn">Export CSV</button>
+                </section>
+            </section>
+        </section>
+    </main>
+    <script type="module" src="../scripts/index.js"></script>
+    <script type="module" src="./scripts/custom.js"></script>
+</body>
+</html>

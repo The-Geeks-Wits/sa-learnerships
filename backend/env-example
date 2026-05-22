@@ -5,3 +5,5 @@ GOOGLE_CLIENT_SECRET=your google client secret
 JWT_SECRET=your super safe jwt secret
 CLIENT_URL=http://127.0.0.1:5500
 API_URL=http://localhost:3000
+EMAIL_USER=the email address to send emails from
+EMAIL_PASSWORD=the account app password

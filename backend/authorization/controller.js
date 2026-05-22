@@ -9,16 +9,16 @@ exports.register = async (req, res) => {
         const email = req.body.email;
         const confirmPassword = req.body.confirmPassword;
 
+        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
+            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
+        }
+
         const userExists = await User.findOne({ email: req.body.email });
         if (userExists) {
             return res.status(409).json({ error: 'User Already Exists!' });
         }
 
-        if (firstName === '' || lastName === '' || email === '' || password === '' || confirmPassword === '') {
-            return res.status(400).json({ error: 'Please Fill All The Required Fields!' });
-        }
-
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             return res.status(400).json({ error: 'Passwords do not match' });
         }
 
@@ -43,9 +43,14 @@ exports.register = async (req, res) => {
         });
 
         const token = utils.generateAccessToken(email, user._id);
+        res.cookie('jwt', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        maxAge: 3600000
+        });
 
         res.status(201).json({
-            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,
@@ -71,17 +76,31 @@ exports.login = async (req, res) => {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
 
+        if (user.signupMethod === 'google' || !user.password) {
+            return res.status(400).json({
+                error: 'This account was created using Google. Please sign in with Google.',
+            });
+        }
+
         const isPasswordValid = await utils.comparePasswords(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ error: 'Invalid Credentials' });
         }
+        if (user.status === 'disabled') {
+            return res.status(401).json({ error: 'Your account has been disabled. Please contact an administrator.' });
+        }
 
         const rememberMe = req.body.rememberMe;
-        const token = utils.generateAccessToken(email, user._id, user.role);
+        const token = utils.generateAccessToken(email, user._id);
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+            maxAge: rememberMe ? 604800000 : 3600000,    
+        });
 
         res.status(200).json({
-            token,
             user: {
                 id: user._id,
                 firstName: user.firstName,
@@ -104,21 +123,19 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndUpdate(id, { status: 'disabled' }, { new: true });
 
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
-        } else {
-            res.json({
-                message: 'User disabled',
-                user: {
-                    _id: user._id,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    email: user.email,
-                    role: user.role,
-                },
-            });
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        res.json({ message: 'User disabled', user: user });
+        return res.json({
+            message: 'User disabled',
+            user: {
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+            },
+        });
     } catch (error) {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
@@ -131,7 +148,7 @@ exports.updateUser = async (req, res) => {
         const { role, status } = req.body;
 
         const allowedRoles = ['applicant', 'provider', 'admin'];
-        const allowedStatus = ['active', 'inactive', 'blocked'];
+        const allowedStatus = ['active', 'disabled'];
 
         let updateData = {};
 
@@ -139,7 +156,7 @@ exports.updateUser = async (req, res) => {
             const normalizedRole = role.toLowerCase().trim();
 
             if (!allowedRoles.includes(normalizedRole)) {
-                return res.status(400).json({ message: 'Invalid role value' });
+                return res.status(400).json({ error: 'Invalid role value' });
             }
 
             updateData.role = normalizedRole;
@@ -149,14 +166,14 @@ exports.updateUser = async (req, res) => {
             const normalizedStatus = status.toLowerCase().trim();
 
             if (!allowedStatus.includes(normalizedStatus)) {
-                return res.status(400).json({ message: 'Invalid status value' });
+                return res.status(400).json({ error: 'Invalid status value' });
             }
 
             updateData.status = normalizedStatus;
         }
 
         if (Object.keys(updateData).length === 0) {
-            return res.status(400).json({ message: 'No valid fields provided' });
+            return res.status(400).json({ error: 'No valid fields provided' });
         }
 
         const updatedUser = await User.findByIdAndUpdate(req.params.id, updateData, {
@@ -165,7 +182,7 @@ exports.updateUser = async (req, res) => {
         });
 
         if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         res.json({
@@ -215,7 +232,7 @@ exports.getUserById = async (req, res) => {
         const user = await User.findById(req.params.id);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         res.json({
@@ -277,14 +294,14 @@ exports.editProfile = async (req, res) => {
 exports.uploadCV = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+            return res.status(400).json({ error: 'No file uploaded' });
         }
 
         const user = await User.findById(req.user.userId);
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
-
+        
         // Safely delete old CV (if any) – won't crash on error
         if (user.cv) {
             try {
@@ -300,8 +317,7 @@ exports.uploadCV = async (req, res) => {
         }
 
         const filePath = `/uploads/${req.file.filename}`;
-        user.cv = filePath;
-        await user.save();
+        await User.findByIdAndUpdate(req.user.userId, { cv: filePath });
 
         return res.json({
             success: true,
@@ -311,4 +327,14 @@ exports.uploadCV = async (req, res) => {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
+};
+
+//logout user by clearing the JWT cookie
+exports.logout = (req, res) => {
+    res.clearCookie('jwt', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
 };

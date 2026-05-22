@@ -45,7 +45,7 @@ exports.submitApplication = async (req, res) => {
 
         const title = `Application Received - Thank You ${req.user.firstName}`;
         const message = `We're pleased to confirm the receipt of your application for the ${opportunity.title} opportunity.`;
-        sendNotification(req.user._id, title, message);
+        sendNotification(req.user, title, message);
 
         res.status(201).json({
             id: application._id,
@@ -86,7 +86,7 @@ exports.getMyApplications = async (req, res) => {
     try {
         if (!req.user) {
             return res.status(400).json({
-                error: 'Creator required! Please provide the creator of opportunities',
+                error: 'User not found! Please log in to continue',
             });
         }
 
@@ -125,14 +125,20 @@ exports.getAllApplications = async (req, res) => {
         const applications = [];
         for (let i = 0; i < opportunities.length; i++) {
             const opportunity = opportunities[i].toObject();
-            const opportunityApplications = await Application.find({ opportunity: opportunity._id });
+            const queryOptions = { opportunity: opportunity._id };
+
+            if (req.query && req.query.status) {
+                queryOptions.status = req.query.status;
+            }
+
+        const opportunityApplications = await Application.find(queryOptions);
 
             for (let i = 0; i < opportunityApplications.length; i++) {
                 const application = opportunityApplications[i].toObject();
                 opportunityApplications[i] = { ...application, opportunity: opportunity };
             }
 
-            applications.push(opportunityApplications);
+            applications.push(...opportunityApplications);
         }
 
         res.status(200).json({ applications });
@@ -173,7 +179,7 @@ exports.rejectApplication = async (req, res) => {
         try {
            
             const title = `Application Update - ${application.opportunity.title}`;
-            const message = `Your application for ${application.opportunity.title} has been reviewed carefully. Unfortunately, it was not selected at this time.`;
+            const message = `After careful consideration, we regret to inform you that your application for the ${application.opportunity.title} opportunity was not successful at this time.`;
             await sendNotification(application.applicant, title, message);
         } catch (notifError) {
             console.log('Notification error (non-critical):', notifError.message);
@@ -197,68 +203,92 @@ exports.rejectApplication = async (req, res) => {
     }
 };
 
-exports.getRejectedApplications = async (req, res) => {
+exports.shortlistApplication = async (req, res) => {
     try {
+        const applicationId = req.params.id;
+
         if (!req.user) {
-            return res.status(401).json({ error: 'Not authenticated' });
+            return res.status(401).json({
+                error: 'You are not logged in! Please log in to continue',
+            });
         }
-        
-        const opportunities = await Opportunity.find({ creator: req.user._id });
-        const opportunityIds = opportunities.map(opp => opp._id);
-        
-        const rejectedApplications = await Application.find({
-            opportunity: { $in: opportunityIds },
-            status: 'Rejected'  
-        })
-        .populate('applicant', 'firstName lastName email phone')
-        .populate('opportunity', 'title description closingDate')
-        .sort({ createdAt: -1 }); 
-        
+
+        const userId = req.user._id;
+
+        const application = await Application.findById(applicationId).populate('opportunity');
+
+        if (!application) {
+            return res.status(404).json({
+                error: 'Application not found',
+            });
+        }
+
+        if (application.opportunity.creator.toString() !== userId.toString()) {
+            return res.status(403).json({
+                error: 'You can only shortlist applications for your own opportunities',
+            });
+        }
+
+        application.status = 'Shortlisted';
+        await application.save();
+
+        const title = `Application Update - ${application.opportunity.title}`;
+        const message = `After careful consideration, we are pleased to inform you that your application for the ${application.opportunity.title} opportunity has been shortlisted.`;
+
+        await sendNotification(application.applicant, title, message);
+
         res.status(200).json({
-            success: true,
-            count: rejectedApplications.length,
-            applications: rejectedApplications
+            message: 'Application shortlisted successfully',
+            application,
         });
-        
     } catch (error) {
-        console.error('Get rejected applications error:', error);
-        res.status(500).json({ 
-            error: 'Something went wrong! Please try again later' 
+        console.log(error);
+        res.status(500).json({
+            error: 'Something went wrong! Please try again later',
         });
     }
 };
 
-exports.getProviderApplications = async (req, res) => {
-    try {
-        if (!req.user) {
-            return res.status(401).json({ error: 'Not authenticated' });
+exports.getApplicationDetails = async (req,res) =>{
+    try{
+        if (!req.user){
+            return res.status(401).json({
+                error: 'You are not logged in! Please log in to continue',
+            });
         }
-        
-        const { status } = req.query; 
-        
-        const opportunities = await Opportunity.find({ creator: req.user._id });
-        const opportunityIds = opportunities.map(opp => opp._id);
-        
-        const query = { opportunity: { $in: opportunityIds } };
-        if (status) {
-            query.status = status;
+
+        const applicationId = req.params.id;
+        const application = await Application.findById(applicationId);
+
+        if (!application){
+            return res.status(404).json({
+                error : "Application not found"
+            });
         }
+
+        const opportunity = await Opportunity.findById(application.opportunity);
+
+        const isApplicant = (application.applicant.toString() === req.user._id.toString());
+        const isProvider = (opportunity.creator.toString() == req.user._id.toString());
         
-        const applications = await Application.find(query)
-            .populate('applicant', 'firstName lastName email phone')
-            .populate('opportunity', 'title description closingDate stipend duration')
-            .sort({ createdAt: -1 });
-        
-        res.status(200).json({
-            success: true,
-            count: applications.length,
-            applications: applications
+        if (!isApplicant && !isProvider){
+            return res.status(403).json({
+                error: 'Unauthorized'
+            });
+        }
+
+        const detailedApplication = await Application.findById(applicationId).populate('applicant').populate({
+            path: 'opportunity',
+            populate:{
+                path: 'creator',
+                select: 'firstName lastName'
+            }
         });
-        
-    } catch (error) {
-        console.error('Get provider applications error:', error);
-        res.status(500).json({ 
-            error: 'Something went wrong! Please try again later' 
-        });
+
+        res.status(200).json({detailedApplication});
+
+    
+    }catch{
+        res.status(500).json({ error: 'Something went wrong! Please try again later' });
     }
-};
+}

@@ -14,7 +14,7 @@ const getNotificationElement = (id, title, createdAt) => {
             <section>
                 <p><b>Sent:</b> ${createdAt.slice(0, 10)}</p>   
             </section>
-            <secttion>
+            <section>
                 <button class="transparent-btn full-details-btn" data-id="${id}">Full Details</button>
             </section>
         </section>
@@ -80,15 +80,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const url = backendURL() + '/notifications/mine';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
 
         pageState.style.display = 'flex';
         pageState.innerHTML = 'Loading...';
 
         const response = await fetch(url, {
             method: 'GET',
-            headers: { Authorization: token },
+            credentials: 'include',
         });
 
         const data = await response.json();

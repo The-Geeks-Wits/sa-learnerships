@@ -8,16 +8,18 @@ const submitApplication = applicationsController.submitApplication;
 const getApplication = applicationsController.getApplication;
 const getAllApplications = applicationsController.getAllApplications;
 const getMyApplications = applicationsController.getMyApplications;
-const getProviderApplications = applicationsController.getProviderApplications;
-const getRejectedApplications = applicationsController.getRejectedApplications;
+const getApplicationDetails = applicationsController.getApplicationDetails;
+const shortlistApplication = applicationsController.shortlistApplication;
 const rejectApplication = applicationsController.rejectApplication;
 
 router.post('/', isAuthenticated, submitApplication);
-router.get('/', isAuthenticated, getAllApplications);
 router.get('/mine', isAuthenticated, getMyApplications);
-router.get('/provider/all', isAuthenticated, isProvider, getProviderApplications);
-router.get('/provider/rejected', isAuthenticated, isProvider, getRejectedApplications);
+router.get('/details/:id', isAuthenticated, getApplicationDetails);
+router.patch('/:id/shortlist', isAuthenticated,isProvider, shortlistApplication);
 router.patch('/:id/reject', isAuthenticated, isProvider, rejectApplication);
-router.get('/:id', isAuthenticated, getApplication);  // ← moved to bottom
+router.get('/:id', isAuthenticated, getApplication);
+router.get('/', isAuthenticated, getAllApplications);
+
+
 
 module.exports = router;

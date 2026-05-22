@@ -24,6 +24,11 @@ const opportunitySchema = new Schema({
     duration: { type: Number, min: 0 },
     status: { type: String, default: 'Pending' },
     createdAt: { type: Date, default: Date.now },
+    sector: {
+        type: String,
+        required: [true, 'Sector required! Please provide the sector of the opportunity'],
+        enum: ['Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Construction', 'Education', 'Hospitality', 'Marketing', 'Business']},
+    
 });
 
 const Opportunity = model('Opportunity', opportunitySchema);

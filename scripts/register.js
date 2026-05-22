@@ -63,12 +63,8 @@ form.addEventListener('submit', async (event) => {
         });
 
         if (response.status === 201) {
-            const data = await response.json();
-
-            if (data) {
-                localStorage.setItem('jwt', data.token);
-                window.location.href = '/home.html';
-            }
+            window.location.href = '/home.html';
+        
         } else {
             const data = await response.json();
             errorMessage.style.display = 'block';

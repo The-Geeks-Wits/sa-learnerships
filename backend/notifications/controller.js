@@ -1,15 +1,34 @@
 const Notification = require('./Notification.js');
+const nodemailer = require('nodemailer');
+
+const sendEmail = async (to, subject, text) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASSWORD,
+        },
+    });
+
+    const mailOptions = { from: process.env.EMAIL_USER, to, subject, text };
+
+    await transporter.sendMail(mailOptions);
+};
 
 // This is a method to send all in-app notifications.
 // It is not used as a middleware so there is no need to wrap it inside a try and catch block
 // Infact all the errors that happen in this method should be handled by the middleware calling it
-exports.sendNotification = async (recipient, title, message) => {
-    if (!recipient || !title || !message) {
+exports.sendNotification = async (user, title, message) => {
+    if (!user || !title || !message) {
         throw new Error('All notification details are required');
     }
 
-    const notification = await Notification.create({ recipient, title, message });
+    const notification = await Notification.create({ recipient: user._id, title, message });
 
+    sendEmail(user.email, title, message).catch(err => {
+        console.warn('Email notification failed:', err.message);
+    });
+    
     if (!notification) {
         throw new Error('All notification details are required');
     }
@@ -27,8 +46,11 @@ exports.getMyNotifications = async (req, res) => {
 
         const notifications = await Notification.find({ recipient: req.user._id });
 
-        res.status(200).json({ count: notifications.length, notifications });
-    } catch (error) {
+        const unreadNotifications = notifications.filter((notification) => !notification.read);
+        const unreadCount = unreadNotifications.length;
+
+        res.status(200).json({ count: unreadCount, notifications });
+    } catch {
         res.status(500).json({ error: 'Something went wrong! Please try again later' });
         console.log(error);
     }
@@ -100,7 +122,7 @@ exports.updateNotification = async (req, res) => {
 
         if (!notification.recipient.equals(req.user._id)) {
             return res.status(401).json({
-                error: 'Invalid receipt! You need to be the receipt of the notification',
+                error: 'Invalid receipient! You need to be the receipt of the notification',
             });
         }
 

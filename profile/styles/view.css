@@ -149,8 +149,12 @@ aside #settings-nav-options {
 }
 
 #education-visible-details li {
-    padding: 20px;
+    padding: 16px 20px;
     flex-direction: column;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    margin-bottom: 12px;
 }
 
 #education-visible-details li h4 {

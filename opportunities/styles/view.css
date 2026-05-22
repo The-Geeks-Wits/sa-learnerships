@@ -76,8 +76,9 @@ hr {
 }
 
 #actions section {
-    width: 100%;
     display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 button {
@@ -92,7 +93,8 @@ button {
 }
 
 #approve-btn,
-#resubmit-btn {
+#resubmit-btn,
+#apply-opportunity-btn {
     margin-right: 15px;
 }
 

@@ -1,0 +1,194 @@
+#main-details {
+    max-width: 950px;
+}
+
+#main-details h2 {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+#main-details p {
+    margin-bottom: 20px;
+    color: #4a5568;
+    font-size: 16px;
+}
+
+#placement-report-form fieldset {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: #ffffff;
+}
+
+#placement-report-form legend {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1a202c;
+    padding: 0 8px;
+}
+
+#sector-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin-top: 4px;
+}
+
+#sector-options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    color: #2d3748;
+    cursor: pointer;
+}
+
+#sector-options input[type="checkbox"] {
+    accent-color: #1562f2;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+
+#filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+#filter-options label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    color: #2d3748;
+    gap: 4px;
+}
+
+#filter-options input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    width: auto;
+    min-width: 140px;
+}
+
+#placement-report-form button[type="submit"] {
+    margin-top: 12px;
+    background-color: #1562f2;
+    border: 1px solid #1562f2;
+}
+
+#report-results {
+    margin-top: 30px;
+}
+
+#report-results h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 16px;
+}
+
+#chart-container {
+    max-width: 800px;
+    margin-bottom: 30px;
+}
+
+#results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.92rem;
+}
+
+#results-table th,
+#results-table td {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#results-table th {
+    background-color: #f7fafc;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+#results-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+#export-csv {
+    background-color: #1562f2;
+    border: 1px solid #1562f2;
+    margin-right: 10px;
+}
+
+#export-pdf {
+    background-color: #1562f2;
+    border: 1px solid #1562f2;
+}
+
+#export-pdf:hover {
+    background-color: #1562f2;
+    border-color: #1562f2;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    #sector-options,
+    #filter-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+    #filter-options input[type="date"] {
+        width: 100%;
+    }
+    #export-csv, 
+    #export-pdf {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+}
+
+#sidebar-options a {
+    text-decoration: none;
+}
+
+#sidebar-options a:hover {
+    text-decoration: none;
+}
+
+.sidebar-nav-options ul {
+    list-style: none;
+    padding-left: 1.5rem;
+}
+
+.sidebar-nav-options li {
+    margin: 0.5rem 0;
+}
+
+.sidebar-nav-options a {
+    color: #4a5568;
+    display: block;
+    padding: 0.25rem 0;
+    font-weight: normal;
+}
+
+.sidebar-nav-options a:hover {
+    color: #2d3748;
+    background-color: #f7fafc;
+}
+
+#export-actions {
+    margin-top: 16px;
+}

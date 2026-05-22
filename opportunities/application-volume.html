@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Application Volume Analytics</title>
+
+    <link rel="stylesheet" href="../styles/index.css" />
+    <link rel="stylesheet" href="./styles/application-volume.css">
+    <link rel="stylesheet" href="./styles/common.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <h1 id="app-name">SA - Learnerships</h1>
+
+        <ul>
+            <li id="notifications">
+                <img src="../assets/notifications.png" />
+                <p class="notifications-count">2</p>
+            </li>
+
+            <li id="profile-details"></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <aside>
+            <ul id="sidebar-options">
+
+                <li>
+                    <section id="opportunities-nav" class="heading">
+                        <p>Opportunities</p>
+
+                        <img
+                            id="opportunities-nav-image"
+                            src="../assets/right-arrow.png"
+                        />
+                    </section>
+
+                    <section
+                        id="opportunities-nav-options"
+                        class="sidebar-nav-options">
+                    </section>
+                </li>
+
+                <li>
+                    <section id="applications-nav" class="heading">
+                        <p>Applications</p>
+
+                        <img
+                            id="applications-nav-image"
+                            src="../assets/right-arrow.png"
+                        />
+                    </section>
+
+                    <section
+                        id="applications-nav-options"
+                        class="sidebar-nav-options">
+                    </section>
+                </li>
+
+                <li>
+                    <section id="settings-nav" class="heading">
+                        <p>Settings</p>
+
+                        <img
+                            id="settings-nav-image"
+                            src="../assets/right-arrow.png"
+                        />
+                    </section>
+
+                    <section
+                        id="settings-nav-options"
+                        class="sidebar-nav-options">
+
+                        <ul>
+                            <li>
+                                <a href="/profile/view.html">Profile</a>
+                            </li>
+                        </ul>
+
+                    </section>
+                </li>
+
+            </ul>
+        </aside>
+
+        <section id="main-details">
+
+            <section id="page-state"></section>
+
+            <section id="page-error"></section>
+
+            <section id="page-container">
+
+                <h1 id="page-title">
+                    Application Volume Report
+                </h1>
+
+                <p id="page-description">
+                    This report shows the number of applications
+                    submitted for each opportunity.
+                </p>
+
+                <section id="report-results">
+
+                    <section id="chart-container">
+                        <canvas id="report-chart"></canvas>
+                    </section>
+
+                    <table id="results-table">
+                        <thead id="results-header"></thead>
+
+                        <tbody id="results-body"></tbody>
+                    </table>
+
+                    <section id="export-section">
+                        <button
+                            id="export-csv"
+                            class="coloured-btn">
+
+                            Export CSV
+                        </button>
+                    </section>
+
+                </section>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="../scripts/index.js"></script>
+
+    <script
+        type="module"
+        src="./scripts/application-volume.js">
+    </script>
+
+</body>
+</html>

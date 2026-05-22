@@ -43,10 +43,9 @@ form.addEventListener('submit', async function (event) {
         });
 
         if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('jwt', data.token);
             window.location.href = 'home.html';
         } else {
+            const data = await response.json();
             errorMessage.style.display = 'block';
             errorMessage.textContent = data.error || 'Login failed';
         }

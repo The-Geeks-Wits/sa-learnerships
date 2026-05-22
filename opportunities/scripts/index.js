@@ -25,23 +25,27 @@ const submitApplication = async (opportunityId) => {
     try {
         const url = backendURL() + '/applications';
 
-        const token = localStorage.getItem('jwt');
-        if (!token) return (window.location.href = '/login.html');
-
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: token,
             },
             body: JSON.stringify({ opportunityId }),
         });
 
+        const data = await response.json();
+
         if (response.ok) {
+            alert('You have successfully applied for this opportunity!');
             window.location.href = '/applications/pending.html';
         }
+        else {
+            alert(data.error);
+        }    
     } catch (err) {
         // Alert or show the error as a modal
+        alert('Something went wrong! Please try again later');
     }
 };
 
@@ -82,6 +86,11 @@ opportunities.addEventListener('click', (event) => {
         // Show a modal and ask the applicant if they really want to apply to this opportunity
         // When they click yes then we should just take their details make an application for them in the backend
         // For now just send the request directly
+        const confirmed = confirm('Are you sure you want to apply for this opportunity?');
+        
+        if(!confirmed)
+            return;
+        
         const id = event.target.getAttribute('data-id');
         submitApplication(id);
     }
