@@ -14,9 +14,8 @@ const googleBtn = document.getElementById('google-btn');
 const appName = document.getElementById('app-name');
 
 googleBtn.addEventListener('click', () => {
-    window.location.href = 'http://localhost:3000/api/users/google';
+    window.location.href = backendURL() + '/api/users/google';
 });
-
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
     errorMessage.style.display = 'none';
