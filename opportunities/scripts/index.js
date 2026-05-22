@@ -27,9 +27,9 @@ const submitApplication = async (opportunityId) => {
 
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${getToken()}` },
-            headers: {
+            headers: { 
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
             },
             body: JSON.stringify({ opportunityId }),
         });

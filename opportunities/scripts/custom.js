@@ -84,14 +84,16 @@ async function generateReport(dimensions, metrics) {
 
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            headers: { 'Authorization': `Bearer ${getToken()}` },        
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },        
             body: JSON.stringify({
                 dimensions: selectedDimensions,
                 metric: selectedMetric,
                 filters: Object.keys(filters).length ? filters : undefined
             })
-        });
+        }); 
 
         const result = await response.json();
         if (result.success) {

@@ -89,8 +89,10 @@ async function generateReport() {
         
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
             body: JSON.stringify({
                 sectors: selectedSectors,
                 ...filters
@@ -235,8 +237,10 @@ async function exportPDF() {
     try {
         const response = await fetch(`${backendURL()}/api/analytics/export-placement-report`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getToken()}`
+            },
             body: JSON.stringify({
                 headers: headers,
                 rows: rows,
