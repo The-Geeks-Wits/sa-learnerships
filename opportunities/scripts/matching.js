@@ -24,10 +24,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch(backendURL() + '/opportunities/matched', {
             method: 'GET',
-            headers: { 'Authorization': `Bearer ${getToken()}` },
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Authorization': `Bearer ${getToken()}`,
+                'Content-Type': 'application/json'
+            },
         });
-
         if (!response.ok) return;
 
         const data = await response.json();
