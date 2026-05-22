@@ -36,20 +36,10 @@ router.get(
 
 router.get(
     '/google/callback',
-    passport.authenticate('google', {
-        session: false,
-        failureRedirect: '/',
-    }),
+    passport.authenticate('google', { session: false, failureRedirect: '/' }),
     (req, res) => {
         const token = req.user.token;
-        res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
-            maxAge: 3600000,
-        });
-
-        res.redirect(`${process.env.CLIENT_URL}/home.html`);
+        res.redirect(`${process.env.CLIENT_URL}/home.html?token=${token}`);
     },
 );
 
