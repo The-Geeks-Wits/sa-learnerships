@@ -8,7 +8,8 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
-        "test:ci": "jest --coverage --silent --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=text-summary --coverageReporters=lcov"
+        "test:ci": "jest --coverage --silent --ci --maxWorkers=2 --coverageReporters=json-summary --coverageReporters=text --coverageReporters=text-summary --coverageReporters=lcov",
+        "seed:admin": "node scripts/seedAdmin.js"
     },
     "keywords": [],
     "author": "",
@@ -32,5 +33,5 @@
     },
     "devDependencies": {
         "jest": "^30.3.0"
-    }
+    }    
 }
