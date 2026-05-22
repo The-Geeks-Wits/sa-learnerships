@@ -1,4 +1,4 @@
-import { backendURL, saveToken } from '../env.config.js';
+import { backendURL, saveToken, getToken } from '../env.config.js';
 
 const errorMessage = document.getElementById('error-message');
 const form = document.getElementById('login-form');
@@ -34,7 +34,6 @@ form.addEventListener('submit', async function (event) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({
                 email: email.value,
                 password: password.value,
