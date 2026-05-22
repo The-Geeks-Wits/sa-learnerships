@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const pageState = document.getElementById('page-state');
 const pageError = document.getElementById('page-error');
@@ -27,7 +27,7 @@ const submitApplication = async (opportunityId) => {
 
         const response = await fetch(url, {
             method: 'POST',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             headers: {
                 'Content-Type': 'application/json',
             },

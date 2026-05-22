@@ -34,7 +34,7 @@ form.addEventListener('submit', async function (event) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({
                 email: email.value,
                 password: password.value,

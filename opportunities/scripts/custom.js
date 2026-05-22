@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 let chartInstance = null;
 
@@ -85,7 +85,7 @@ async function generateReport(dimensions, metrics) {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',           
+            headers: { 'Authorization': `Bearer ${getToken()}` },        
             body: JSON.stringify({
                 dimensions: selectedDimensions,
                 metric: selectedMetric,

@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const detailName = document.getElementById('detailName');
 const detailEmail = document.getElementById('detailEmail');
@@ -33,7 +33,7 @@ async function updateUser() {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ role: detailRole.value }),
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         if (res.ok) {
@@ -69,7 +69,7 @@ async function toggleUserStatus() {
         const res = await fetch(url, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             body: JSON.stringify({ status: newStatus }),
         });
 
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const res = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         if (res.ok) {

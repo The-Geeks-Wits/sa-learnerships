@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const badgeStyle = (percent) => {
     if (percent >= 70) return 'background:#1a7f4b;color:#fff;';
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch(backendURL() + '/opportunities/matched', {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` },
             headers: { 'Content-Type': 'application/json' },
         });
 
