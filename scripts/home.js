@@ -3,7 +3,7 @@ import { backendURL } from '../env.config.js';
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const [opportunitiesRes, applicationsRes] = await Promise.all([
-            fetch(backendURL() + '/opportunities', { method: 'GET', credentials: 'include' }),
+            fetch(backendURL() + '/opportunities?status=Approved', { method: 'GET', credentials: 'include' }),
             fetch(backendURL() + '/applications', { method: 'GET', credentials: 'include' }),
         ]);
 
@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector('#insights li:nth-child(2) h4').textContent = `${acceptanceRate}%`;
         document.querySelector('#insights li:nth-child(3) h4').textContent = totalApplications;
 
-        // Update labels to be accurate
         document.querySelector('#insights li:nth-child(3) p').textContent = 'Total Applications';
 
     } catch (err) {
