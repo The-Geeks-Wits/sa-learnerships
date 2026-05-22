@@ -25,8 +25,10 @@ exports.sendNotification = async (user, title, message) => {
 
     const notification = await Notification.create({ recipient: user._id, title, message });
 
-    sendEmail(user.email, title, message);
-
+    sendEmail(user.email, title, message).catch(err => {
+        console.warn('Email notification failed:', err.message);
+    });
+    
     if (!notification) {
         throw new Error('All notification details are required');
     }
