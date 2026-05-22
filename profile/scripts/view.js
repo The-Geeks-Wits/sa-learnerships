@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 const personalDetails = document.getElementById('personal-details');
 const visibleDetails = document.getElementById('visible-profile-details');
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(backendURL() + '/api/users/profile', {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` }
         });
 
         const data = await response.json();
