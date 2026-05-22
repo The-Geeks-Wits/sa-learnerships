@@ -1,4 +1,4 @@
-import { backendURL } from '../../env.config.js';
+import { backendURL, getToken } from '../../env.config.js';
 
 //locations dropdown data
 const LOCATIONS = {
@@ -55,8 +55,10 @@ const addPersonalDetailsSubmitListener = (formElement, user) => {
             saveBtn.textContent = 'Loading...';
             const response = await fetch(url, {
                 method: 'PUT',
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
                 body: JSON.stringify(requestBody),
             });
 
@@ -112,8 +114,10 @@ const addEducationSubmitListener = (formElement, user, qualifications) => {
 
             const response = await fetch(url, {
                 method: 'PUT',
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
                 body: JSON.stringify({ qualifications: user.qualifications }),
             });
 
@@ -156,8 +160,10 @@ const addSkillSubmitListener = (formElement, user) => {
 
             const response = await fetch(url, {
                 method: 'PUT',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
                 body: JSON.stringify({ skills: user.skills }),
             });
 
@@ -488,7 +494,7 @@ const showAttachments = (user) => {
         try {
             const res = await fetch(backendURL() + '/api/users/upload-cv', {
                 method: 'POST',
-                credentials: 'include',
+                headers: { 'Authorization': `Bearer ${getToken()}` },
                 body: formData,
             });
 
@@ -517,7 +523,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include',
+            headers: { 'Authorization': `Bearer ${getToken()}` }
         });
 
         const data = await response.json();
