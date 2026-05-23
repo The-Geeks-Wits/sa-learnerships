@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const response = await fetch(url, {
             method: 'GET',
-            credentials: 'include'
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         const data = await response.json();

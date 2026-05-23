@@ -14,7 +14,7 @@ const loadApplicationVolume = async () => {
     try{
         const response = await fetch (`${backendURL()}/api/analytics/application-volume`,{
             method: 'GET',
-            credentials: 'include'
+            headers: { 'Authorization': `Bearer ${getToken()}` },
         });
 
         const data = await response.json();
